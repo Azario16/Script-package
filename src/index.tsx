@@ -1,0 +1,24 @@
+import React from 'react';
+
+import App from './App';
+import './style.scss'
+// import './index.css'; 
+// import './main.css';
+import ReactDOM from 'react-dom/client';
+
+
+
+
+
+
+// console.log('Test render')
+
+<App />
+
+
+
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+
