@@ -21,9 +21,9 @@ export const getMessage = (callback: () => void): void => {
     callback();
 }
 
-export const sendMessage = (mesageName: string, messageValue: string, callback: any) => {
+export const sendMessage = (mesageName: string, messageValue: any, callback: any) => {
     if (window.location.hostname === 'localhost' || window.location.hostname === 'extension-test.ru') {
-        console.log('На текуйщей странице')
+        // console.log('На текуйщей странице')
         const getFunction = mapFunction(mesageName)
         getFunction(messageValue, (result: any) => {
             callback(result)

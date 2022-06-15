@@ -42,17 +42,20 @@ function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: s
     }
 
     const mapEducationColor = (educationValue: any) => {
+        if (educationValue.incorrectnessReason !== null) {
+            return 'fatal'
+        }
         if (educationValue.stage === "regular_lessons") {
             return 'success'
         }
         if (educationValue.stage === "before_call") {
-            return 'warning'
+            return 'gold'
         }
         if (educationValue.stage === "lost") {
             return 'lost'
         }
-        if (educationValue.stage === "after_trial") {
-            return 'fatal'
+        if (educationValue.stage === "after_trial" || educationValue.stage === "after_call") {
+            return 'info'
         }
     }
     const updateEducation = async () => {
@@ -61,13 +64,14 @@ function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: s
             const educationInfo: any = result["education-service"]
             // educationInfo["data"] = result["education-service"]
             if (educationInfo.data?.length === 0 || educationInfo?.data?.error || educationInfo.data?.errors) {
-                if(educationInfo.data?.error){
+                if (educationInfo.data?.error) {
                     const errorMessage = educationInfo.data?.error?.message ? educationInfo?.error.message : educationInfo?.errors[0].message
                     setError(errorMessage)
                 }
             } else if (educationInfo.data) {
-                const rsultConfog: any = result["configurations"]
-                configurationsRef.current = rsultConfog
+                console.log(result)
+                const resultConfog: any = result["configurations"].data
+                configurationsRef.current = resultConfog
                 setEducation(educationInfo.data)
 
             } else {
@@ -94,7 +98,7 @@ function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: s
                     {JSON.stringify(ERROR)}
                 </pre>
             : <>
-                <div className="accordion" id={`accordionExample`}>
+                <div className="accordion" id="accordionExample">
                     {
                         EDUCATION.map((educationValue: any, key: number) => {
                             const teacherId = educationValue.teacher?.general?.id !== undefined
@@ -102,57 +106,63 @@ function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: s
                                 : ''
                             return (
                                 <div className="accordion-item" key={key}>
-                                    <h2 className="accordion-header" id="panelsStayOpen-headingTwo">
+                                    <div className="accordion-header" id="panelsStayOpen-headingTwo">
                                         <button className={`accordion-button collapsed padding-btn-0 fs-custom-0_7 bg-${mapEducationColor(educationValue)} text-light`} type="button"
                                             data-bs-toggle="collapse"
-                                            data-bs-target={`#collapseWidthExample-${key}`}
+                                            data-bs-target={`#collapseUserInfo-${key}`}
                                             aria-expanded="false"
-                                            aria-controls={`collapseWidthExample-${key}`}
+                                            aria-controls={`collapseUserInfo-${key}`}
                                         >
                                             <div className="ms-1  w-75">
-                                                <div className="d-flex flex-row justify-content-between  ">
-
-                                                    <span>
-                                                        Плательщик: {educationValue.paymentAgreement.person.general.id}
-                                                    </span>
-
-
-                                                    <div className="d-flex  justify-content-center  fs-custom-0_7">
-
-                                                        <span>
-                                                            П: {educationValue.teacher !== null 
-                                                                ? educationValue.teacher.general.id 
-                                                                : '-'
-                                                            }
-                                                        </span>
+                                                <div className=" btn-group">
+                                                    <div className="w-180px me-2">
+                                                        <span>{`Плательщик: ${educationValue.paymentAgreement.person.general.id}`}</span>
+                                                        <br/>
+                                                        У: {educationValue.student.general.name}
+                                                        {/* <div className='input-group'>
+                                                            <div className='coin custom-icon w-15px h-15px'>
+                                                            </div>
+                                                            <span className='ms-1 text-nowrap'>
+                                                            : {educationValue.balance}
+                                                            </span>
+                                                        </div> */}
+                                                        <br/>
+                                                        <div className=" text-nowrap inline">{mapEducation(educationValue.serviceTypeKey)}</div>
 
                                                     </div>
 
-                                                </div>
-                                                У: {educationValue.student.general.name}
-                                                <div className='input-group'>
-                                                    <div className='coin custom-icon w-15px h-15px'>
-                                                    </div>
-                                                    <span className='ms-1 text-nowrap'>
-                                                        : {educationValue.balance}
-                                                    </span>
-                                                </div>
-                                                <span>{mapEducation(educationValue.serviceTypeKey)}</span>
 
+
+                                                    <div className={`w-65px fs-custom-0_7 d-grid bg-${mapEducationColor(educationValue)}`}>
+                                                        <div className='btn-group'>
+                                                            {/* <span>{`П: `}</span> */}
+                                                            <span>{educationValue.teacher !== null ? 'П: '+educationValue.teacher.general.id : 'П: -'}
+                                                            </span>
+                                                        </div>
+                                                        <div className='btn-group'>
+                                                            <div className='coin custom-icon w-15px h-15px'>
+                                                            </div>
+                                                            <span className='ms-1 text-nowrap'>
+                                                                : 1
+                                                                {/* {educationValue.balance} */}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </button>
-                                    </h2>
-                                    <div id={`collapseWidthExample-${key}`} className={`accordion-collapse collapse`}
+                                    </div>
+                                    <div id={`collapseUserInfo-${key}`} className={`accordion-collapse collapse`}
                                         aria-labelledby="panelsStayOpen-headingTwo"
 
                                     >
 
                                         {educationValue.teacher !== null ?
-                                            <div className="bg-exten-window">
+                                            <div className="bg-dark">
                                                 {/* <ButtonBar howUser="teacher" /> */}
                                                 <InfoBlock howUser="teacher" startValue={START} userId={teacherId} />
                                             </div>
-                                            : <div className="bg-exten-window text-center">Не указан преподаватель</div>
+                                            : <div className="bg-dark text-light text-center">Не указан преподаватель</div>
                                         }
 
 

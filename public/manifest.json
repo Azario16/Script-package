@@ -9,6 +9,14 @@
     "128": "script-pack.png"
   },
   "options_page": "options.html",
+  "browser_action": {
+    "default_popup": "options.html",
+    "default_icon": {
+      "16": "script-pack.png",
+      "32": "script-pack.png",
+      "128": "script-pack.png"
+    }
+  },
   "background": {
     "scripts": [
       "static/js/background.js"
@@ -24,11 +32,17 @@
         "static/css/main.css"
       ],
       "matches": [
-        "<all_urls>"
+        "*://crm2.skyeng.ru/*",
+        "*://app.slack.com/*",
+        "*://app.extension-test.ru/*",
+        "*://skyeng.autofaq.ai/*",
+        "*://extension-test.ru/*",
+        "*://api.extension-test.ru/*"
       ]
     }
   ],
   "web_accessible_resources": [
+    "static/css/main.css",
     "libs/*",
     "autofaq/*"
   ],

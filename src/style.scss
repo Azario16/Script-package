@@ -1,5 +1,6 @@
 // $fa-font-path: "../public/webfonts" !default;
-
+// @import url("https://skyeng.autofaq.ai/static/css/main.8bec040c.chunk.css");
+@import "./af-style.css";
 @import "./main.css";
 // @import "./css/font-awesom/all.css";
 @import "./css/db/datatables.min.css";
@@ -18,7 +19,7 @@
 $nav-link-color: #fff;
 $nav-link-hover-color: #c1c1c1;
 body {
-    padding-top: 4.5rem;
+    // padding-top: 4.5rem;
 }
 a {
     cursor: pointer;
@@ -26,7 +27,9 @@ a {
 .form-control {
     border-color: rgb(128, 120, 110) !important;
 }
-
+.d-fixed {
+    display: fixed !important;
+}
 // 3. Включите оставшуюся часть необходимых таблиц стилей Bootstrap
 @import "../node_modules/bootstrap/scss/variables";
 $nav-tabs-link-active-bg: #3a3c3d;
@@ -36,38 +39,57 @@ $nav-tabs-link-active-border-color: $gray-300 $gray-300 #3a3c3d;
 $body-color: $gray-100;
 $table-color: #fff;
 // 4. Включите любые дополнительные компоненты Bootstrap, как Вам нравится
+
 $custom-colors: (
     "checkbox": #ebebeb,
     "fatal": #693a3a,
     "customcolor": #afdbaf,
     "primary": #0d6efd,
+    "blue-relation" : #3293e8,
     "secondary": #71797d,
-    "success": #3e9e53,
+    "success": #188754,
     "info": #3389a3,
     "warning": #c4a137,
+    "gold": #DAA520,
     "danger": #ab413e,
     "light": #ffffff,
     "dark": #3a3c3d,
-    "border": #000000,
+    "b-border": #030303,
+    "b-dark": #787063,
     "lost": #610061,
     "border-green": #00693e,
     "exten-window": #f5deb3,
+    "exten-UI": #626e7a,
+    "af-search-chat": #252829,
 );
 
+// $theme-colors: map-merge($theme-colors, $custom-colors);
 @import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/root";
+// @import "../node_modules/bootstrap/scss/utilities";
 @import "../node_modules/bootstrap/scss/containers";
 @import "../node_modules/bootstrap/scss/transitions";
 @import "../node_modules/bootstrap/scss/dropdown";
 @import "../node_modules/bootstrap/scss/accordion";
+// @import "../node_modules/bootstrap/scss/maps";
+
 $theme-colors: map-merge($theme-colors, $custom-colors);
-$theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
-$utilities-colors: map-merge($utilities-colors, $theme-colors-rgb);
-$utilities-text: map-merge($utilities-text, $utilities-colors);
-$utilities-text-colors: map-loop($utilities-text, rgba-css-var, "$key", "text");
-$utilities-bg: map-merge($utilities-bg, $utilities-colors);
-$utilities-bg-colors: map-loop($utilities-bg, rgba-css-var, "$key", "bg");
+// $theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+// $utilities-colors: map-merge($utilities-colors, $theme-colors-rgb);
+// $utilities-text-colors: map-loop($utilities-colors, rgba-css-var, "$key", "text");
+// $utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, "$key", "bg");
+@each $color, $value in $custom-colors {
+    .bg-#{$color} {
+        background-color: $value !important;
+    }
+
+    .text-#{$color} {
+        color: $value !important;
+    }
+}
 
 @import "../node_modules/bootstrap/scss/utilities";
+
 $utilities: map-merge(
     $utilities,
     (
@@ -117,7 +139,18 @@ $utilities: map-merge(
                 0_4: 0.4rem,
                 0_5: 0.5rem,
                 0_6: 0.6rem,
-                0_7: 0.7rem
+                0_7: 0.7rem,
+                0_8: 0.8rem,
+                0_9: 0.9rem,
+            ),
+        ),
+        "fs-el": (
+            property: font-size,
+            class: fs-el,
+            values: (
+                0_6: 0.6rem,
+                0_7: 0.7rem,
+                10: 10pt,
             ),
         ),
         "width": (
@@ -130,12 +163,16 @@ $utilities: map-merge(
                 25px: 25px,
                 50px: 50px,
                 55px: 55px,
+                65px: 65px,
                 75px: 75px,
                 100px: 100px,
                 150px: 150px,
+                180px: 180px,
+                190px: 190px,
                 200px: 200px,
                 300px: 300px,
                 360px: 360px,
+                400px: 400px,
                 450px: 450px,
                 620px: 620px,
                 1vw: 1vw,
@@ -146,6 +183,8 @@ $utilities: map-merge(
                 45vw: 45vw,
                 62vw: 62vw,
                 10: 10%,
+                20: 20%,
+                21: 21%,
                 25: 25%,
                 40: 40%,
                 50: 50%,
@@ -184,11 +223,24 @@ $utilities: map-merge(
                     )
                 ),
         ),
+        "rounded-cust": (
+            responsive: true,
+            property: border-radius,
+            class: rounded-cust,
+            values:
+                map-merge(
+                    $spacers,
+                    (
+                        0_15: 0.15rem,
+                    )
+                ),
+        ),
         "height": (
             property: height,
             class: h,
             values: (
-                1em: 2.5em,
+                1em: 1em,
+                2_5em: 2.5em,
                 2em: 2em,
                 3em: 3em,
                 6rem: 6rem,
@@ -211,7 +263,7 @@ $utilities: map-merge(
             values: (
                 0: 0rem,
                 0_1: 0.1rem,
-                10: 10rem,   
+                10: 10rem,
             ),
         ),
         "border-none": (
@@ -238,7 +290,31 @@ $utilities: map-merge(
 .ui-datepicker-trigger {
     @extend .btn-success, .btn;
 }
-@import "../node_modules/bootstrap/scss/bootstrap";
+
+// @import "../node_modules/bootstrap/scss/bootstrap";
+
+/* Рабочие импорты но ломают h2 теги */
+
+@import "../node_modules/bootstrap/scss/grid";
+@import "../node_modules/bootstrap/scss/forms";
+@import "../node_modules/bootstrap/scss/buttons";
+@import "../node_modules/bootstrap/scss/button-group";
+@import "../node_modules/bootstrap/scss/badge";
+@import "../node_modules/bootstrap/scss/tables";
+@import "./reboot-custom";
+@import "../node_modules/bootstrap/scss/images";
+@import "../node_modules/bootstrap/scss/containers";
+@import "../node_modules/bootstrap/scss/utilities/api";
+@import "../node_modules/bootstrap/scss/modal";
+@import "../node_modules/bootstrap/scss/close";
+/* --------------------------------- */
+
+// @import "../node_modules/bootstrap/scss/root";
+// @import "../node_modules/bootstrap/scss/grid";
+// @import "../node_modules/bootstrap/scss/forms";
+// @import "../node_modules/bootstrap/scss/buttons";
+// @import "../node_modules/bootstrap/scss/transitions";
+// @import "../node_modules/bootstrap/scss/badge";
 
 // @import "../node_modules/bootstrap/scss/root";
 // @import "../node_modules/bootstrap/scss/reboot";
@@ -340,14 +416,6 @@ $utilities: map-merge(
     background-color: rgb(58, 60, 61) !important;
 }
 
-// .form-control,
-// .form-control[readonly] {
-//     color: #a9b2b1;
-//     background-color: rgb(104, 110, 113);
-// }
-// input[type="text"]::placeholder {
-//     color: rgb(176 178 177) !important;
-// }
 .fa {
     color: white;
 }
@@ -362,42 +430,9 @@ $utilities: map-merge(
     top: 75px;
 }
 
-// tr:hover {
-//     background-color: coral;
-// }
-// td:hover {
-//     background-color: coral;
-// }
 table {
     overflow: hidden;
 }
-
-// td {
-//     position: relative;
-// }
-// //Row
-// td:hover::before {
-//     background-color: #71797d;
-//     content: '';
-//     height: 100%;
-//     left: -5000px;
-//     position: absolute;
-//     top: 0;
-//     width: 10000px;
-//     z-index: -2;
-// }
-
-// //Column
-// td:hover::after {
-//     background-color:#71797d;
-//     content: "";
-//     height: 10000px;
-//     left: 0;
-//     position: absolute;
-//     top: -5000px;
-//     width: 100%;
-//     z-index: -1;
-// }
 
 .collum-hov {
     position: relative;
@@ -426,44 +461,20 @@ table {
     z-index: -1;
 }
 
-// h2 {
-//     text-align: center;
-//     margin: 15px;
-//     padding: 7px;
-//     background-color: green;
-//     cursor: pointer;
-// }
-
-// table.table {
-//     text-align: center;
-// }
-
-// .hide {
-//     display: none;
-// }
-
-// td[title] {
-//     cursor: help;
-// }
-
-// .active {
-//     display: block !important;
-// }
-
-// #loggins,
-// #sessions,
-// #banned {
-//     display: none;
-// }
-
-// tbody>tr>td {
-//     vertical-align: inherit !important;
-// }
-
 .cursor-point {
     cursor: pointer;
 }
-// @import '../node_modules/datatables/media/css/jquery.dataTables.min.css';
 
-// @import "./datatables.min.css"
-// @import "./main222.css"
+.accordion-left::after {
+    transform: rotate(90deg);
+}
+
+.accordion-left:not(.collapsed)::after {
+    transform: rotate(270deg);
+}
+
+// #my-extension-root iframe {
+//     width: 100%;
+//     height: 100%;
+//     border: none;
+// }

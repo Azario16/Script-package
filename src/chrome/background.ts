@@ -8,7 +8,9 @@ const messagesFromReactAppListener = (
     sender: chrome.runtime.MessageSender,
     response: any,
 ) => {
-    console.log(sender)
+
+
+    console.log(message)
     const getFunction = mapFunction(message.messageName)
     getFunction(message.messageValue, (result: any) => {
         response(result)
