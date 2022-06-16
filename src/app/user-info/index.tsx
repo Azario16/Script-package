@@ -39,7 +39,7 @@ const UserInfo: React.FC = () => {
             })
         })
     }
-
+ 
     // console.log('App')
     useEffect(() => {
         updateSessionAndAfUserId()
