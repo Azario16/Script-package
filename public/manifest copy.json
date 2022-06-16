@@ -10,7 +10,7 @@
   },
   "options_page": "options.html",
   "browser_action": {
-    "default_popup": "index.html",
+    "default_popup": "options.html",
     "default_icon": {
       "16": "script-pack.png",
       "32": "script-pack.png",
@@ -21,9 +21,8 @@
     "scripts": [
       "static/js/background.js"
     ],
-    "persistent": true
+    "persistent": false
   },
-  
   "content_scripts": [
     {
       "js": [
@@ -54,7 +53,6 @@
     "*://datsy.ru/api/*",
     "*://kibana-logs.skyeng.link/",
     "storage",
-    "notifications",
-    "activeTab"
+    "notifications"
   ]
 }

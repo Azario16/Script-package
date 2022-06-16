@@ -27,15 +27,16 @@ function InfoBlock(params: any) {
         'kid': 'Skysmart - KIDS',
     }
 
-    const startChatAutofaq = () => {
+    const startChatAutofaq = (callback: any) => {
         if (params.session.data.roles.includes('ROLE_SUPPORT')) {
             const getParams = {
                 userId: USER_INFO.data.id,
                 operatorAfId: params.afUserId
             }
-            // sendMessage(ACTIONS.GET_AUTOFAQ_START_CHAT, getParams, (result: any) => {
-            //     // window.open(`https://crm2.skyeng.ru/persons/${USER_INFO.data.id}/customer-support/manual`)
-            // })
+            sendMessage(ACTIONS.GET_AUTOFAQ_START_CHAT, getParams, (result: any) => {
+                callback(result)
+                // window.open(`https://crm2.skyeng.ru/persons/${USER_INFO.data.id}/customer-support/manual`)
+            })
         }
     }
 
@@ -110,10 +111,21 @@ function InfoBlock(params: any) {
                                         Эта функция временно работает только для сотрудников ТП
                                     </Modal.Body>
                                     <Modal.Footer bsPrefix="modal-footer bg-dark">
-                                        <Button variant="primary" onClick={handleClose}>
+                                        <Button variant="primary" onClick={()=>{
+                                            startChatAutofaq((result: any)=>{
+                                                window.open(`https://skyeng.autofaq.ai/tickets/assigned/${result["start-chat"].conversationId}`)
+                                                handleClose()
+
+                                            })
+                                        }}>
                                             Открыть вкладку на чат
                                         </Button>
-                                        <Button variant="primary" onClick={handleClose}>
+                                        <Button variant="primary" onClick={()=>{
+                                             startChatAutofaq((result: any)=>{
+                                                console.log('Чат запущен без вкладки')
+                                                handleClose()
+                                            })
+                                        }}>
                                             Запустить чат без вкладки
                                         </Button>
                                     </Modal.Footer>

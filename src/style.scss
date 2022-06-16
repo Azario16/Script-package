@@ -18,12 +18,12 @@
 // $body-bg: #3a3c3d;
 $nav-link-color: #fff;
 $nav-link-hover-color: #c1c1c1;
-body {
-    // padding-top: 4.5rem;
-}
-a {
-    cursor: pointer;
-}
+// body {
+//     // padding-top: 4.5rem;
+// }
+// a {
+//     cursor: pointer;
+// }
 .form-control {
     border-color: rgb(128, 120, 110) !important;
 }
@@ -61,6 +61,7 @@ $custom-colors: (
     "exten-window": #f5deb3,
     "exten-UI": #626e7a,
     "af-search-chat": #252829,
+    "comment": #80808054
 );
 
 // $theme-colors: map-merge($theme-colors, $custom-colors);
@@ -304,9 +305,9 @@ $utilities: map-merge(
 @import "./reboot-custom";
 @import "../node_modules/bootstrap/scss/images";
 @import "../node_modules/bootstrap/scss/containers";
-@import "../node_modules/bootstrap/scss/utilities/api";
 @import "../node_modules/bootstrap/scss/modal";
 @import "../node_modules/bootstrap/scss/close";
+@import "../node_modules/bootstrap/scss/utilities/api";
 /* --------------------------------- */
 
 // @import "../node_modules/bootstrap/scss/root";
@@ -409,9 +410,9 @@ $utilities: map-merge(
     max-width: 5% !important;
     display: inline-block;
 }
-::-webkit-scrollbar {
-    width: 0px;
-}
+// ::-webkit-scrollbar {
+//     width: 0px;
+// }
 .block-slot {
     background-color: rgb(58, 60, 61) !important;
 }
@@ -430,9 +431,9 @@ $utilities: map-merge(
     top: 75px;
 }
 
-table {
-    overflow: hidden;
-}
+// table {
+//     overflow: hidden;
+// }
 
 .collum-hov {
     position: relative;

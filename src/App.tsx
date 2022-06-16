@@ -50,7 +50,7 @@ const App: any = () => {
       break;
     case 'skyeng.autofaq.ai':  // if (x === 'value2')
       renderApp(<UserInfo />, 'main')
-      renderApp(<SearchChat styleElement="float-end" />, 'search-chat')
+      renderApp(<SearchChat styleElement="float-end vh-100 " />, 'search-chat')
       window.onload = () => {
         setTimeout(async function () {
           createDivIdForReact();

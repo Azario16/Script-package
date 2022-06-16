@@ -14,7 +14,7 @@ const createDargAndDrop = (mainElemnt: any, dragDropElement: any) => {
     generalElm.style.left = localStorage.getItem('winLeft')
     // generalElm.style.position = "absolute"
     let shiftX: any
-    let shiftY: any
+    let shiftY: any 
     dragAndDrop.onmousedown = function (event: any) {
         // console.log('Нажатие на эелемент')
         const coords = getCoords(generalElm);

@@ -8,12 +8,12 @@ import EdauctionBlock from './element/education-services-block';
 import { Collapse } from 'bootstrap';
 import { sendMessage } from "../../chrome/utils";
 import { ACTIONS } from "../../chrome/actions-bg";
-
+import createButtonSeacrhId from './function/create-button-to-af'
 
 
 const UserInfo: React.FC = () => {
     const [START, setStart] = useState(false)
-    const [USER_ID, setUserId] = useState('5152265')
+    const [USER_ID, setUserId] = useState('')
     const [AF_USER_ID, setAfUserId] = useState('')
     const [CRM_SESSION, setCrmSession] = useState()
     const [ERROR, setError] = useState()
@@ -39,9 +39,12 @@ const UserInfo: React.FC = () => {
             })
         })
     }
- 
+
     // console.log('App')
     useEffect(() => {
+        createButtonSeacrhId(() => {
+            console.log('test')
+        })
         updateSessionAndAfUserId()
         const mainElem = document.querySelector('#main-window')
         const moveElem = document.querySelector('#move-window')
@@ -60,6 +63,7 @@ const UserInfo: React.FC = () => {
         } else if (checkShow) {
             // console.log('Свернуть')
             coollapseToogle(true, buttonCollapseRef.current)
+            setUserId('')
             setStart(false)
         }
         // console.log(START)
@@ -70,6 +74,30 @@ const UserInfo: React.FC = () => {
             toggle: value
         })
     }
+
+    const apiGetUserInfo = (userId: string) => {
+        const checkShow = buttonCollapseRef.current?.classList?.contains('show')
+        if (userId !== null && !checkShow) {
+            // console.log('Развернуть')
+            coollapseToogle(!checkShow, buttonCollapseRef.current)
+            setUserId(userId)
+            setStart(!checkShow)
+        } else if (checkShow) {
+            // console.log('Свернуть')
+            coollapseToogle(true, buttonCollapseRef.current)
+            setStart(false)
+        }
+    }
+    useEffect(() => {
+        chrome.runtime.onMessage.addListener(
+            function (request, sender, sendResponse) {
+               if(request.message === "open-user-info"){
+                apiGetUserInfo(request.userId)
+               }
+            }
+        );
+    }, [])
+
     return (
         <div >
             <div className="d-flex w-auto position-fixed main-window border-b-dark" id="main-window">

@@ -143,7 +143,7 @@ function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: s
                                                             <div className='coin custom-icon w-15px h-15px'>
                                                             </div>
                                                             <span className='ms-1 text-nowrap'>
-                                                                : 1
+                                                                : {educationValue.balance === null ? '-' : educationValue.balance}
                                                                 {/* {educationValue.balance} */}
                                                             </span>
                                                         </div>

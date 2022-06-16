@@ -471,7 +471,7 @@ const GetterBackground = () => {
                 arrayResult['start-chat'] = resultStartChat
             } else {
                 const resultStartChat = await productGet(urStartChat, {
-                    method: "GET",
+                    method: "POST",
                     credentials: "include"
                 })
                 arrayResult['start-chat'] = await resultStartChat.json()

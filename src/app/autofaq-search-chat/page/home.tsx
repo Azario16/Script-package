@@ -19,9 +19,9 @@ const Home = (props: any) => {
             toggle: value
         })
     }
-    /* Здесь указваем функию которая будет экспортирована для дргих компонентов которые запрашивают чаты */
-    const getLocationFromStatusBlock = (operatorId: string) => {
-        console.log('test')
+
+
+    const toogleButton = () => {
         buttonCollapseRef.current = document.querySelector('#collapseUserInfo')
         const checkShow = buttonCollapseRef.current?.classList?.contains('show')
         // console.log(START)
@@ -29,8 +29,12 @@ const Home = (props: any) => {
             coollapseToogle(true, buttonCollapseRef.current)
             console.log('скрыть')
         }
+    }
 
-
+    /* Здесь указваем функию которая будет экспортирована для дргих компонентов которые запрашивают чаты */
+    const getLocationFromStatusBlock = (operatorId: string) => {
+        console.log('test')
+        toogleButton()
         navigate(`/chat-operator/${operatorId}`)
         // navigate(`/chat-operator`)
     }
@@ -39,12 +43,32 @@ const Home = (props: any) => {
 
     const location = useLocation()
     const param = useParams()
-    const [USER_ID, setUserId] = useState('15969824')
+    const [USER_ID, setUserId] = useState('')
     const [CHAT_ID, setChatId] = useState('')
 
     const START = useRef<string>('')
     const END = useRef<string>('')
-
+    useEffect(() => {
+        chrome.runtime.onMessage.addListener(
+            function (request, sender, sendResponse) {
+                switch (request.message) {
+                    case 'search-user-chat':
+                        console.log(request)
+                        toogleButton()
+                        setUserId(request.userId)
+                        setChatId('')
+                        navigate("/chat-list/1234");
+                        break;
+                    case 'open-id-chat':
+                        toogleButton()
+                        setUserId('')
+                        setChatId(request.chatId)
+                        navigate(`/chat-list/chat-id/${request.chatId}`);
+                        break;
+                }
+            }
+        );
+    }, [])
 
     useMemo(() => {
         const dateWeek = getDateWeekForButton().weekButton(null, 30)
@@ -63,12 +87,17 @@ const Home = (props: any) => {
                                 }}
                             >сбросить</button>
                         }
-                        {/* <button type="button" className="btn btn-secondary mb-3 ms-2 padding-btn-0 fs-6 text-uppercase text-light" id="change_week"
+                        <button type="button" className="btn btn-secondary mb-3 ms-2 padding-btn-0 fs-6 text-uppercase text-light" id="change_week"
                             onClick={async () => {
-                                console.log(START.current)
-                                console.log(END.current)
+                                // const test: any = window
+                                // test.apiGetUserInfo('1')
+
+                                var port = chrome.runtime.connect('gibeoebkgmgoeoemcbofgdfcmllkdjpe');
+                                port.postMessage('test');
+                                // console.log(START.current)
+                                // console.log(END.current)
                             }}
-                        >ТЕСТ</button> */}
+                        >ТЕСТ</button>
                         <button type="button" className="btn btn-secondary mb-3 ms-2 padding-btn-0 fs-6 text-uppercase text-light" id="change_week"
                             onClick={async () => {
                                 if (USER_ID !== '' && CHAT_ID === '') {

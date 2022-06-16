@@ -12,7 +12,7 @@ const OperatorComment = (params: any) => {
     const operatorName = params.text.operatorId !== 'autoFAQ' ?  findOperatorName().name : 'autoFAQ'
     return (
         <div className="chat-message chat-comment">
-            <div className="chat-message-block chat-message-block--html">
+            <div className="chat-message-block chat-message-block--html bg-comment">
                 <div className="chat-message-header">
                     <div className="chat-message-sender">{operatorName}:</div>
                     <div className="chat-message-time chat-message-time-answer">{params.dateTime.dateTime}</div>

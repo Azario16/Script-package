@@ -18,7 +18,7 @@ import MessageBlock from './element/message-block'
 import ChatList from './page/chat-list'
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 
-const SearchChat = (props:any) => {
+const SearchChat = (props: any) => {
     const [CHAT_ID, setChatId] = useState('')
     const [CHAT_LIST, setChatLis] = useState()
     const [ROUT, setRout] = useState()
@@ -33,10 +33,10 @@ const SearchChat = (props:any) => {
 
         /* Сделать и для CRM 2 сдвигом */
 
-        <div className={`${props.styleElement} vh-100 bg-af-search-chat overflow-auto z-index-cs`}>
+        <div className={`${props.styleElement} bg-af-search-chat overflow-auto z-index-cs`}>
 
             <div className="btn-group">
-                <div className={`bg-dark vh-100 ${props.styleElement} z-index-cs`}>
+                <div className={`${props.styleElement} bg-dark z-index-cs`}>
                     <div className="accordion" id="accordionExample">
                         <div className="accordion-item" key={key}>
                             <div className="accordion-header" id="panelsStayOpen-headingTwo">
@@ -51,7 +51,7 @@ const SearchChat = (props:any) => {
                         </div>
                     </div>
                 </div>
-                <div style={{ "minHeight": "120px" }} className="rounded h-100">
+                <div style={{ "minHeight": "120px" }} className="rounded vh-100">
                     <div className={`collapse collapse-horizontal border-none`} id="collapseUserInfo">
                         {/* <div className="container w-400px h-100"> */}
 
@@ -62,12 +62,12 @@ const SearchChat = (props:any) => {
                             </div>
                             :
                             /* Подключаем расширение чере iframe чтобы не ломать стили других страниц */
-                            <Frame 
-                           className='vh-100 w-400px bg-dark'
-                            head={[<link type="text/css" rel="stylesheet" 
-                            href="https://build.extension-test.ru/static/css/main.css"
-                            // href={chrome.runtime.getURL("/static/css/main.css")}
-                             ></link>]}>
+                            <Frame
+                                className='vh-100 w-400px bg-dark'
+                                head={[<link type="text/css" rel="stylesheet"
+                                    href="https://build.extension-test.ru/static/css/main.css"
+                                // href={chrome.runtime.getURL("/static/css/main.css")}
+                                ></link>]}>
                                 <FrameContextConsumer>
 
 
@@ -78,7 +78,7 @@ const SearchChat = (props:any) => {
                                             // Render Children
                                             return (
                                                 <div className="container vh-100 ">
-                                                    <App/>
+                                                    <App />
                                                 </div>
 
                                             )
