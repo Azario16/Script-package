@@ -81,7 +81,8 @@ async function StatusAutofaqPeopleRender() {
         }
         async getRoomInfo() {
             //console.log("getRoomInfo")
-            const url = `https://api-english.skyeng.ru/api/v2/rooms/${this.state.room}`;
+            const locationPath = window.location.pathname.split('/')[2]
+            const url = `https://api-${locationPath}.skyeng.ru/api/v2/rooms/${this.state.room}`;
             let roomInfoRes = await fetch(url, {
                 method: 'GET',
                 credentials: 'include'
