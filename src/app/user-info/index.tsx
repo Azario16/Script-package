@@ -26,14 +26,12 @@ const UserInfo: React.FC = () => {
 
     const updateSessionAndAfUserId = () => {
         sendMessage(ACTIONS.GET_SESSION, '', (result: any) => {
+            // console.log(result)
             const operatorCrmSession: any = result["session"]
             setCrmSession(operatorCrmSession)
 
-            sendMessage(ACTIONS.GET_AUTOFAQ_PEOPLE_LIST, '', (result: any) => {
-                const operatorAfInfo: any = result["people-list"].find((operator: any) => {
-                    return operator.email === operatorCrmSession.data.email
-                })
-                setAfUserId(operatorAfInfo.id)
+            sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: any) => {
+                setAfUserId(result.id)
             })
         })
     }

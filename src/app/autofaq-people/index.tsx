@@ -48,12 +48,6 @@ class Reservation extends React.Component<{}, {
 
         super(props);
         this.state = {
-            // userGroup: userGroup,
-            // userGroup: 'ТП',
-            // userGroup: '',
-            // userName: userName,
-            // userName: 'ТП-Гусейнов Рахид',
-            // userName: '',
             userKbs: [],
             userId: null,
             error: null,
@@ -109,14 +103,9 @@ class Reservation extends React.Component<{}, {
 
 
     async getCurrentState() {
-        // console.log("getCurrentState")
         sendMessage(ACTIONS.GET_AUTOFAQ_PEOPLE, '', (result: any) => {
             const operState = result['people-list']
-            // console.log(operState)
-            // console.log(this.state)
-            // console.log(this.state.groupCnt)
             const operStatus = this.parseStatus(operState)
-            // console.log(operStatus)
             let operStatusRender = Object.assign({}, operStatus.Online, operStatus.Busy, operStatus.Pause);
             let cCntUndistributedGroup = this.checkSumContTematicGroup(operState)
             this.setState({
@@ -143,13 +132,19 @@ class Reservation extends React.Component<{}, {
         return parseResult
     }
 
-    ckechKbOperator(knowledgeBases: any){
-        return true
+    ckechKbOperator(knowledgeBases: any) {
+        let state = false
+        // const testKB = [121779]
+        this.state.userKbs.forEach((element: any) => {
+            if (!state) {
+                state = knowledgeBases.includes(element);
+            }
+        });
+
+        return state
     }
 
     parse(status: any, data: any) {
-        //console.log('parse')
-        //console.log(status, groupIdParse)
         const userList: any = []
         const userKB: any = []
         let userInfo = {};
@@ -158,14 +153,6 @@ class Reservation extends React.Component<{}, {
         data.forEach((person: any, index: any) => {
             // AF вместо 0 чатов отдает null, тут условие чтобы были нули
             if (person.operator !== null) {
-                // Ищем совпадения по имени того кто зашел в систему и присваиваем тематику в state
-                // if (person.operator.fullName === this.state.userName) {
-                //     this.setState({ userKbs: person.operator.kbs })
-                //     userKB.push(person.operator.kbs)
-                //     // console.log(this.state)
-                //     // console.log(person.operator.kbs)
-                // }
-
                 if (person.operator.status === status && this.ckechKbOperator(person.operator.kbs)) {
                     if (person.aCnt === null) {
                         data[index].aCnt = 0;
@@ -195,24 +182,19 @@ class Reservation extends React.Component<{}, {
         }
     }
     checkSumContTematicGroup(operState: any) {
-        //console.log('checkSumContTematicGroup')
         const listCntUndistributed: any = [];
-        const userKb = operState.find((person: any) => {
-            return person.operator.fullName === this.state.userId
-        })
         operState.forEach((operatorState: any) => {
             if (operatorState.operator === null) {
-                if (userKb.operator.kbs.includes(operatorState.kb)) {
+                if (this.state.userKbs.includes(operatorState.kb)) {
                     listCntUndistributed.push(operatorState.cCnt)
                 }
             }
         });
+        console.log(listCntUndistributed)
         const summCnt = listCntUndistributed.reduce((sum: any, current: any) => sum + current, 0);
         return summCnt;
     }
     render() {
-        // console.log('Render')
-        // console.log(this.state.userKbs)
         const { error, isLoaded } = this.state;
         if (error) {
             return <div>Ошибка: {error.message}</div>;

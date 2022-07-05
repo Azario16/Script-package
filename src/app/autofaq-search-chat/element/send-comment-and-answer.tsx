@@ -139,3 +139,25 @@ const SendCommentAndAnswer = (props: any) => {
 }
 
 export default SendCommentAndAnswer
+
+// вфетч из инт 24
+// fetch("https://skyeng.autofaq.ai/api/reason8/answers", {
+//   "headers": {
+//     "accept": "*/*",
+//     "accept-language": "en-US,en;q=0.9,ru;q=0.8",
+//     "cache-control": "max-age=0",
+//     "content-type": "multipart/form-data; boundary=----WebKitFormBoundarywNkB9K7Y92D2XgUk",
+//     "sec-ch-ua": "\".Not/A)Brand\";v=\"99\", \"Google Chrome\";v=\"103\", \"Chromium\";v=\"103\"",
+//     "sec-ch-ua-mobile": "?0",
+//     "sec-ch-ua-platform": "\"Windows\"",
+//     "sec-fetch-dest": "empty",
+//     "sec-fetch-mode": "cors",
+//     "sec-fetch-site": "same-origin"
+//   },
+//   "referrer": "https://skyeng.autofaq.ai/tickets/assigned/c792ff2d-42a8-4e3a-a9ee-b0c050b203b6",
+//   "referrerPolicy": "strict-origin-when-cross-origin",
+//   "body": "------WebKitFormBoundarywNkB9K7Y92D2XgUk\r\nContent-Disposition: form-data; name=\"payload\"\r\n\r\n{\"sessionId\":\"15906237:customer_support_international\",\"conversationId\":\"c792ff2d-42a8-4e3a-a9ee-b0c050b203b6\",\"text\":\"<p>Message 2</p>\"}\r\n------WebKitFormBoundarywNkB9K7Y92D2XgUk--\r\n",
+//   "method": "POST",
+//   "mode": "cors",
+//   "credentials": "include"
+// });
