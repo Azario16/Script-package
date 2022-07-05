@@ -27,6 +27,7 @@ import MessageValueDebug from '../debug/message-value'
 const MessageBlock = (props: any) => {
     console.log(props)
     const [MESSAGE_VALUE, setMessageValue] = useState<any>([])
+    const [MESSAGE_INFO, setMessageInfo] = useState<any>([])
     const [USER_ID, setUserId] = useState<any>('')
     const [ERROR, setError] = useState<boolean>(false)
     const [USER_NAME, setUserName] = useState<string>()
@@ -47,12 +48,23 @@ const MessageBlock = (props: any) => {
                 setUserId(result["message-value"].channelUser.id)
                 setUserName(name)
                 setMessageValue(messageValue)
+                setMessageInfo(result["message-value"])
             } else {
                 setMessageValue("Чат не найден, возможно неверный chatId")
                 setError(true)
             }
         })
     }
+    const findOperatorName = (operatorId: string) => {
+        const result = props.operatorName.find((value: any) => {
+            return value.id === operatorId
+        })
+        if (result) {
+            return result.name
+        }
+        return operatorId
+    }
+
     useEffect(() => {
         if (props.chatOpen) {
             // console.log(MessageValueDebug)
@@ -124,9 +136,10 @@ const MessageBlock = (props: any) => {
                             let nowDataTimeBack = new Date(value.ts);
                             const dateTime = nowDataTimeBack.toLocaleDateString('ru-Ru', OPTION)
                             const time = dateTime.split(', ')[1]
-                            // const time = nowDataTimeBack.toLocaleTimeString('ru-Ru', OPTION)
-                            // .split('.').join('-')
-
+                            let operatorName = ''
+                            if (value.operatorId) {
+                                operatorName = value.operatorId !== 'autoFAQ' ? findOperatorName(value.operatorId) : 'autoFAQ'
+                            }
                             switch (value.tpe) {
                                 case 'Question':
                                     return (
@@ -134,19 +147,19 @@ const MessageBlock = (props: any) => {
                                     )
                                 case 'Event':
                                     return (
-                                        <Event value={value} key={key} operatorName={props.operatorName} eventName={props.eventName} dateTime={{ dateTime, time }} />
+                                        <Event value={value} key={key} operatorName={operatorName} eventName={props.eventName} dateTime={{ dateTime, time }} />
                                     )
                                 case 'AnswerOperatorWithBot':
                                     return (
-                                        <AnswerBot text={value.txt} key={key} operatorName={props.operatorName} dateTime={{ dateTime, time }} />
+                                        <AnswerBot text={value.txt} key={key} operatorName={operatorName} dateTime={{ dateTime, time }} />
                                     )
                                 case 'AnswerOperator':
                                     return (
-                                        <AnswerOperator text={value} key={key} operatorName={props.operatorName} dateTime={{ dateTime, time }} />
+                                        <AnswerOperator text={value} key={key} operatorName={operatorName} dateTime={{ dateTime, time }} />
                                     )
                                 case 'OperatorComment':
                                     return (
-                                        <OperatorComment text={value} key={key} operatorName={props.operatorName} dateTime={{ dateTime, time }} />
+                                        <OperatorComment text={value} key={key} operatorName={operatorName} dateTime={{ dateTime, time }} />
                                     )
 
                             }
@@ -158,6 +171,7 @@ const MessageBlock = (props: any) => {
                         chatId={props.chatId}
                         afUserId={props.operatorAfId}
                         updateChat={updateChatList}
+                        messageInfo={MESSAGE_INFO}
                     />
                 </>
             }

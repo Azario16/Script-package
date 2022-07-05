@@ -75,7 +75,7 @@ const SendCommentAndAnswer = (props: any) => {
     const sendCommentOrAnswer = () => {
         console.log(props)
         const valueMessage = {
-            userId: props.userId,
+            sessionId: props.messageInfo.sessionId,
             chatId: props.chatId,
             sendText: TEXT_SEND,
             commentValue: TYPE_SEND,
@@ -157,6 +157,28 @@ export default SendCommentAndAnswer
 //   "referrer": "https://skyeng.autofaq.ai/tickets/assigned/c792ff2d-42a8-4e3a-a9ee-b0c050b203b6",
 //   "referrerPolicy": "strict-origin-when-cross-origin",
 //   "body": "------WebKitFormBoundarywNkB9K7Y92D2XgUk\r\nContent-Disposition: form-data; name=\"payload\"\r\n\r\n{\"sessionId\":\"15906237:customer_support_international\",\"conversationId\":\"c792ff2d-42a8-4e3a-a9ee-b0c050b203b6\",\"text\":\"<p>Message 2</p>\"}\r\n------WebKitFormBoundarywNkB9K7Y92D2XgUk--\r\n",
+//   "method": "POST",
+//   "mode": "cors",
+//   "credentials": "include"
+// });
+
+
+// fetch("https://skyeng.autofaq.ai/api/reason8/answers", {
+//   "headers": {
+//     "accept": "*/*",
+//     "accept-language": "ru,en;q=0.9,mt;q=0.8",
+//     "cache-control": "no-cache",
+//     "content-type": "multipart/form-data; boundary=----WebKitFormBoundary4KtHEYQgYopjdhoL",
+//     "pragma": "no-cache",
+//     "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"100\", \"Yandex\";v=\"22\"",
+//     "sec-ch-ua-mobile": "?0",
+//     "sec-ch-ua-platform": "\"Windows\"",
+//     "sec-fetch-dest": "empty",
+//     "sec-fetch-mode": "cors",
+//     "sec-fetch-site": "none"
+//   },
+//   "referrerPolicy": "strict-origin-when-cross-origin",
+//   "body": "------WebKitFormBoundary4KtHEYQgYopjdhoL\r\nContent-Disposition: form-data; name=\"payload\"\r\n\r\n{\"sessionId\":\"15906237:customer_support\",\"conversationId\":\"c792ff2d-42a8-4e3a-a9ee-b0c050b203b6\",\"text\":\"test\",\"isComment\":true}\r\n------WebKitFormBoundary4KtHEYQgYopjdhoL--\r\n\"",
 //   "method": "POST",
 //   "mode": "cors",
 //   "credentials": "include"

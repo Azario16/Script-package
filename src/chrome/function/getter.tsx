@@ -572,7 +572,7 @@ const GetterBackground = () => {
         getAutofaqSendMessage: async ({ messageValue, callback }: { messageValue: any, sender: any, callback: any }) => {
             console.log(messageValue)
             const body = {
-                "sessionId": `${messageValue.userId}:customer_support`,
+                "sessionId": `${messageValue.sessionId}`,
                 "conversationId": `${messageValue.chatId}`,
                 "text": `${messageValue.sendText}`,
                 "isComment": messageValue.commentValue

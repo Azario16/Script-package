@@ -3,15 +3,6 @@ import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'r
 
 
 const Event = (params: any) => {
-    const findOperatorName = () => {
-        const result = params.operatorName.find((value: any) => {
-            return value.id === params.value.payload.oid
-        })
-        // console.log(params.value.payload)
-        return result
-    }
-    const operatorName = params.value.payload?.oid === undefined ? '' : findOperatorName().name
-
     const eventName: any = {
         "NewConversation": 'Начат новый диалог',
         'RunIntegration': `Запущена интеграция ${params.value.payload.name}`,
@@ -30,7 +21,7 @@ const Event = (params: any) => {
     // .join(' ')
     const resultNameEvent = eventName[params.value.eventTpe] !== undefined ? eventName[params.value.eventTpe] : params.value.eventTpe
 
-    const eventTable = `${operatorName} ${resultNameEvent}`
+    const eventTable = `${params.operatorName} ${resultNameEvent}`
 
     return (
         <div className="chat_event text-light bg-dark">
