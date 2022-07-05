@@ -18,7 +18,7 @@ const getBacktDate = () => {
     return backDate
 }
 
-const setDateTimeSlot = (dateTime: any ) => {
+const setDateTimeSlot = (dateTime: any) => {
     // DATE_TIME_SLOT.dateTimeslot = '2022-02-05, 17:25:01'
     DATE_TIME_SLOT.dateTimeslot = dateTime
 }
@@ -171,45 +171,27 @@ const getDateWeekForButton = () => {
                 pickDate = date
             }
             const dt = new Date(pickDate); // current date of week
-            // const currentWeekDay = dt.getDay();
-            // const lessDays = currentWeekDay === 0 ? 6 : currentWeekDay - 1;
+            // console.log(dt)
             const currentStartDate = new Date(new Date(dt).setDate(dt.getDate() - dateInterval));
+            // console.log(currentStartDate)
             const wkStart = createDate(currentStartDate)
-            const currentEndDate = new Date(new Date(dt).setDate(dt.getDate() + 1));
+            const currentEndDate = new Date(new Date(dt).setDate(dt.getDate()));
+            // console.log(currentEndDate)
             const wkEnd = createDate(currentEndDate)
             return { wkStart, wkEnd, pickDate }
         }
     }
 }
 
-const getDateForButton = () => {
-    return {
-
-        getLessDate: (pickDateCurrent: any) => {
-            const dt = new Date(pickDateCurrent); // current date of week
-            const currentWeekDay = dt.getDate();
-            const currentStartDate = new Date(new Date(dt).setDate(currentWeekDay - 1));
-            const pickDate = createDate(currentStartDate)
-            return { pickDate }
-        },
-        getNextDate: (pickDateCurrent: any) => {
-            const dt = new Date(pickDateCurrent); // current date of week
-            const currentWeekDay = dt.getDate();
-            const currentStartDate = new Date(new Date(dt).setDate(currentWeekDay + 1));
-            const pickDate = createDate(currentStartDate)
-
-            return { pickDate }
-        },
-        nowDate: (date: any) => {
-            let pickDate
-            if (!date) {
-                pickDate = creatNowDateFormate()
-            } else {
-                pickDate = date
-            }
-            return { pickDate }
-        }
-    }
+const createDateAndTime = (date: any) => {
+    const currentDate = new Date(date);
+    console.log(currentDate)
+    const dt = currentDate.toLocaleDateString('ru-Ru', OPTION)
+    console.log(dt)
+    const formatDt = dt.split('.').join('-')
+    console.log(formatDt)
+    const time = currentDate.toLocaleTimeString('ru-Ru', OPTION)
+    return `${formatDt} ${time}`;
 }
 
 const createDate = (date: any) => {
@@ -218,6 +200,28 @@ const createDate = (date: any) => {
     const formatDt = dt.split('.').reverse().join('-')
     return formatDt;
 }
+
+const createTime = (date: any) => {
+    const currentDate = new Date(date);
+    const time = currentDate.toLocaleTimeString('ru-Ru', OPTION)
+    return time;
+}
+
+const getTimeFromDate = (date: any) => {
+    const dt = new Date(date);
+    const time = createTime(dt)
+    return time
+}
+
+const getDateFormate = (date: any) => {
+    console.log(date)
+    const dt = new Date(date);
+    console.log(dt)
+    const newDate = createDateAndTime(dt)
+
+    return newDate
+}
+
 export {
     setDateTimeSlot,
     getDateTimeSlot,
@@ -230,6 +234,8 @@ export {
     getDateForamte,
     getDateForamteSlot,
     setDateForamteSlot,
+    getTimeFromDate,
+    getDateFormate,
 
     createDate,
     creatNowDate,
@@ -237,6 +243,5 @@ export {
 
     checkNowDateSlot,
     getTimeForButton,
-    getDateForButton,
     getDateWeekForButton
 }

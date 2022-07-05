@@ -8,49 +8,48 @@ import ButtonBar from './button-bar';
 import React from 'react';
 import { sendMessage } from "../../../chrome/utils";
 import { ACTIONS } from "../../../chrome/actions-bg";
+import { ACTIONS_WINDOW } from '../../modal-window/function/actions-window'
 import EdauctionBlock from './education-services-block';
 import EyesNumber from './eyes-number'
-import { Modal, Button } from 'react-bootstrap';
 
 function InfoBlock(params: any) {
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-    // console.log('InfoBlock')
-    // const [START, setStart] = useState<any>(false)
+    console.log(params)
+
     const [USER_INFO, setUserInfo] = useState<any>()
     const [ERROR, setError] = useState()
     const [RELATION, setRelation] = useState('')
     const effectStatus = useRef(true)
-    const buttonCollapseRef = useRef<any>()
     const mapRelation: any = {
         'kid': 'Skysmart - KIDS',
     }
+    // console.log(params.session)
 
-    const startChatAutofaq = (callback: any) => {
-        if (params.session.data.roles.includes('ROLE_SUPPORT')) {
-            const getParams = {
-                userId: USER_INFO.data.id,
-                operatorAfId: params.afUserId
-            }
-            sendMessage(ACTIONS.GET_AUTOFAQ_START_CHAT, getParams, (result: any) => {
-                callback(result)
-                // window.open(`https://crm2.skyeng.ru/persons/${USER_INFO.data.id}/customer-support/manual`)
-            })
+    const openModalElenet = () => {
+        const messageValue = {
+            message: 'create-chat',
+            userId: params.userId,
+            session: params.session,
+            afUserId: params.afUserId
         }
+
+        sendMessage(ACTIONS.SEND_EVENT, messageValue, (result: any) => {
+
+        })
     }
+
+
 
     const updateUserIngo = () => {
         effectStatus.current = true
         sendMessage(ACTIONS.GET_USER_ID, params.userId, (result: any) => {
             // console.log(result)
-            console.log(effectStatus.current)
+            // console.log(effectStatus.current)
             const userInfo: any = result["user-info"]
             if (userInfo.data?.error || userInfo.data?.errors) {
                 const errorMessage = userInfo.data.error?.message ? userInfo.error.message : userInfo.errors[0].message
                 setError(errorMessage)
             } else if (userInfo.data && effectStatus.current) {
-                console.log(effectStatus.current)
+                // console.log(effectStatus.current)
                 const findRelation = result.family.data.find((element: any) => {
                     return element.general.id === userInfo.data.id
                 })
@@ -73,14 +72,14 @@ function InfoBlock(params: any) {
         }
         return () => {
             effectStatus.current = false;
-            console.log(effectStatus.current)
+            // console.log(effectStatus.current)
         }
     }, [params.userId, params.startValue])
 
+    // console.log(params.session)
     return (
         <>
             <ButtonBar user-info={USER_INFO} user-id={params.userId} startValue={params.startValue} />
-
             {USER_INFO === undefined ?
                 ERROR === undefined
                     ? <></>
@@ -96,40 +95,13 @@ function InfoBlock(params: any) {
                                         <TelehoneMissedIcon />
                                     </div>
                                 }
-                                <div className='bg-none custom-icon autoFaq rounded bg-secondary border border-b-dark '
-                                    onClick={handleShow}
-                                >
-                                </div>
-                                <Modal show={show} onHide={handleClose}>
-                                    <Modal.Header closeButton closeVariant="white" bsPrefix="modal-header bg-b-border fs-4">
-                                        <Modal.Title>Создание чата с {USER_INFO.data.id}</Modal.Title>
-                                    </Modal.Header>
-                                    {/* <Modal.Header closeButton>
-                                        <Modal.Title>Modal heading</Modal.Title>
-                                    </Modal.Header> */}
-                                    <Modal.Body bsPrefix="modal-body bg-dark">
-                                        Эта функция временно работает только для сотрудников ТП
-                                    </Modal.Body>
-                                    <Modal.Footer bsPrefix="modal-footer bg-dark">
-                                        <Button variant="primary" onClick={()=>{
-                                            startChatAutofaq((result: any)=>{
-                                                window.open(`https://skyeng.autofaq.ai/tickets/assigned/${result["start-chat"].conversationId}`)
-                                                handleClose()
-
-                                            })
-                                        }}>
-                                            Открыть вкладку на чат
-                                        </Button>
-                                        <Button variant="primary" onClick={()=>{
-                                             startChatAutofaq((result: any)=>{
-                                                console.log('Чат запущен без вкладки')
-                                                handleClose()
-                                            })
-                                        }}>
-                                            Запустить чат без вкладки
-                                        </Button>
-                                    </Modal.Footer>
-                                </Modal>
+                                {
+                                    params.session?.data.roles.includes('ROLE_SUPPORT') &&
+                                    <div className='bg-none custom-icon autoFaq rounded bg-secondary border border-b-dark '
+                                        onClick={openModalElenet}
+                                    >
+                                    </div>
+                                }
                             </div>
                         </>
 
@@ -144,46 +116,58 @@ function InfoBlock(params: any) {
                             </div>
                         </div>
 
-                        {/* <div className="position-absolute bottom-0 start-0 rounded border border-b-dark  bg-secondary">
-                                    <div className='bg-none custom-icon autoFaq'
-                                        onClick={() => {
-
-                                        }}
-                                    >
-                                    </div>
-                                </div> */}
+                        <div className="position-absolute bottom-0 start-0 rounded border border-b-dark  bg-secondary">
+                            <div className='bg-none custom-icon time-table'
+                                onClick={() => {
+                                    window.open(`https://crm2.skyeng.ru/persons/${USER_INFO.data.id}/customer-support/manual`)
+                                }}
+                            >
+                            </div>
+                        </div>
 
                         <div className="position-absolute bottom-50 end-50"></div>
                         <div className="position-absolute bottom-0 start-0"></div>
                         <div className="position-absolute bottom-0 end-0"></div>
-
-                        <div className="fs-custom-0_7 text-light text-center bg-exten-UI">
+                        <div className="text-light text-center bg-exten-UI d-grid">
                             {RELATION === 'kid' &&
                                 <>
                                     <span className="text-info fs-6 fw-bold">
                                         {mapRelation[RELATION]}
                                     </span>
-                                    <br />
                                 </>
                             }
-                            {`ID: ${USER_INFO.data.id}`}
-                            <br />
-                            {`Name: ${USER_INFO.data.name}`}
-                            <br />
-                            {`eMail: ${USER_INFO.data.email}`}
-                            <br />
-                            <EyesNumber userInfo={USER_INFO.data} />
-                            <br />
-                            {`Skype: ${USER_INFO.data.skype}`}
-                            <br />
-                            {`Identity: ${USER_INFO.data.identity}`}
-                            <br />
-                            {`Время: ${USER_INFO.data.utcOffset} UTC`}
+                            <span>
+                                {`ID: ${USER_INFO.data.id}`}
+                            </span>
+                            {/* <br /> */}
+                            <span>
+                                {`Name: ${USER_INFO.data.name}`}
+                            </span>
+                            <span>
+                                {`eMail: ${USER_INFO.data.email}`}
+                            </span>
+                            <span>
+                                <EyesNumber userInfo={USER_INFO.data} />
+                            </span>
+                            <span>
+                                {`Skype: ${USER_INFO.data.skype}`}
+                            </span>
+                            <span>
+                                {`Identity: ${USER_INFO.data.identity}`}
+                            </span>
+                            <span>
+                                {`Время: ${USER_INFO.data.utcOffset} UTC`}
+                            </span>
                         </div>
                     </div>
                     {
                         params.startValue &&
-                        <EdauctionBlock howUser="student" startValue={params.startValue} userInfo={USER_INFO.data} />
+                        <EdauctionBlock
+                            session={params.session}
+                            afUserId={params.afUserId}
+                            howUser="student"
+                            startValue={params.startValue}
+                            userInfo={USER_INFO.data} />
                     }
                 </>
             }

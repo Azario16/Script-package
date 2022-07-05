@@ -21,23 +21,32 @@ export const getMessage = (callback: () => void): void => {
     callback();
 }
 
-export const sendMessage = (mesageName: string, messageValue: any, callback: any) => {
+export const sendMessage = (mesageName: string, messageValue: any, callbackSend: any) => {
     if (window.location.hostname === 'localhost' || window.location.hostname === 'extension-test.ru') {
         // console.log('На текуйщей странице')
+        // const getFunction = mapFunction(mesageName)
+        // getFunction(messageValue, (result: any) => {
+        //     callback(result)
+        // })
+
+        const callback = (result: any) => {
+            callbackSend(result)
+        }
+
+        const sender = null
+
         const getFunction = mapFunction(mesageName)
-        getFunction(messageValue, (result: any) => {
-            callback(result)
-        })
+        getFunction({ messageValue, sender, callback })
     } else {
-        console.log('Страниа бэкграунда ')
+        // console.log('Страниа бэкграунда ')
         const message: ChromeMessage = {
             messageValue: messageValue,
             messageName: mesageName,
         }
-        chrome.runtime.sendMessage(message,  (response) => {
+        chrome.runtime.sendMessage(message, (response) => {
             // 3. Got an asynchronous response with the data from the background
-            callback(response)
+            callbackSend(response)
             // console.log(response);
-        });    
+        });
     }
 };

@@ -1,6 +1,6 @@
 {
   "name": "Script Package",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "Сборник скриптов для быстрого доступа к ресурсам: ://.skyeng.ru/* , ://datsy.ru/, ://skyeng.autofaq.ai/, ://skyeng.omnidesk.ru/*",
   "manifest_version": 2,
   "icons": {
@@ -10,7 +10,7 @@
   },
   "options_page": "options.html",
   "browser_action": {
-    "default_popup": "index.html",
+    "default_popup": "options.html",
     "default_icon": {
       "16": "script-pack.png",
       "32": "script-pack.png",
@@ -30,25 +30,28 @@
         "static/js/main.js"
       ],
       "css": [
-        "static/css/main.css"
+        "static/css/variable.css"
       ],
       "matches": [
         "*://crm2.skyeng.ru/*",
-        "*://app.slack.com/*",
         "*://app.extension-test.ru/*",
         "*://skyeng.autofaq.ai/*",
         "*://extension-test.ru/*",
-        "*://api.extension-test.ru/*"
+        "*://api.extension-test.ru/*",
+        "*://app.extension-test.ru/*",
+        "*://vimbox.skyeng.ru/*",
+        "*://timetable.skyeng.ru/*"
       ]
     }
   ],
   "web_accessible_resources": [
-    "static/css/main.css",
+    "static/*",
     "libs/*",
     "autofaq/*"
   ],
   "permissions": [
     "cookies",
+    "*://skyeng.autofaq.ai/*",
     "*://*.skyeng.ru/*",
     "*://skyeng.omnidesk.ru/*",
     "*://datsy.ru/api/*",

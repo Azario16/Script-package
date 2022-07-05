@@ -1,0 +1,6 @@
+body,
+.DraftEditor-editorContainer > .public-DraftEditor-content,
+.expert-sidebar-inner > .expert-sider-tabs {
+    color: black !important;
+    font-weight: 400 !important;
+}

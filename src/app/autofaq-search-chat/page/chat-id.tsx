@@ -18,14 +18,14 @@ const ChatListUser = (props: any) => {
     const { START, END, USER_ID, CHAT_ID }: any = useOutletContext()
     const [ERROR, setError] = useState<string>()
 
-    console.log('ChatList')
+    // console.log('ChatList')
     const navigate = useNavigate();
     navigateComponent.getNavigate = navigate
     const location = useLocation()
     const param = useParams()
 
     useEffect(() => {
-        console.log(param)
+        // console.log(param)
         // updateChatMessage()
     }, [param])
 
@@ -33,13 +33,14 @@ const ChatListUser = (props: any) => {
     return (
         <>
             <div className="card card-body  bg-dark"
-                // key={`chat-${CHAT_ID}`}
+            // key={`chat-${CHAT_ID}`}
             >
                 <MessageBlock
                     chatId={param.id}
                     chatOpen={true}
                     operatorName={props.operaotName}
                     eventName={props.eventName}
+                    operatorAfId={props.operatorAfId}
                 />
             </div>
             <Outlet />

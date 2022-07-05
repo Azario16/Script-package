@@ -1,0 +1,484 @@
+@import "./af-style.css";
+@import "./main.css";
+
+@import "./css/db/datatables.min.css";  
+
+// @import "./font-awesom/scss/fontawesome.scss";
+// @import "./font-awesom/scss/solid.scss";
+// @import "./font-awesom/scss/regular.scss";
+
+// // for Duotones need both files
+// @import "./css/font-awesom/scss/duotone.scss";
+// @import "./css/font-awesom/scss/_duotone-icons.scss";
+@import "./css/jquery-ui-themes-1.12.1/jquery-ui.css";
+@import "../node_modules/bootstrap/scss/functions";
+// 2. Включите сюда любые переопределения переменных по умолчанию
+// $body-bg: #3a3c3d;
+$nav-link-color: #fff;
+$nav-link-hover-color: #c1c1c1;
+// body {
+//     // padding-top: 4.5rem;
+// }
+// a {
+//     cursor: pointer; 
+// }
+.form-control {
+    border-color: rgb(128, 120, 110) !important;
+}
+.d-fixed {
+    display: fixed !important;
+}
+// 3. Включите оставшуюся часть необходимых таблиц стилей Bootstrap
+@import "../node_modules/bootstrap/scss/variables";
+$nav-tabs-link-active-bg: #3a3c3d;
+$nav-tabs-link-active-border-color: $gray-300 $gray-300 #3a3c3d;
+// $nav-tabs-border-color: #3a3c3d;
+
+$body-color: $gray-100;
+$table-color: #fff;
+// 4. Включите любые дополнительные компоненты Bootstrap, как Вам нравится
+
+$custom-colors: (
+    "checkbox": #ebebeb,
+    "fatal": #693a3a,
+    "customcolor": #afdbaf,
+    "primary": #0d6efd,
+    "blue-relation": #3293e8,
+    "secondary": #71797d,
+    "success": #188754,
+    "info": #3389a3,
+    "warning": #c4a137,
+    "gold": #daa520,
+    "danger": #ab413e,
+    "light": #ffffff,
+    "dark": #3a3c3d,
+    "b-border": #030303,
+    "b-dark": #787063,
+    "lost": #610061,
+    "border-green": #00693e,
+    "exten-window": #f5deb3,
+    "exten-UI": #626e7a,
+    "af-search-chat": #252829,
+    "comment": #80808054,
+);
+ 
+// $theme-colors: map-merge($theme-colors, $custom-colors);
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/root";
+// @import "../node_modules/bootstrap/scss/utilities";
+@import "../node_modules/bootstrap/scss/containers";
+@import "../node_modules/bootstrap/scss/transitions";
+@import "../node_modules/bootstrap/scss/dropdown";
+@import "../node_modules/bootstrap/scss/accordion";
+// @import "../node_modules/bootstrap/scss/maps";
+
+$theme-colors: map-merge($theme-colors, $custom-colors);
+// $theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+// $utilities-colors: map-merge($utilities-colors, $theme-colors-rgb);
+// $utilities-text-colors: map-loop($utilities-colors, rgba-css-var, "$key", "text");
+// $utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, "$key", "bg");
+@each $color, $value in $custom-colors {
+    .bg-#{$color} {
+        background-color: $value !important;
+    }
+
+    .text-#{$color} {
+        color: $value !important;
+    }
+}
+
+@import "../node_modules/bootstrap/scss/utilities";
+
+$utilities: map-merge(
+    $utilities,
+    (
+        "min-viewport-width": (
+            property: min-width,
+            class: min-vw,
+            values: (
+                100: 100vw,
+                98: 98vw,
+                5: 5vw,
+                7: 7vw,
+            ),
+        ),
+        "max-width": (
+            property: max-width,
+            class: mw,
+            values: (
+                100: 100%,
+                98: 98vw,
+                5: 5vw,
+                7: 7vw,
+            ),
+        ),
+        "viewport-width": (
+            property: width,
+            class: vw,
+            values: (
+                100: 100vw,
+                95: 95vw,
+                10: 10vm,
+            ),
+        ),
+        "font-size-table": (
+            property: font-size,
+            class: fs-table,
+            values: (
+                10: 10pt,
+            ),
+        ),
+        "font-size-custom": (
+            property: font-size,
+            class: fs-custom,
+            values: (
+                0_1: 0.1rem,
+                0_2: 0.2rem,
+                0_3: 0.3rem,
+                0_4: 0.4rem,
+                0_5: 0.5rem,
+                0_6: 0.6rem,
+                0_7: 0.7rem,
+                0_8: 0.8rem,
+                0_9: 0.9rem,
+            ),
+        ),
+        "fs-el": (
+            property: font-size,
+            class: fs-el,
+            values: (
+                0_6: 0.6rem,
+                0_7: 0.7rem,
+                10: 10pt,
+            ),
+        ),
+        "width": (
+            property: width,
+            class: w,
+            values: (
+                10px: 10px,
+                15px: 15px,
+                20px: 20px,
+                25px: 25px,
+                50px: 50px,
+                55px: 55px,
+                65px: 65px,
+                75px: 75px,
+                100px: 100px,
+                150px: 150px,
+                180px: 180px,
+                190px: 190px,
+                200px: 200px,
+                300px: 300px,
+                360px: 360px,
+                400px: 400px,
+                450px: 450px,
+                620px: 620px,
+                1vw: 1vw,
+                75vw: 75vw,
+                10vw: 10vw,
+                20vw: 20vw,
+                30vw: 30vw,
+                45vw: 45vw,
+                62vw: 62vw,
+                10: 10%,
+                20: 20%,
+                21: 21%,
+                25: 25%,
+                40: 40%,
+                50: 50%,
+                58: 58%,
+                60: 60%,
+                75: 75%,
+                100: 100%,
+                auto: auto,
+            ),
+        ),
+        "margin-start": (
+            responsive: true,
+            property: margin-left,
+            class: ms,
+            values:
+                map-merge(
+                    $spacers,
+                    (
+                        0_9: 0.9rem,
+                        48rem: 48rem,
+                        auto: auto,
+                    )
+                ),
+        ),
+        "margin-top": (
+            responsive: true,
+            property: margin-top,
+            class: mt,
+            values:
+                map-merge(
+                    $spacers,
+                    (
+                        5rem: 5rem,
+                        7rem: 7rem,
+                        auto: auto,
+                    )
+                ),
+        ),
+        "rounded-cust": (
+            responsive: true,
+            property: border-radius,
+            class: rounded-cust,
+            values:
+                map-merge(
+                    $spacers,
+                    (
+                        0_15: 0.15rem,
+                    )
+                ),
+        ),
+        "height": (
+            property: height,
+            class: h,
+            values: (
+                1em: 1em,
+                2_5em: 2.5em,
+                2em: 2em,
+                3em: 3em,
+                6rem: 6rem,
+                15px: 15px,
+                25px: 25px,
+                30px: 30px,
+                40px: 40.111111111px,
+                20: 20%,
+                25: 25%,
+                50: 50%,
+                75: 75%,
+                80: 80%,
+                100: 100%,
+                auto: auto,
+            ),
+        ),
+        "padding-btn": (
+            property: padding,
+            class: padding-btn,
+            values: (
+                0: 0rem,
+                0_1: 0.1rem,
+                10: 10rem,
+            ),
+        ),
+        "border-none": (
+            property: border,
+            class: border,
+            values: (
+                none: none,
+            ),
+        ),
+        "padding-top": (
+            property: padding-top,
+            class: pt,
+            values: (
+                0: 0rem,
+                1: 1rem,
+                2: 2rem,
+                3: 3rem,
+                4: 4rem,
+                5: 5rem,
+            ),
+        ),
+    )
+);
+.ui-datepicker-trigger {
+    @extend .btn-success, .btn;
+}
+
+// @import "../node_modules/bootstrap/scss/bootstrap";
+
+/* Рабочие импорты но ломают h2 теги */
+
+@import "../node_modules/bootstrap/scss/grid";
+@import "../node_modules/bootstrap/scss/forms";
+@import "../node_modules/bootstrap/scss/buttons";
+@import "../node_modules/bootstrap/scss/button-group";
+@import "../node_modules/bootstrap/scss/badge";
+@import "../node_modules/bootstrap/scss/tables";
+@import "../node_modules/bootstrap/scss/reboot";
+
+@import "./reboot-custom";
+
+@import "../node_modules/bootstrap/scss/images";
+@import "../node_modules/bootstrap/scss/containers";
+@import "../node_modules/bootstrap/scss/modal";
+@import "../node_modules/bootstrap/scss/close";
+@import "../node_modules/bootstrap/scss/utilities/api";
+/* --------------------------------- */
+
+// @import "../node_modules/bootstrap/scss/root";
+// @import "../node_modules/bootstrap/scss/grid";
+// @import "../node_modules/bootstrap/scss/forms";
+// @import "../node_modules/bootstrap/scss/buttons";
+// @import "../node_modules/bootstrap/scss/transitions";
+// @import "../node_modules/bootstrap/scss/badge";
+
+// @import "../node_modules/bootstrap/scss/root";
+// @import "../node_modules/bootstrap/scss/reboot";
+// @import "../node_modules/bootstrap/scss/type";
+// @import "../node_modules/bootstrap/scss/images";
+// @import "../node_modules/bootstrap/scss/containers";
+// @import "../node_modules/bootstrap/scss/grid";
+// @import "../node_modules/bootstrap/scss/tables";
+// @import "../node_modules/bootstrap/scss/forms";
+// @import "../node_modules/bootstrap/scss/buttons";
+// @import "../node_modules/bootstrap/scss/transitions";
+// @import "../node_modules/bootstrap/scss/dropdown";
+// @import "../node_modules/bootstrap/scss/button-group";
+// @import "../node_modules/bootstrap/scss/nav";
+// @import "../node_modules/bootstrap/scss/navbar";
+// @import "../node_modules/bootstrap/scss/card";
+// @import "../node_modules/bootstrap/scss/accordion";
+// @import "../node_modules/bootstrap/scss/breadcrumb";
+// @import "../node_modules/bootstrap/scss/pagination";
+// @import "../node_modules/bootstrap/scss/badge";
+// @import "../node_modules/bootstrap/scss/alert";
+// @import "../node_modules/bootstrap/scss/progress";
+// @import "../node_modules/bootstrap/scss/list-group";
+// @import "../node_modules/bootstrap/scss/close";
+// @import "../node_modules/bootstrap/scss/toasts";
+// @import "../node_modules/bootstrap/scss/modal";
+// @import "../node_modules/bootstrap/scss/tooltip";
+// @import "../node_modules/bootstrap/scss/popover";
+// @import "../node_modules/bootstrap/scss/carousel";
+// @import "../node_modules/bootstrap/scss/spinners";
+// @import "../node_modules/bootstrap/scss/offcanvas";
+// @import "../node_modules/bootstrap/scss/placeholders";
+
+// // Helpers
+// @import "../node_modules/bootstrap/scss/helpers";
+
+// // Utilities
+// @import "../node_modules/bootstrap/scss/utilities/api";
+
+@each $color, $value in $theme-colors {
+    .custom-control-input-#{$color}:checked {
+        background-color: $value;
+        border-color: $value;
+    }
+    .custom-control-input-#{$color}:focus {
+        border-color: $value;
+        box-shadow: 0 0 0 0.25rem $value;
+        outline: 0;
+    }
+}
+@each $color, $value in $theme-colors {
+    .btn-#{$color} {
+        @include button-variant($value, $value, #fff);
+    }
+}
+// @import url("https://fonts.googleapis.com/css?family=Quicksand");
+// @import url("https://fonts.googleapis.com/css?family=Lato:300,400,700");
+:root {
+    --bs-font-sans-serif: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+        sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.timeslot-link {
+    max-width: 65% !important;
+    display: inline-block;
+    position: relative;
+}
+
+.timeslot-assign {
+    max-width: 15% !important;
+    min-width: 15% !important;
+    display: inline-block;
+}
+
+.timeslot-btn-assign {
+    min-width: 10% !important;
+    max-width: 10% !important;
+    display: inline-block;
+}
+.timeslot-btn-assign-twothirds {
+    min-width: 15% !important;
+    max-width: 15% !important;
+    display: inline-block;
+}
+.timeslot-btn-assign-full {
+    min-width: 20% !important;
+    max-width: 20% !important;
+    display: inline-block;
+}
+.timeslot-btn-assign-half {
+    min-width: 5% !important;
+    max-width: 5% !important;
+    display: inline-block;
+}
+// ::-webkit-scrollbar {
+//     width: 0px;
+// }
+.block-slot {
+    background-color: rgb(58, 60, 61) !important;
+}
+
+.fa {
+    color: white;
+}
+
+.timeslot-assign,
+.timeslot-assign[readonly] {
+    color: #a9b2b1;
+    background-color: rgb(104, 110, 113);
+}
+
+.block-date-pocker {
+    top: 75px;
+}
+
+// table {
+//     overflow: hidden;
+// }
+
+.collum-hov {
+    position: relative;
+}
+//Row
+.collum-hov:hover::before {
+    background-color: #71797d;
+    content: "";
+    height: 100%;
+    left: -5000px;
+    position: absolute;
+    top: 0;
+    width: 10000px;
+    z-index: -2;
+}
+
+//Column
+.collum-hov:hover::after {
+    background-color: #71797d;
+    content: "";
+    height: 10000px;
+    left: 0;
+    position: absolute;
+    top: -5000px;
+    width: 100%;
+    z-index: -1;
+}
+
+.cursor-point {
+    cursor: pointer;
+}
+
+.accordion-left::after {
+    transform: rotate(90deg);
+}
+
+.accordion-left:not(.collapsed)::after {
+    transform: rotate(270deg);
+}
+// .text-light::selection {
+//     background: #0b4a98 !important;
+// }
+// #my-extension-root iframe {
+//     width: 100%;
+//     height: 100%;
+//     border: none;
+// }

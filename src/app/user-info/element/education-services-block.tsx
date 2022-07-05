@@ -4,6 +4,7 @@ import { getEducationInfo } from '../function/get-education-info'
 import { sendMessage } from "../../../chrome/utils";
 import { ACTIONS } from "../../../chrome/actions-bg";
 import InfoBlock from './user-info-block';
+import { Collapse } from 'bootstrap';
 
 interface HitLog {
     serviceTypeKey: string;
@@ -24,12 +25,20 @@ interface eduInfo {
     errors?: any;
 }
 
-function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: string; }) {
+function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: string; session: any, afUserId: string }) {
     // console.log('InfoBlock')
     const [START, setStart] = useState(true)
     const [EDUCATION, setEducation] = useState([])
     const [ERROR, setError] = useState<any>()
     const configurationsRef = useRef<any>({})
+
+    const buttonCollapseRef = useRef<any>([])
+
+    const coollapseToogle = (element: any) => {
+        new Collapse(element, {
+            toggle: true
+        })
+    }
 
     const mapEducation = (educationValue: string) => {
         if (null !== configurationsRef.current) {
@@ -69,7 +78,7 @@ function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: s
                     setError(errorMessage)
                 }
             } else if (educationInfo.data) {
-                console.log(result)
+                // console.log(result)
                 const resultConfog: any = result["configurations"].data
                 configurationsRef.current = resultConfog
                 setEducation(educationInfo.data)
@@ -102,31 +111,23 @@ function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: s
                     {
                         EDUCATION.map((educationValue: any, key: number) => {
                             const teacherId = educationValue.teacher?.general?.id !== undefined
-                                ? educationValue?.teacher.general.id
+                                ? String(educationValue?.teacher.general.id)
                                 : ''
                             return (
                                 <div className="accordion-item" key={key}>
                                     <div className="accordion-header" id="panelsStayOpen-headingTwo">
                                         <button className={`accordion-button collapsed padding-btn-0 fs-custom-0_7 bg-${mapEducationColor(educationValue)} text-light`} type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target={`#collapseUserInfo-${key}`}
-                                            aria-expanded="false"
-                                            aria-controls={`collapseUserInfo-${key}`}
+                                            onClick={() => {
+                                                coollapseToogle(buttonCollapseRef.current[key])
+                                            }}
                                         >
                                             <div className="ms-1  w-75">
                                                 <div className=" btn-group">
                                                     <div className="w-180px me-2">
                                                         <span>{`Плательщик: ${educationValue.paymentAgreement.person.general.id}`}</span>
-                                                        <br/>
+                                                        <br />
                                                         У: {educationValue.student.general.name}
-                                                        {/* <div className='input-group'>
-                                                            <div className='coin custom-icon w-15px h-15px'>
-                                                            </div>
-                                                            <span className='ms-1 text-nowrap'>
-                                                            : {educationValue.balance}
-                                                            </span>
-                                                        </div> */}
-                                                        <br/>
+                                                        <br />
                                                         <div className=" text-nowrap inline">{mapEducation(educationValue.serviceTypeKey)}</div>
 
                                                     </div>
@@ -136,7 +137,7 @@ function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: s
                                                     <div className={`w-65px fs-custom-0_7 d-grid bg-${mapEducationColor(educationValue)}`}>
                                                         <div className='btn-group'>
                                                             {/* <span>{`П: `}</span> */}
-                                                            <span>{educationValue.teacher !== null ? 'П: '+educationValue.teacher.general.id : 'П: -'}
+                                                            <span>{educationValue.teacher !== null ? 'П: ' + educationValue.teacher.general.id : 'П: -'}
                                                             </span>
                                                         </div>
                                                         <div className='btn-group'>
@@ -154,13 +155,21 @@ function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: s
                                     </div>
                                     <div id={`collapseUserInfo-${key}`} className={`accordion-collapse collapse`}
                                         aria-labelledby="panelsStayOpen-headingTwo"
-
+                                        ref={(ref) => {
+                                            const array = [...buttonCollapseRef.current, ref]
+                                            buttonCollapseRef.current = array
+                                        }}
                                     >
 
                                         {educationValue.teacher !== null ?
                                             <div className="bg-dark">
                                                 {/* <ButtonBar howUser="teacher" /> */}
-                                                <InfoBlock howUser="teacher" startValue={START} userId={teacherId} />
+                                                <InfoBlock
+                                                    session={params.session}
+                                                    afUserId={params.afUserId}
+                                                    howUser="teacher"
+                                                    startValue={START}
+                                                    userId={teacherId} />
                                             </div>
                                             : <div className="bg-dark text-light text-center">Не указан преподаватель</div>
                                         }

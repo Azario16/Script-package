@@ -4,25 +4,8 @@ import ReactDOM from 'react-dom/client';
 import { sendMessage } from "../../chrome/utils";
 import { ACTIONS } from "../../chrome/actions-bg";
 
-import { navigateComponent } from '../autofaq-search-chat/page/home'
-
 import UserStatus from './element/user-statuc-block'
 
-function createDivIdForReact() {
-    let elm: HTMLElement = document.createElement('li');
-    const appenfElem = document.querySelector('div[class="app-content bg-dark"] > ul[role="menu"]');
-    if (appenfElem !== null) {
-        appenfElem.append(elm)
-    }
-    elm.outerHTML = `
-        <li id="people_head" class="ant-menu-submenu ant-menu-submenu-inline ant-menu-submenu-active" role="PeopleList">
-        </li>
-        `;
-}
-
-// type State {
-//     active: boolean
-//   }
 interface ClassValue {
     status: string,
     color: string,
@@ -33,11 +16,12 @@ function innerTextElement(node: HTMLElement): string {
 }
 // async function StatusAutofaqPeopleRender() {
 class Reservation extends React.Component<{}, {
-    userGroup: string,
+    // userGroup: string,
     //userGroup: 'ТП',
-    userName: string,
+    // userName: string,
     //userName: 'ТП-Гусейнов Рахид',
     userKbs: any,
+    userId: any,
     error: any,
     data: any,
     isLoadedData: boolean,
@@ -48,22 +32,30 @@ class Reservation extends React.Component<{}, {
     class: Array<ClassValue>,
 }> {
     constructor(props: any) {
-        const userGroupElem: HTMLElement = document.querySelector('.user_menu-dropdown-user_name')!
-        const userNameElem: HTMLElement = document.querySelector('.user_menu-dropdown-user_name')!
-        let userGroup: string;
-        let userName: string;
+        // sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: any) => {
+        //     console.log(result)
+        //     userGroup = result.settings.knowledgeBases;
+        //     userName = '';
+        //     userId = result.id;
+        // })
 
-        userGroup = innerTextElement(userGroupElem).split('-')[0];;
-        userName = innerTextElement(userNameElem);
+        // const userGroupElem: HTMLElement = document.querySelector('.user_menu-dropdown-user_name')!
+        // const userNameElem: HTMLElement = document.querySelector('.user_menu-dropdown-user_name')!
+
+        // userGroup = innerTextElement(userGroupElem).split('-')[0];;
+        // userName = innerTextElement(userNameElem);
+
+
         super(props);
         this.state = {
-            userGroup: userGroup,
+            // userGroup: userGroup,
             // userGroup: 'ТП',
             // userGroup: '',
-            userName: userName,
+            // userName: userName,
             // userName: 'ТП-Гусейнов Рахид',
             // userName: '',
             userKbs: [],
+            userId: null,
             error: null,
             data: [],
             isLoadedData: false,
@@ -90,23 +82,32 @@ class Reservation extends React.Component<{}, {
 
     }
 
+    openModalElenet(this: any, operatorId: string) {
+        const messageValue = {
+            message: 'open-operator-chat',
+            operatorAfId: operatorId
+        }
+
+        sendMessage(ACTIONS.SEND_EVENT, messageValue, (result: any) => {
+
+        })
+    }
+
     componentDidMount() {
         //console.log("componentDidUpdate")
+        sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: any) => {
+            console.log(result)
+            this.setState({
+                userKbs: result.settings.knowledgeBases,
+                userId: result.id,
+            })
+        })
         this.getCurrentState()
         // setTimeout(this.getCurrentState.bind(this), 3000)
         setInterval(this.getCurrentState.bind(this), 15000)
     }
-    get_operator_chats(test: any) {
-        console.log(test)
-        console.log("Run")
-    }
-    getChatOperator(this: any, operatorId: string) {
-        console.log(navigateComponent)
-        navigateComponent.getNavigate(operatorId)
-        // console.log('test')
-        // const navigate = useNavigate();
-        // navigate("/chat-list/1234");
-    }
+
+
     async getCurrentState() {
         // console.log("getCurrentState")
         sendMessage(ACTIONS.GET_AUTOFAQ_PEOPLE, '', (result: any) => {
@@ -130,9 +131,9 @@ class Reservation extends React.Component<{}, {
     }
     parseStatus(data: any) {
         //console.log('parseStatus')
-        const online = this.parse('Online', this.state.userGroup, data);
-        const busy = this.parse('Busy', this.state.userGroup, data);
-        const pause = this.parse('Pause', this.state.userGroup, data);
+        const online = this.parse('Online', data);
+        const busy = this.parse('Busy', data);
+        const pause = this.parse('Pause', data);
 
         const parseResult = {
             Online: online,
@@ -141,7 +142,12 @@ class Reservation extends React.Component<{}, {
         }
         return parseResult
     }
-    parse(status: any, groupIdParse: any, data: any) {
+
+    ckechKbOperator(knowledgeBases: any){
+        return true
+    }
+
+    parse(status: any, data: any) {
         //console.log('parse')
         //console.log(status, groupIdParse)
         const userList: any = []
@@ -153,14 +159,14 @@ class Reservation extends React.Component<{}, {
             // AF вместо 0 чатов отдает null, тут условие чтобы были нули
             if (person.operator !== null) {
                 // Ищем совпадения по имени того кто зашел в систему и присваиваем тематику в state
-                if (person.operator.fullName === this.state.userName) {
-                    this.setState({ userKbs: person.operator.kbs })
-                    userKB.push(person.operator.kbs)
-                    // console.log(this.state)
-                    // console.log(person.operator.kbs)
-                }
+                // if (person.operator.fullName === this.state.userName) {
+                //     this.setState({ userKbs: person.operator.kbs })
+                //     userKB.push(person.operator.kbs)
+                //     // console.log(this.state)
+                //     // console.log(person.operator.kbs)
+                // }
 
-                if (person.operator.status === status && person.operator.fullName.split('-')[0] == groupIdParse) {
+                if (person.operator.status === status && this.ckechKbOperator(person.operator.kbs)) {
                     if (person.aCnt === null) {
                         data[index].aCnt = 0;
                     }
@@ -192,7 +198,7 @@ class Reservation extends React.Component<{}, {
         //console.log('checkSumContTematicGroup')
         const listCntUndistributed: any = [];
         const userKb = operState.find((person: any) => {
-            return person.operator.fullName === this.state.userName
+            return person.operator.fullName === this.state.userId
         })
         operState.forEach((operatorState: any) => {
             if (operatorState.operator === null) {
@@ -214,54 +220,58 @@ class Reservation extends React.Component<{}, {
             return <div>Загрузка...</div>;
         } else {
             return (
-                <div>
-                    <div className="ant-menu-item ant-menu-item-only-child">
-                        <div className={this.colorUndistributed() + " asign-slot-box fs-el-0_7 badge rounded-pill col-auto row g-0 badge border border-3 border-border-green"}>{this.state.groupCnt}</div>
-                        <span className="">
-                            <span className="ant-badge user-select-none  mx-1">Нераспред</span>
-                        </span>
-                    </div>
-                    <div className="ant-menu-item ant-menu-item-only-child " data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                        <span className="ps-4 user-select-none "> Список </span>
-                    </div>
-                    <div className="collapse show" id="collapseExample">
-                        <div className="card card-body ant-menu-dark ant-menu ant-menu-sub ant-menu-inline">
-                            <div className="">
-                                {
-                                    this.state.operStatus.Online.map((body: any, number: any) => {
-                                        const status = this.state.class.find((value: ClassValue) => {
-                                            return value.status === body.stats
-                                        })
-                                        return (
-                                            <UserStatus body={body} status={status} searchChat={this.getChatOperator.bind(this, body.id)} key={body.name} />
-                                        )
-                                    })
-                                }
-
-                                {
-                                    this.state.operStatus.Busy.map((body: any) => {
-                                        const status = this.state.class.find((value: ClassValue) => {
-                                            return value.status === body.stats
-                                        })
-                                        return (
-                                            <UserStatus body={body} status={status} searchChat={this.getChatOperator.bind(this, body.id)} key={body.name} />
-                                        )
-                                    })
-                                }
-                                {
-                                    this.state.operStatus.Pause.map((body: any, number: any) => {
-                                        const status = this.state.class.find((value: ClassValue) => {
-                                            return value.status === body.stats
-                                        })
-                                        return (
-                                            <UserStatus body={body} status={status} searchChat={this.getChatOperator.bind(this, body.id)} key={body.name} />
-                                        )
-                                    })
-                                }
+                <div className="ant-menu app-content ant-menu-dark ant-menu-root ant-menu-inline">
+                    <li className="ant-menu-submenu ant-menu-submenu-inline ant-menu-submenu-active" role="PeopleList">
+                        <div>
+                            <div className="ant-menu-item ant-menu-item-only-child">
+                                <div className={this.colorUndistributed() + " asign-slot-box fs-el-0_7 badge rounded-pill col-auto row g-0 badge border border-3 border-border-green"}>{this.state.groupCnt}</div>
+                                <span className="">
+                                    <span className="ant-badge user-select-none  mx-1">Нераспред</span>
+                                </span>
                             </div>
-                        </div>
-                    </div>
-                </div >
+                            <div className="ant-menu-item ant-menu-item-only-child " data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                <span className="ps-4 user-select-none "> Список </span>
+                            </div>
+                            <div className="collapse show" id="collapseExample">
+                                <div className="card card-body ant-menu-dark ant-menu ant-menu-sub ant-menu-inline">
+                                    <div className="">
+                                        {
+                                            this.state.operStatus.Online.map((body: any, number: any) => {
+                                                const status = this.state.class.find((value: ClassValue) => {
+                                                    return value.status === body.stats
+                                                })
+                                                return (
+                                                    <UserStatus body={body} status={status} searchChat={this.openModalElenet.bind(this, body.id)} key={body.name} />
+                                                )
+                                            })
+                                        }
+
+                                        {
+                                            this.state.operStatus.Busy.map((body: any) => {
+                                                const status = this.state.class.find((value: ClassValue) => {
+                                                    return value.status === body.stats
+                                                })
+                                                return (
+                                                    <UserStatus body={body} status={status} searchChat={this.openModalElenet.bind(this, body.id)} key={body.name} />
+                                                )
+                                            })
+                                        }
+                                        {
+                                            this.state.operStatus.Pause.map((body: any, number: any) => {
+                                                const status = this.state.class.find((value: ClassValue) => {
+                                                    return value.status === body.stats
+                                                })
+                                                return (
+                                                    <UserStatus body={body} status={status} searchChat={this.openModalElenet.bind(this, body.id)} key={body.name} />
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div >
+                    </li>
+                </div>
             )
 
         }

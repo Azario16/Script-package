@@ -19,42 +19,69 @@ import Question from './question'
 import AnswerBot from './answer-bot'
 import AnswerOperator from './answer-operator'
 import OperatorComment from './operator-comment'
+import SendCommentAndAnswer from './send-comment-and-answer'
+import { Modal, Button } from 'react-bootstrap';
 
+import MessageValueDebug from '../debug/message-value'
 
 const MessageBlock = (props: any) => {
+    console.log(props)
     const [MESSAGE_VALUE, setMessageValue] = useState<any>([])
     const [USER_ID, setUserId] = useState<any>('')
     const [ERROR, setError] = useState<boolean>(false)
     const [USER_NAME, setUserName] = useState<string>()
     const updateChatList = () => {
-        console.log('updateChatList')
-        // if (!!props.id) {
+        // console.log('updateChatList')
         sendMessage(ACTIONS.GET_AUTOFAQ_MESSAGE_VALUE, props.chatId, (result: any) => {
-            console.log(result)
+            // console.log(result)
             const messageValue: any = result["message-value"].messages
             if (messageValue?.length === 0) {
                 setMessageValue("Пользователь не писал в этот преиод")
                 setError(true)
             } else if (messageValue) {
+                // console.log(result["message-value"].channelUser)
+                const name = result["message-value"].channelUser.fullName !== undefined
+                    ? result["message-value"].channelUser.fullName
+                    : result["message-value"].channelUser.email
+
                 setUserId(result["message-value"].channelUser.id)
-                setUserName(result["message-value"].channelUser.fullName)
+                setUserName(name)
                 setMessageValue(messageValue)
             } else {
                 setMessageValue("Чат не найден, возможно неверный chatId")
                 setError(true)
             }
         })
-        // }
     }
-    const navigate = useNavigate();
-    // console.log('Rerender')
     useEffect(() => {
         if (props.chatOpen) {
+            // console.log(MessageValueDebug)
+            // const name = MessageValueDebug.channelUser.fullName !== undefined
+            //     ? MessageValueDebug.channelUser.fullName
+            //     : MessageValueDebug.channelUser.email
+
+            // setUserId(MessageValueDebug.channelUser.id)
+            // setUserName(name)
+            // setMessageValue(MessageValueDebug.messages)
+
+
+
             updateChatList()
             setUserId('')
         }
-        // console.log(props)
     }, [props.chatOpen, props.chatId])
+
+    const openModalElenet = () => {
+        const messageValue = {
+            message: 'assign-chat',
+            chatId: props.chatId,
+            afUserId: props.operatorAfId
+        }
+
+        sendMessage(ACTIONS.SEND_EVENT, messageValue, (result: any) => {
+
+        })
+    }
     return (
         <div className="chat-messages">
             <div className="d-flex flex-row justify-content-between ">
@@ -65,13 +92,14 @@ const MessageBlock = (props: any) => {
                     }}
                 >ссылка на чат hdi</button>
 
-                <button type="button" className="btn btn-warning mb-3 padding-btn-0 fs-6 text-light" id="change_week"
-                    onClick={async () => {
-                    }}
-                >Забрать</button>
+                {window.location.hostname === 'skyeng.autofaq.ai' &&
+                    <button type="button" className="btn btn-warning mb-3 padding-btn-0 fs-6 text-light" id="change_week"
+                        onClick={openModalElenet}
+                    >Забрать</button>
+                }
             </div>
 
-            <div className="d-grid">
+            <div className="d-grid ">
                 <span className="fs-custom-0_8 text-light">ID: {props.chatId}</span>
                 <span className="fs-custom-0_8 text-light">userID: {USER_ID}</span>
             </div>
@@ -79,48 +107,59 @@ const MessageBlock = (props: any) => {
             {ERROR
                 ? <pre>{MESSAGE_VALUE}</pre>
                 :
+                <>
 
-                MESSAGE_VALUE.map((value: any, key: number) => {
-                    const OPTION: any = {
-                        day: 'numeric',
-                        year: 'numeric',
-                        month: 'long',
-                        hour: 'numeric',
-                        minute: 'numeric',
-                        second: 'numeric',
-                        timeZone: 'Europe/Moscow',
-                        hour12: false,
-                    };
-                    let nowDataTimeBack = new Date(value.ts);
-                    const dateTime = nowDataTimeBack.toLocaleDateString('ru-Ru', OPTION)
-                    const time = dateTime.split(', ')[1]
-                    // const time = nowDataTimeBack.toLocaleTimeString('ru-Ru', OPTION)
-                    // .split('.').join('-')
+                    {
+                        MESSAGE_VALUE.map((value: any, key: number) => {
+                            const OPTION: any = {
+                                day: 'numeric',
+                                year: 'numeric',
+                                month: 'long',
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                second: 'numeric',
+                                timeZone: 'Europe/Moscow',
+                                hour12: false,
+                            };
+                            let nowDataTimeBack = new Date(value.ts);
+                            const dateTime = nowDataTimeBack.toLocaleDateString('ru-Ru', OPTION)
+                            const time = dateTime.split(', ')[1]
+                            // const time = nowDataTimeBack.toLocaleTimeString('ru-Ru', OPTION)
+                            // .split('.').join('-')
 
-                    switch (value.tpe) {
-                        case 'Question':
-                            return (
-                                <Question text={value.txt} key={key} userName={USER_NAME} dateTime={{ dateTime, time }} />
-                            )
-                        case 'Event':
-                            return (
-                                <Event value={value} key={key} operatorName={props.operatorName} eventName={props.eventName} dateTime={{ dateTime, time }} />
-                            )
-                        case 'AnswerOperatorWithBot':
-                            return (
-                                <AnswerBot text={value.txt} key={key} operatorName={props.operatorName} dateTime={{ dateTime, time }} />
-                            )
-                        case 'AnswerOperator':
-                            return (
-                                <AnswerOperator text={value} key={key} operatorName={props.operatorName} dateTime={{ dateTime, time }} />
-                            )
-                        case 'OperatorComment':
-                            return (
-                                <OperatorComment text={value} key={key} operatorName={props.operatorName} dateTime={{ dateTime, time }} />
-                            )
+                            switch (value.tpe) {
+                                case 'Question':
+                                    return (
+                                        <Question text={value.txt} key={key} userName={USER_NAME} dateTime={{ dateTime, time }} />
+                                    )
+                                case 'Event':
+                                    return (
+                                        <Event value={value} key={key} operatorName={props.operatorName} eventName={props.eventName} dateTime={{ dateTime, time }} />
+                                    )
+                                case 'AnswerOperatorWithBot':
+                                    return (
+                                        <AnswerBot text={value.txt} key={key} operatorName={props.operatorName} dateTime={{ dateTime, time }} />
+                                    )
+                                case 'AnswerOperator':
+                                    return (
+                                        <AnswerOperator text={value} key={key} operatorName={props.operatorName} dateTime={{ dateTime, time }} />
+                                    )
+                                case 'OperatorComment':
+                                    return (
+                                        <OperatorComment text={value} key={key} operatorName={props.operatorName} dateTime={{ dateTime, time }} />
+                                    )
 
+                            }
+                        })
                     }
-                })
+                    {/* Блок отправки ссобщений либо комментариев в AF  */}
+                    <SendCommentAndAnswer
+                        userId={USER_ID}
+                        chatId={props.chatId}
+                        afUserId={props.operatorAfId}
+                        updateChat={updateChatList}
+                    />
+                </>
             }
         </div>
     )

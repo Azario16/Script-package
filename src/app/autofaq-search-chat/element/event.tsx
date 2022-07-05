@@ -7,7 +7,7 @@ const Event = (params: any) => {
         const result = params.operatorName.find((value: any) => {
             return value.id === params.value.payload.oid
         })
-        console.log(params.value.payload)
+        // console.log(params.value.payload)
         return result
     }
     const operatorName = params.value.payload?.oid === undefined ? '' : findOperatorName().name

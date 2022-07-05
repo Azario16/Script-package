@@ -1,0 +1,48 @@
+@import "./css/jquery-ui-themes-1.12.1/jquery-ui.css";
+.ui-widget.ui-widget-content {
+    z-index: 2001 !important;
+}
+
+.ui-datepicker-month {
+    background: #e9e9e9 !important;
+    color: black !important;
+}
+
+.expert-sidebar-inner > .expert-sider-tabs {
+    color: black;
+    font-weight: 400;
+}
+.paddding-custom-cms{
+    padding-top: 7px !important;
+}
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+
+$custom-colors: (
+    "checkbox": #ebebeb,
+    "fatal": #693a3a,
+    "customcolor": #afdbaf,
+    "primary": #0d6efd,
+    "blue-relation": #3293e8,
+    "secondary": #71797d,
+    "success": #188754,
+    "info": #3389a3,
+    "warning": #c4a137,
+    "gold": #daa520,
+    "danger": #ab413e,
+    "light": #ffffff,
+    "dark": #3a3c3d,
+    "b-border": #030303,
+    "b-dark": #787063,
+    "lost": #610061,
+    "border-green": #00693e,
+    "exten-window": #f5deb3,
+    "exten-UI": #626e7a,
+    "af-search-chat": #252829,
+    "comment": #80808054,
+    "message": #dceeff,
+);
+
+$theme-colors: map-merge($theme-colors, $custom-colors);
+
+@import "../node_modules/bootstrap/scss/root";

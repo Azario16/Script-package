@@ -1,20 +1,20 @@
-const createDargAndDrop = (mainElemnt: any, dragDropElement: any) => {
+const createDargAndDrop = (mainElemnt: any, dragDropElement: any, prefName: string) => {
     // Указываем главное окно
     let generalElm = mainElemnt
     // Теперь элементы нажатием на которые оно будет перемещаться
     let dragAndDrop = dragDropElement
 
     //Сохранение позиции окна
-    if (localStorage.getItem('winTop') === null) {
-        localStorage.setItem('winTop', '120');
-        localStorage.setItem('winLeft', '295');
+    if (localStorage.getItem(`${prefName}Top`) === null) {
+        localStorage.setItem(`${prefName}Top`, '120');
+        localStorage.setItem(`${prefName}Left`, '295');
     }
 
-    generalElm.style.top = localStorage.getItem('winTop')
-    generalElm.style.left = localStorage.getItem('winLeft')
+    generalElm.style.top = localStorage.getItem(`${prefName}Top`)
+    generalElm.style.left = localStorage.getItem(`${prefName}Left`)
     // generalElm.style.position = "absolute"
     let shiftX: any
-    let shiftY: any 
+    let shiftY: any
     dragAndDrop.onmousedown = function (event: any) {
         // console.log('Нажатие на эелемент')
         const coords = getCoords(generalElm);
@@ -43,8 +43,8 @@ const createDargAndDrop = (mainElemnt: any, dragDropElement: any) => {
     function moveAt(clientX: any, clientY: any) {
         generalElm.style.left = clientX - shiftX + 'px';
         generalElm.style.top = clientY - shiftY + 'px';
-        localStorage.setItem('winLeft', generalElm.style.left);
-        localStorage.setItem('winTop', generalElm.style.top);
+        localStorage.setItem(`${prefName}Left`, generalElm.style.left);
+        localStorage.setItem(`${prefName}Top`, generalElm.style.top);
     }
 
     generalElm.ondragstart = function () {

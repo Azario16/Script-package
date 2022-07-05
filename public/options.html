@@ -32,30 +32,10 @@
         }
     </style>
     <script src="options.js"></script>
-    <script>
-        const test = () => {
-            console.log('start')
-            var laserExtensionId = "gibeoebkgmgoeoemcbofgdfcmllkdjpe";
-
-            // Make a simple request:
-            chrome.runtime.sendMessage(laserExtensionId, { getTargetData: true },
-                function (response) {
-
-                    chrome.runtime.sendMessage(
-                        laserExtensionId, { activateLasers: true }
-                    );
-
-                }
-            );
-        }
-    </script>
 </head>
 
 <body>
     <h1>Настройки</h1>
-    <div>
-        <button onclick=test></button>
-    </div>
     <div>
         <div>
             <span>

@@ -8,12 +8,23 @@ const testingGet = async (body: any) => {
         body: JSON.stringify(body),
         // credentials: "include"
     })
-    const result = await get.json();
+    if (body?.return === 'doc') {
+        const result = await get.text();
+        return result
+    }
+    let result
+    try {
+        result = await get.json();
+    } catch (e) {
+        result = null
+    }
+    console.log(result)
     return result
 }
 
 const productGet = async (url: string, methodOption: any) => {
     let get: any = await fetch(url, methodOption)
+    console.log(get)
     return get
 }
 
@@ -21,6 +32,68 @@ const productGet = async (url: string, methodOption: any) => {
 
 const GetterBackground = () => {
     return {
+        getTeacherLessons: async (param: any, callback: any) => {
+            console.log(param)
+            const arrayResult: any = {
+                'lessons': {},
+            }
+
+            const body = {
+                "timetableFrom": `${param.dateWeek.wkStart}T21:00:00+00:00`,
+                "timetableTo": `${param.dateWeek.wkEnd}T20:59:59+00:00`,
+                "serviceTypeKey": null,
+                "timeRanges": [],
+                "expressions": [],
+                "teacherIds": [
+                    param.props.teacherId
+                ],
+                "isComplexSearch": false,
+                "intensity": null,
+                "customFilters": {
+                    "includeTeachersWhoClosedSpecificSlots": false
+                },
+                "page": 1,
+                "pageSize": 15,
+                "orderByProperty": "by_rating_small_package"
+            }
+
+
+
+            const url = `https://timetable.skyeng.ru/api/v3/teacher/search`;
+
+            const result = await productGet(url, {
+                headers: {
+                    "content-type": "application/json; charset=UTF-8",
+                },
+                body: JSON.stringify(body),
+                method: "POST",
+                credentials: "include"
+            })
+            arrayResult['lessons'] = await result.json()
+            callback(arrayResult)
+            return arrayResult
+        },
+        getSession: async (userId: any, callback: any) => {
+            const arrayResult: any = {
+                'session': {},
+            }
+
+            const urlSession = `https://backend.skyeng.ru/api/session`;
+            if (window.location.hostname === 'extension-test.ru') {
+                let bodySession: any = {}
+                bodySession['uer-get'] = urlSession;
+                const resultSession = await testingGet(bodySession)
+                arrayResult['session'] = resultSession
+            } else {
+                const resultSession = await productGet(urlSession, {
+                    method: "GET",
+                    credentials: "include"
+                })
+                arrayResult['session'] = await resultSession.json()
+            }
+            callback(arrayResult)
+            return arrayResult
+        },
         getEducationInfo: async (userId: any, callback: any) => {
             const arrayResult: any = {
                 'education-service': {},
@@ -205,21 +278,103 @@ const GetterBackground = () => {
             callback(json)
             return arrayResult
         },
+        getLoginLinkOld: async (userId: any, callback: any) => {
+            const arrayResult = {
+                'login-link': {},
+            }
+            let bodyLoginLinkPost: any = {}
+            bodyLoginLinkPost['uer-get'] = `https://id.skyeng.ru/admin/auth/login-links`;
+            bodyLoginLinkPost['body'] = `login_link_form%5Bid%5D=${userId}`;
+            bodyLoginLinkPost['body'] += '&login_link_form%5Btarget%5D=https%3A%2F%2Fskyeng.ru'
+            bodyLoginLinkPost['body'] += '&login_link_form%5Blifetime%5D=2000'
+            bodyLoginLinkPost['method'] = 'POST'
+            bodyLoginLinkPost['return'] = 'html'
+            bodyLoginLinkPost['headers'] = {
+                'content-type': 'application/x-www-form-urlencoded'
+            }
+
+            // arrayList['userid'] = userId;
+            const urlLoginLinkPost = `${api()}`;
+            let getLoginLinkPost = await fetch(urlLoginLinkPost, {
+                method: "POST",
+                body: JSON.stringify(bodyLoginLinkPost),
+                // credentials: "include"
+            })
+            const resultLoginLinkPost = await getLoginLinkPost.json();
+
+            let json = {
+                'loginLink': '',
+                'success': true
+            }
+
+            let bodyLoginLink: any = {}
+            bodyLoginLink['uer-get'] = `https://id.skyeng.ru/admin/auth/login-links`;
+            bodyLoginLink['return'] = 'doc';
+
+            // arrayList['userid'] = userId;
+            const urlLoginLink = `${api()}`;
+            let getLoginLink = await fetch(urlLoginLink, {
+                method: "POST",
+                body: JSON.stringify(bodyLoginLink),
+                // credentials: "include"
+            })
+
+            try {
+                const textHtml = await getLoginLink.text();
+                let domPars = new DOMParser()
+                let loginLinks: any = domPars.parseFromString(textHtml, `text/html`).querySelectorAll("[value^='https://id.skyeng.ru/auth/login-link/']")
+                let last = loginLinks[loginLinks.length - 1].value;
+                console.log(`Loginner: ${last}`)
+                json.loginLink = last
+                json.success = true
+                console.log(json)
+            } catch (err) {
+                json.success = false
+            }
+            callback(json)
+            return arrayResult
+        },
         getAutofaqCurretnList: async (userId: string, callback: any) => {
             const arrayResult: any = {
                 'people-list': {},
             }
-            let bodyUserNumber: any = {}
-            bodyUserNumber['uer-get'] = `https://skyeng.autofaq.ai/api/operators/statistic/currentState`;
-            // arrayList['userid'] = userId;
-            const urlUserNumber = `${api()}`;
-            let getUserNumber = await fetch(urlUserNumber, {
-                method: "POST",
-                body: JSON.stringify(bodyUserNumber),
-                // credentials: "include"
-            })
-            const resultUserNumber = await getUserNumber.json();
-            arrayResult['people-list'] = resultUserNumber.rows
+
+            const urlCurrentList = `https://skyeng.autofaq.ai/api/operators/statistic/currentState`;
+            if (window.location.hostname === 'extension-test.ru') {
+                let bodyCurrentList: any = {}
+                bodyCurrentList['uer-get'] = urlCurrentList;
+                const resultCurrentList = await testingGet(bodyCurrentList);
+                arrayResult['people-list'] = resultCurrentList.rows
+            } else {
+                const resultCurrentList = await productGet(urlCurrentList, {
+                    method: "GET",
+                    credentials: "include"
+                })
+                const currentList = await resultCurrentList.json()
+                arrayResult['people-list'] = currentList.rows
+            }
+            callback(arrayResult)
+            return arrayResult
+        },
+        getAutofaqPeopleList: async (userId: string, callback: any) => {
+            const arrayResult: any = {
+                'people-list': {},
+            }
+
+            const urlPeopleList = `https://skyeng.autofaq.ai/api/users?serviceId=361c681b-340a-4e47-9342-c7309e27e7b5&action=Reason8Operator`;
+            if (window.location.hostname === 'extension-test.ru') {
+                let bodyPeopleList: any = {}
+                bodyPeopleList['uer-get'] = urlPeopleList;
+                const resultPeopleList = await testingGet(bodyPeopleList);
+                arrayResult['people-list'] = resultPeopleList.items
+            } else {
+                const resultPeopleList = await productGet(urlPeopleList, {
+                    method: "GET",
+                    credentials: "include"
+                })
+                const peopleList = await resultPeopleList.json()
+                arrayResult['people-list'] = peopleList.items
+            }
             callback(arrayResult)
             return arrayResult
         },
@@ -227,17 +382,20 @@ const GetterBackground = () => {
             const arrayResult: any = {
                 'event-list': {},
             }
-            let bodyEventList: any = {}
-            bodyEventList['uer-get'] = `https://skyeng.autofaq.ai/i18n/ru-RU/ticket.json`;
-            // arrayList['userid'] = userId;
-            const urlEventList = `${api()}`;
-            let getEventList = await fetch(urlEventList, {
-                method: "POST",
-                body: JSON.stringify(bodyEventList),
-                // credentials: "include"
-            })
-            const resultEventList = await getEventList.json();
-            arrayResult['event-list'] = resultEventList.chatEvents
+            const urlEventList = `https://skyeng.autofaq.ai/i18n/ru-RU/ticket.json`;
+            if (window.location.hostname === 'extension-test.ru') {
+                let bodyEventList: any = {}
+                bodyEventList['uer-get'] = urlEventList;
+                const resultEventList = await testingGet(bodyEventList);
+                arrayResult['event-list'] = resultEventList.chatEvents
+            } else {
+                const resultEventList = await productGet(urlEventList, {
+                    method: "GET",
+                    credentials: "include"
+                })
+                const eventList = await resultEventList.json()
+                arrayResult['event-list'] = eventList.chatEvents
+            }
             callback(arrayResult)
             return arrayResult
         },
@@ -245,23 +403,84 @@ const GetterBackground = () => {
             const arrayResult: any = {
                 'chat-list': {},
             }
+            const urlChatListUser = `https://skyeng.autofaq.ai/api/conversations/history`;
+
             let bodyChatListUser: any = {}
-            bodyChatListUser['uer-get'] = `https://skyeng.autofaq.ai/api/conversations/history`;
+            bodyChatListUser['uer-get'] = urlChatListUser;
             bodyChatListUser['body'] = `{\"serviceId\":\"361c681b-340a-4e47-9342-c7309e27e7b5\",\"mode\":\"Json\",\"channelUserFullTextLike\":\"${data.USER_ID}\",\"tsFrom\":\"${data.START.current}T00:00:00.000Z\",\"tsTo\":\"${data.END.current}T23:59:59.059Z\",\"orderBy\":\"ts\",\"orderDirection\":\"Desc\",\"page\":1,\"limit\":10}`;
             bodyChatListUser['method'] = 'POST'
             bodyChatListUser['headers'] = {
                 'content-type': 'application/json'
             }
             bodyChatListUser['return'] = 'json'
-            // arrayList['userid'] = userId;
-            const urlChatListUser = `${api()}`;
-            let getChatListUser = await fetch(urlChatListUser, {
-                method: "POST",
-                body: JSON.stringify(bodyChatListUser),
-                // credentials: "include"
-            })
-            const resultChatListUser = await getChatListUser.json();
-            arrayResult['chat-list'] = resultChatListUser
+
+
+            if (window.location.hostname === 'extension-test.ru') {
+                const resultChatListUser = await testingGet(bodyChatListUser);
+                if (resultChatListUser === null) {
+                    arrayResult['chat-list'] = { items: [] }
+                } else {
+                    arrayResult['chat-list'] = resultChatListUser
+                }
+            } else {
+                const resultChatListUser = await productGet(urlChatListUser, {
+                    headers: bodyChatListUser['headers'],
+                    body: bodyChatListUser['body'],
+                    method: "POST",
+                    credentials: "include"
+                })
+                arrayResult['chat-list'] = await resultChatListUser.json()
+            }
+            callback(arrayResult)
+            return arrayResult
+        },
+        getAutofaqChatListOperator: async (data: any, callback: any) => {
+            const arrayResult: any = {
+                'chat-list': {},
+            }
+            const urlChatListOperator = `https://skyeng.autofaq.ai/api/conversations/history`;
+            const bodyOperator = {
+                "serviceId": "361c681b-340a-4e47-9342-c7309e27e7b5",
+                "mode": "Json",
+                "participatingOperatorsIds": [
+                    data.OPERATOR_ID.id
+                ],
+                "tsFrom": `${data.START.current}T23:23:00.043Z`,
+                "tsTo": `${data.END.current}T23:23:00.043Z`,
+                "usedStatuses": [
+                    "OnOperator",
+                    "AssignedToOperator",
+                    "Active"
+                ],
+                "orderBy": "ts",
+                "orderDirection": "Asc",
+                "page": 1,
+                "limit": 10
+            }
+
+            let bodyChatListOperator: any = {}
+            bodyChatListOperator['uer-get'] = urlChatListOperator;
+            // bodyChatListOperator['body'] = `{\"serviceId\":\"361c681b-340a-4e47-9342-c7309e27e7b5\",\"mode\":\"Json\",\"channelUserFullTextLike\":\"${data.USER_ID}\",\"tsFrom\":\"${data.START.current}T00:00:00.000Z\",\"tsTo\":\"${data.END.current}T23:59:59.059Z\",\"orderBy\":\"ts\",\"orderDirection\":\"Desc\",\"page\":1,\"limit\":10}`;
+            bodyChatListOperator['body'] = JSON.stringify(bodyOperator)
+            bodyChatListOperator['method'] = 'POST'
+            bodyChatListOperator['headers'] = {
+                'content-type': 'application/json'
+            }
+            bodyChatListOperator['return'] = 'json'
+
+
+            if (window.location.hostname === 'extension-test.ru') {
+                const resultChatListOperator = await testingGet(bodyChatListOperator);
+                arrayResult['chat-list'] = resultChatListOperator
+            } else {
+                const resultChatListOperator = await productGet(urlChatListOperator, {
+                    headers: bodyChatListOperator['headers'],
+                    body: JSON.stringify(bodyOperator),
+                    method: "POST",
+                    credentials: "include"
+                })
+                arrayResult['chat-list'] = await resultChatListOperator.json()
+            }
             callback(arrayResult)
             return arrayResult
         },
@@ -269,21 +488,86 @@ const GetterBackground = () => {
             const arrayResult: any = {
                 'message-value': {},
             }
-            let bodyMessageValue: any = {}
-            bodyMessageValue['uer-get'] = `https://skyeng.autofaq.ai/api/conversations/${chatId}`;
-            // arrayList['userid'] = userId;
-            const urlMessageValue = `${api()}`;
-            let getMessageValue = await fetch(urlMessageValue, {
-                method: "POST",
-                body: JSON.stringify(bodyMessageValue),
-                // credentials: "include"
-            })
-            const resultMessageValue = await getMessageValue.json();
-            arrayResult['message-value'] = resultMessageValue
+
+            const urlMessageValue = `https://skyeng.autofaq.ai/api/conversations/${chatId}`;
+            if (window.location.hostname === 'extension-test.ru') {
+                let bodyMessageValue: any = {}
+                bodyMessageValue['uer-get'] = urlMessageValue;
+                const resultTrmId = await testingGet(bodyMessageValue)
+                arrayResult['message-value'] = resultTrmId
+            } else {
+                const resultMessageValue = await productGet(urlMessageValue, {
+                    method: "GET",
+                    credentials: "include"
+                })
+                arrayResult['message-value'] = await resultMessageValue.json()
+            }
+            callback(arrayResult)
+            return arrayResult
+        },
+        getAutofaqStartChat: async (data: any, callback: any) => {
+            const arrayResult: any = {
+                'start-chat': {},
+            }
+            const urStartChat = `https://skyeng.autofaq.ai/api/conversation/start?channelId=eca64021-d5e9-4c25-b6e9-03c24s638d4d&userId=${data.userId}&operatorId=${data.operatorAfId}`;
+            if (window.location.hostname === 'extension-test.ru') {
+                let bodyStartChat: any = {}
+                bodyStartChat['uer-get'] = urStartChat;
+                bodyStartChat['body'] = null
+                bodyStartChat['headers'] = {
+                    'content-type': 'application/json'
+                }
+                bodyStartChat['return'] = 'json'
+                bodyStartChat['method'] = 'POST'
+                const resultStartChat = await testingGet(bodyStartChat)
+                arrayResult['start-chat'] = resultStartChat
+            } else {
+                const resultStartChat = await productGet(urStartChat, {
+                    method: "POST",
+                    credentials: "include"
+                })
+                arrayResult['start-chat'] = await resultStartChat.json()
+            }
+            callback(arrayResult)
+            return arrayResult
+        },
+        getAutofaqAssignChat: async (data: any, callback: any) => {
+            const arrayResult: any = {
+                'assign-chat': {},
+            }
+
+            const bodyOperator = {
+                "command": "DO_ASSIGN_CONVERSATION",
+                "conversationId": data.chatId,
+                "assignToOperatorId": data.operatorAfId
+            }
+
+            const urAssignChat = `https://skyeng.autofaq.ai/api/conversation/assign`;
+            if (window.location.hostname === 'extension-test.ru') {
+                let bodyAssignChat: any = {}
+                bodyAssignChat['uer-get'] = urAssignChat;
+                bodyAssignChat['body'] = JSON.stringify(bodyOperator);
+                bodyAssignChat['headers'] = {
+                    'content-type': 'application/json'
+                }
+                bodyAssignChat['return'] = 'json'
+                bodyAssignChat['method'] = 'POST'
+                const resultAssignChat = await testingGet(bodyAssignChat)
+                arrayResult['assign-chat'] = resultAssignChat
+            } else {
+                const resultAssignChat = await productGet(urAssignChat, {
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(bodyOperator),
+                    method: "POST",
+                    credentials: "include"
+                })
+                arrayResult['assign-chat'] = await resultAssignChat.json()
+            }
             callback(arrayResult)
             return arrayResult
         }
-
     }
 }
 

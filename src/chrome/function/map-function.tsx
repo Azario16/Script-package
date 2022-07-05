@@ -1,9 +1,13 @@
 import { GetterBackground } from "./getter"
+import { apiBackgraund } from "./event"
 import { ACTIONS } from "../actions-bg";
-const Getter = GetterBackground()
 
+const Getter = GetterBackground()
+const Event = apiBackgraund()
 const mapFunction = (name: string) => {
     switch (name) {
+        case ACTIONS.GET_TEACHER_LESSONS:
+            return Getter.getTeacherLessons;
         case ACTIONS.GET_SESSION:
             return Getter.getSession;
         case ACTIONS.GET_USER_ID:
@@ -30,12 +34,21 @@ const mapFunction = (name: string) => {
             return Getter.getAutofaqMessageValue;
         case ACTIONS.GET_AUTOFAQ_START_CHAT:
             return Getter.getAutofaqStartChat;
+        case ACTIONS.GET_AUTOFAQ_ASSIGN_CHAT:
+            return Getter.getAutofaqAssignChat;
+        case ACTIONS.GET_AUTOFAQ_OPERATOR_INFO:
+            return Getter.getAutofaqOperatorInfo;
+        case ACTIONS.GET_AUTOFAQ_SEND_MESSAGE:
+            return Getter.getAutofaqSendMessage;
+        case ACTIONS.SEND_EVENT:
+            return Event.sendEvent;
         default:
-            return (arg1: string, arg2: (arg: any)=>  void)=>{
+            return  async  ({ messageValue, callback }: { messageValue: any, sender: any, callback: any }) => {
 
-                arg2(null)
+                callback(null)
             };
     }
 }
+
 
 export { mapFunction }

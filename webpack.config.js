@@ -8,7 +8,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 const { optimize } = require('webpack');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-
 const { join } = require('path');
 let prodPlugins = [];
 var publicUrl = ''
@@ -20,29 +19,49 @@ if (process.env.NODE_ENV === 'production') {
   );
 }
 // console.log(path.resolve(__dirname))
+const sockHost = process.env.WDS_SOCKET_HOST;
+const sockPath = process.env.WDS_SOCKET_PATH; // default: '/ws'
+const sockPort = process.env.WDS_SOCKET_PORT;
 
 module.exports = {
-  // devServer: {
-  //   static: {
-  //     directory: path.join(__dirname, 'public'),
-  //   },
-  //   compress: true,
-  //   port: process.env.PORT,
-  // },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'public'),
+    },
+    compress: true,
+    port: process.env.PORT,
+    client: {
+      webSocketURL: {
+        // Enable custom sockjs pathname for websocket connection to hot reloading server.
+        // Enable custom sockjs hostname, pathname and port for websocket connection
+        // to hot reloading server.
+        hostname: sockHost,
+        pathname: sockPath,
+        port: sockPort,
+      },
+      logging: 'error',
+    },
+    allowedHosts: "all",
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+
+  },
   stats: {
     errorDetails: true,
   },
-  mode: process.env.NODE_ENV,
+  mode: process.env.MODE,
+  // devtool: 'cheap-module-source-map',
   devtool: 'source-map',
+  // devtool: "inline-source-map",
   entry: {
-    // main: join(__dirname, 'src/index.tsx'),
-    // background: path.resolve(__dirname + '/src/chrome/background.ts'),
-
-    // main: path.resolve(__dirname + '/src/index.tsx'),
-    // background: path.resolve(__dirname + '/src/chrome/background.ts'),
-
-    main: '/src/index.tsx',
+    variable: '/src/variable.scss',
+    styles_extension: '/src/styles-extension.scss',
+    style_main: '/src/style-main.scss',
     background: '/src/chrome/background.ts',
+    main: '/src/index.tsx',
   },
   output: {
     // path: path.resolve(__dirname + '/build'),
@@ -51,9 +70,9 @@ module.exports = {
     publicPath: '/',
     assetModuleFilename: "static/media/[name].[hash][ext]"
   },
-  optimization: {
-    runtimeChunk: false,
-  },
+  // optimization: {
+  //   runtimeChunk: 'single',
+  // },
   // optimization: {
   //   runtimeChunk: false,
   //   minimizer: [new OptimizeCSSAssetsPlugin({})],
@@ -70,14 +89,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-            },
-          },
           'css-loader'
         ]
       },
+
       {
         test: /\.scss$/,
         use: [
@@ -114,8 +129,8 @@ module.exports = {
       new CheckerPlugin(),
       ...prodPlugins,
       new MiniCssExtractPlugin({
-        filename: "static/css/main.css",
-        chunkFilename: "static/css/[name].chunk.css",
+        filename: "static/css/[name].css",
+        // chunkFilename: "static/css/[name].chunk.css",
       }),
 
       new HtmlWebpackPlugin({
@@ -140,9 +155,9 @@ module.exports = {
       }),
     ],
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.ts', '.tsx', '.js'],
     alias: {
-      fonts: path.resolve(__dirname, 'src/fonts')
-    }
+      "@src": path.resolve(__dirname, "src/"),
+  },
   },
 };

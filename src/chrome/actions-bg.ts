@@ -1,4 +1,7 @@
 const ACTIONS = {
+    SEND_EVENT: 'send-event',
+
+    GET_TEACHER_LESSONS: 'get-teacher-lessons',
     GET_SESSION: 'get-session',
     GET_USER_ID: 'get-user-info',
     GET_EDUCATION_INFO: 'get-education-info',
@@ -12,6 +15,9 @@ const ACTIONS = {
     GET_AUTOFAQ_CHAT_LIST_OPERATOR: 'get-autofaq-chat-list-operator',
     GET_AUTOFAQ_MESSAGE_VALUE: 'get-autofaq-message-value',
     GET_AUTOFAQ_START_CHAT: 'get-autofaq-start-chat',
+    GET_AUTOFAQ_ASSIGN_CHAT: 'get-autofaq-assign-chat',
+    GET_AUTOFAQ_SEND_MESSAGE: 'get-autofaq-send-message',
+    GET_AUTOFAQ_OPERATOR_INFO: 'get-autofaq-operator-info',
 };
 
 export { ACTIONS };

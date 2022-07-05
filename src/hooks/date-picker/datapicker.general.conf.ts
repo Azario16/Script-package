@@ -1,11 +1,15 @@
 import $ from "jquery";
-import "jquery-ui-dist/jquery-ui";
+// import "jquery-ui-dist/jquery-ui";
+
+import "./jquery-ui-custom/jquery-ui";
+
+
 export default function createDatePicker({ START, END, elementList, DATE_PICK, cb, cb2 }: any) {
     const createOption = (isRTLboolean: any, show: any) => {
         return {
 
             beforeShow: function (input: any, inst: any) {
-                console.log(`offsetHeight: ${input.offsetHeight}`)
+                // console.log(`offsetHeight: ${input.offsetHeight}`)
                 const coordinate = input.getBoundingClientRect();
                 setTimeout(() => {
                     $(".ui-datepicker-month").addClass('bg-light')
@@ -52,8 +56,8 @@ export default function createDatePicker({ START, END, elementList, DATE_PICK, c
                     END.current = e.split('-').reverse().join('-')
                 }
 
-                console.log(START)
-                console.log(END)
+                // console.log(START)
+                // console.log(END)
             }
         }
     }
@@ -77,25 +81,12 @@ export default function createDatePicker({ START, END, elementList, DATE_PICK, c
             yearSuffix: ""
         });
 
-        const OPTION: any = createOption(null, null)
-        // $('#datep').datepicker(OPTION);
-        // $('#datepStart').datepicker(OPTION);
-        // $('#datepEnd').datepicker(OPTION);
-
-        // $('#datepStartUser').datepicker(createOption());
         if (elementList) {
             elementList.forEach(({ element, isRTLboolean, show }: any) => {
                 const OPTION: any = createOption(isRTLboolean, show)
-                // console.log( $(`#${element}`))
-                // const iframe = $('iframe').contents();
-                // iframe.find(`#${element}`).datepicker(OPTION);
-                $(`#${element}`).datepicker(OPTION);
+                $(element).datepicker(OPTION);
             });
 
         }
-
-        // $('.datep').datepicker(OPTION);
-        $(".ui-datepicker-month").addClass('bg-light')
-        // $(".ui-datepicker-trigger").append('<i class="fa fa-calendar-alt"></i>')
     });
 }

@@ -1,4 +1,6 @@
-var path = require('path');
+const path = require('path');
+const resolve = require('resolve');
+// const paths = require('./paths');
 const { CheckerPlugin } = require('awesome-typescript-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
@@ -17,24 +19,34 @@ if (process.env.NODE_ENV === 'production') {
     new optimize.OccurrenceOrderPlugin()
   );
 }
+// console.log(path.resolve(__dirname))
 
 module.exports = {
-  devServer: {
-    static: {
-      directory: path.join(__dirname, 'public'),
-    },
-    compress: true,
-    port: process.env.PORT,
+  // devServer: {
+  //   static: {
+  //     directory: path.join(__dirname, 'public'),
+  //   },
+  //   compress: true,
+  //   port: process.env.PORT,
+  // },
+  stats: {
+    errorDetails: true,
   },
   mode: process.env.NODE_ENV,
   devtool: 'source-map',
   entry: {
     // main: join(__dirname, 'src/index.tsx'),
-    main: path.resolve(__dirname + '/src/index.tsx'),
-    background: path.resolve(__dirname + '/src/chrome/background.ts'),
+    // background: path.resolve(__dirname + '/src/chrome/background.ts'),
+
+    // main: path.resolve(__dirname + '/src/index.tsx'),
+    // background: path.resolve(__dirname + '/src/chrome/background.ts'),
+
+    main: '/src/index.tsx',
+    background: '/src/chrome/background.ts',
   },
   output: {
-    path: path.resolve(__dirname + '/build'),
+    // path: path.resolve(__dirname + '/build'),
+    path: 'C:/OpenServer/domains/extension/build',
     filename: 'static/js/[name].js',
     publicPath: '/',
     assetModuleFilename: "static/media/[name].[hash][ext]"
@@ -48,77 +60,53 @@ module.exports = {
   // },
 
   module: {
+    strictExportPresence: true,
     rules: [
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
         exclude: /node_modules/,
       },
-      // {
-      //   exclude: /node_modules/,
-      //   test: /\.ts?$/,
-      //   use: 'awesome-typescript-loader?{configFileName: "tsconfig.json"}',
-      // },
-      // {
-      //   test: /\.css$/,
-      //   use: [
-      //     {
-      //       loader: MiniCssExtractPlugin.loader,
-      //       options: {
-      //       },
-      //     },
-      //     'css-loader'
-      //   ]
-      // },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+            },
+          },
+          'css-loader'
+        ]
+      },
       {
         test: /\.scss$/,
         use: [
-         
+          // MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader',
           MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
               sourceMap: true
             }
+          }, {
+            loader: 'resolve-url-loader',
+            options: {
+              sourceMap: true
+            }
           },
-          
           {
             loader: 'sass-loader',
             options: {
-              
-              sourceMap: true
+              sourceMap: true, // <-- !!ВАЖНО!!
             }
           }
-        ]
-      },
 
-      // {
-      //   test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg)(\?.*)?$/,
-      //   use: {
-      //     loader: 'file-loader',
-      //     options: {
-      //       name: 'static/media/[name].[hash].[ext]',
-      //     },
-      //   },
-      // },
-      // {
-      //   test: /\.scss$/,
-      //   use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
-      // },
+        ],
+      },
       {
         test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
-        use: {
-          loader: 'file-loader',
-          options: {
-            name: '[path][name].[ext]',
-          },
-        },
+        type: 'asset/inline'
       },
-      // {
-      //   test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
-      //   type: 'asset/inline'
-      // },
-
     ],
   },
   plugins:
@@ -126,8 +114,8 @@ module.exports = {
       new CheckerPlugin(),
       ...prodPlugins,
       new MiniCssExtractPlugin({
-        filename: "static/css/main.css",
-        chunkFilename: "static/css/[name].chunk.css",
+        // filename: "static/css/main.css",
+        // chunkFilename: "static/css/[name].chunk.css",
       }),
 
       new HtmlWebpackPlugin({
@@ -153,5 +141,8 @@ module.exports = {
     ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      fonts: path.resolve(__dirname, 'src/fonts')
+    }
   },
 };
