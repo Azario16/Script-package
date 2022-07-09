@@ -7,9 +7,9 @@ import ReactDOM from 'react-dom/client';
 import styleText from '../../build/static/css/styles_extension.css';
 // import styleText from '../../build/static/css/style_main.css';
 
-const test: any = styleText
-const styleGreen = document.createElement('style');
-styleGreen.type = 'text/css';
+// const test: any = styleText
+// const styleGreen = document.createElement('style');
+// styleGreen.type = 'text/css';
 // styleGreen.appendChild(document.createTextNode(test));
 
 // import './style.scss'

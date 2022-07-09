@@ -42,7 +42,7 @@ function SampleNextArrow(props: any) {
 
 function TeacherTimeTable(props: any) {
 
-    const [TIME_INIT, setTimeInit] = useState<number>(0)
+    const [TIME_INIT, setTimeInit] = useState<number>()
     const [HOUR_LIST, setHourList] = useState([])
     const [LESSONS_INFO, setLessonsInfo] = useState<any>([])
     const [TIME_LIST, setTimeList] = useState([])
@@ -53,14 +53,11 @@ function TeacherTimeTable(props: any) {
     // const slider = useRef<any>();
 
     useEffect(() => {
-        if (slider) {
+        /* Fix initialSlide https://github.com/akiran/react-slick/issues/1946 */
+        if (slider && TIME_INIT) {
             console.log('Test')
-            slider?.slickGoTo(TIME_INIT);
-            // setHasSetPosition(true);
+            slider?.slickGoTo(TIME_INIT, false);
         }
-
-        // slider.current?.slickGoTo(TIME_INIT);
-
     }, [TIME_INIT, slider]);
 
     const updateTeacherSchedule = () => {
@@ -164,10 +161,10 @@ function TeacherTimeTable(props: any) {
         }
         const week = getNowWeek()
         const timeNumber = Number(getNowTime().slice(0, -6))
-        // console.log(getNowTime())
-        // console.log(timeNumber)
-        const timeInit: number = timeNumber <= 3 ? timeNumber : 1
-        // console.log(timeInit)
+        console.log(getNowTime())
+        console.log(timeNumber)
+        const timeInit: number = timeNumber >= 3 ? timeNumber - 3 : 1
+        console.log(timeInit)
         setTimeInit(timeInit)
         setHourList(times)
         setWeek(week)
@@ -176,10 +173,10 @@ function TeacherTimeTable(props: any) {
     const settings = {
         dots: false,
         infinite: false,
-        // lazyLoad: true,
         speed: 100,
         slidesToShow: 6,
         slidesToScroll: 5,
+        initialSlide: TIME_INIT,
         prevArrow: <SamplePrevArrow />,
         nextArrow: <SampleNextArrow />
     };
@@ -195,7 +192,7 @@ function TeacherTimeTable(props: any) {
                             }}>
                                 {
                                     TIME_LIST.map((element: any, key: number) => {
-                                        console.log(key)
+                                        // console.log(key)
                                         return (
                                             <div
                                                 key={key}

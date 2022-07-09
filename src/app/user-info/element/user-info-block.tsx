@@ -115,14 +115,14 @@ function InfoBlock(props: any) {
                             </div>
                         </div>
 
-                        <div className="position-absolute bottom-0 start-0 rounded border border-b-dark  bg-secondary">
+                        {/* <div className="position-absolute bottom-0 start-0 rounded border border-b-dark  bg-secondary">
                             <div className='bg-none custom-icon time-table'
                                 onClick={() => {
                                     window.open(`https://crm2.skyeng.ru/persons/${USER_INFO.data.id}/customer-support/manual`)
                                 }}
                             >
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className="position-absolute bottom-50 end-50"></div>
                         <div className="position-absolute bottom-0 start-0"></div>
@@ -157,6 +157,7 @@ function InfoBlock(props: any) {
                             <span>
                                 {`Время: ${USER_INFO.data.utcOffset} UTC`}
                             </span>
+                            
                             <span>
                                 <SlackId userId={props.userId} />
                             </span>
