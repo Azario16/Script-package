@@ -34,8 +34,12 @@ function InfoBlock(props: any) {
     const updateLessonsInfo = () => {
         effectStatus.current = true
         const dateWeek = getDateWeekForButton().weekButton(props.startDate.current, 1)
+        const messageValue = {
+            dateWeek,
+            teacherId: props.teacherId
+        }
         console.log(dateWeek)
-        sendMessage(ACTIONS.GET_TEACHER_LESSONS, { props, dateWeek }, (result: any) => {
+        sendMessage(ACTIONS.GET_TEACHER_LESSONS, messageValue, (result: any) => {
             console.log(result)
             const lessons: any = result["lessons"]
             if (lessons[0].count === 0) {

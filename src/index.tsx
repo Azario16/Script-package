@@ -1,7 +1,7 @@
 import React from 'react';
 import App from './App';
 // import './variable.scss'
-import './styles-extension.scss'
+// import './styles-extension.scss'
 // import './index.css'; 
 // import './main.css';
 import ReactDOM from 'react-dom/client';

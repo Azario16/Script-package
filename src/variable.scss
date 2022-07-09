@@ -40,7 +40,10 @@ $custom-colors: (
     "exten-UI": #626e7a,
     "af-search-chat": #252829,
     "comment": #80808054,
+    "table": #808080,
     "message": #dceeff,
+    "slack": #308af2,
+    "class-activ": #247591,
 );
 
 $theme-colors: map-merge($theme-colors, $custom-colors);

@@ -36,7 +36,7 @@ function EyesNumber(params: any) {
                     {/* <i className="fa-solid fa-eye text-border eyes"></i> */}
                 </div>
             }
-            <div className="text-light">
+            <div className="text-light d-flex justify-content-center align-items-center">
                 <span className="fs-custom-0_8 ms-1">Номер: </span>
                 <span className="fs-custom-0_7 ms-1">{NUMBER}</span>
             </div>

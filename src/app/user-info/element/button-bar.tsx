@@ -11,20 +11,12 @@ function ButtonBar(params: any) {
     const effectStatus = useRef(true)
     const updateTecacherIdTrm = () => {
         sendMessage(ACTIONS.GET_TEACHER_ID, params['user-id'], (result: any) => {
-            // console.log(result)
-            setIdTrm(result["teacher-id"][0].id)
+            console.log(result)
+            if (result["teacher-id"].length) {
+                setIdTrm(result["teacher-id"][0].id)
+            }
         })
     }
-
-    // useEffect(() => {
-    //     if (!params.startValue) {
-    //         setButtonColorLL('secondary')
-    //     }
-    //     return () => {
-    //         setButtonColorLL('secondary')
-    //     }
-    // }, [params.startValue])
-
     useEffect(() => {
         if (params['user-info'] !== undefined) {
             setTypeUser(params["user-info"].data.type)

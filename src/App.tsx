@@ -11,6 +11,9 @@ import СreateCmsButtonfrom from './app/vimbox-cms'
 
 import ShadowView from './shadow-view';
 
+import SliderTest from './app/test-slider'
+
+
 /* 
   Маппим приложения для конкретного домена
 */
@@ -116,10 +119,14 @@ const App: any = () => {
       // </ShadowView>, 'main')
 
       renderApp(
-        // <ShadowView>
-        <SearchChat styleElement="position-fixed top-0 end-0" />
-        // </ShadowView>
-        , 'search-chat')
+        <SliderTest />
+        , 'main')
+
+      // renderApp(
+      //   // <ShadowView>
+      //   <SearchChat styleElement="position-fixed top-0 end-0" />
+      //   // </ShadowView>
+      //   , 'search-chat')
 
       // window.onload = () => {
       //   setTimeout(async function () {

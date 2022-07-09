@@ -10,7 +10,7 @@ import createButtonSeacrhId from './function/create-button-to-af'
 
 const UserInfo: React.FC = () => {
     const [START, setStart] = useState(false)
-    const [USER_ID, setUserId] = useState('')
+    const [USER_ID, setUserId] = useState('16103749')
     const [AF_USER_ID, setAfUserId] = useState('')
     const [CRM_SESSION, setCrmSession] = useState()
     const [ERROR, setError] = useState()
@@ -56,7 +56,7 @@ const UserInfo: React.FC = () => {
         } else if (checkShow) {
             // console.log('Свернуть')
             coollapseToogle(true, buttonCollapseRef.current)
-            setUserId('')
+            setUserId('16103749')
             setStart(false)
         }
         // console.log(START)

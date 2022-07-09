@@ -11,9 +11,13 @@ import { ACTIONS } from "../../../chrome/actions-bg";
 import { ACTIONS_WINDOW } from '../../modal-window/function/actions-window'
 import EdauctionBlock from './education-services-block';
 import EyesNumber from './eyes-number'
+import SlackId from './slack-id'
+import TimeTable from './teacher-time-table/teacher-time-table'
 
-function InfoBlock(params: any) {
-    console.log(params)
+import { getDateWeekForButton } from '../../../hooks/date-time'
+
+function InfoBlock(props: any) {
+    console.log(props)
 
     const [USER_INFO, setUserInfo] = useState<any>()
     const [ERROR, setError] = useState()
@@ -22,14 +26,14 @@ function InfoBlock(params: any) {
     const mapRelation: any = {
         'kid': 'Skysmart - KIDS',
     }
-    // console.log(params.session)
+    // console.log(props.session)
 
     const openModalElenet = () => {
         const messageValue = {
             message: 'create-chat',
-            userId: params.userId,
-            session: params.session,
-            afUserId: params.afUserId
+            userId: props.userId,
+            session: props.session,
+            afUserId: props.afUserId
         }
 
         sendMessage(ACTIONS.SEND_EVENT, messageValue, (result: any) => {
@@ -37,11 +41,9 @@ function InfoBlock(params: any) {
         })
     }
 
-
-
-    const updateUserIngo = () => {
+    const updateUserInfo = () => {
         effectStatus.current = true
-        sendMessage(ACTIONS.GET_USER_ID, params.userId, (result: any) => {
+        sendMessage(ACTIONS.GET_USER_ID, props.userId, (result: any) => {
             // console.log(result)
             // console.log(effectStatus.current)
             const userInfo: any = result["user-info"]
@@ -56,16 +58,13 @@ function InfoBlock(params: any) {
                 setRelation(findRelation.relation)
                 setUserInfo(userInfo)
             }
-            // else {
-            //     setError(userInfo)
-            // }
         })
     }
 
     useEffect(() => {
-        // console.log('updateUserIngo')
-        if (params.startValue && params.userId !== '') {
-            updateUserIngo()
+        // console.log('updateUserInfo')
+        if (props.startValue && props.userId !== '') {
+            updateUserInfo()
         } else {
             setError(undefined)
             setUserInfo(undefined)
@@ -74,12 +73,12 @@ function InfoBlock(params: any) {
             effectStatus.current = false;
             // console.log(effectStatus.current)
         }
-    }, [params.userId, params.startValue])
+    }, [props.userId, props.startValue])
 
-    // console.log(params.session)
+    // console.log(props.session)
     return (
         <>
-            <ButtonBar user-info={USER_INFO} user-id={params.userId} startValue={params.startValue} />
+            <ButtonBar user-info={USER_INFO} user-id={props.userId} startValue={props.startValue} />
             {USER_INFO === undefined ?
                 ERROR === undefined
                     ? <></>
@@ -90,13 +89,13 @@ function InfoBlock(params: any) {
                     <div className="text-center position-relative">
                         <>
                             <div className="position-absolute top-0 start-0 btn-group">
-                                {params.howUser === 'student' &&
+                                {props.howUser === 'student' &&
                                     <div className='bg-none custom-icon me-1 rounded bg-secondary border border-b-dark '>
                                         <TelehoneMissedIcon />
                                     </div>
                                 }
                                 {
-                                    params.session?.data.roles.includes('ROLE_SUPPORT') &&
+                                    props.session?.data.roles.includes('ROLE_SUPPORT') &&
                                     <div className='bg-none custom-icon autoFaq rounded bg-secondary border border-b-dark '
                                         onClick={openModalElenet}
                                     >
@@ -158,15 +157,23 @@ function InfoBlock(params: any) {
                             <span>
                                 {`Время: ${USER_INFO.data.utcOffset} UTC`}
                             </span>
+                            <span>
+                                <SlackId userId={props.userId} />
+                            </span>
                         </div>
                     </div>
                     {
-                        params.startValue &&
+                        USER_INFO.data.type === 'teacher'
+                            ? <TimeTable userInfo={USER_INFO} userId={props.userId} startValue={props.startValue} />
+                            : <></>
+                    }
+                    {
+                        props.startValue &&
                         <EdauctionBlock
-                            session={params.session}
-                            afUserId={params.afUserId}
+                            session={props.session}
+                            afUserId={props.afUserId}
                             howUser="student"
-                            startValue={params.startValue}
+                            startValue={props.startValue}
                             userInfo={USER_INFO.data} />
                     }
                 </>

@@ -8,6 +8,8 @@ const mapFunction = (name: string) => {
     switch (name) {
         case ACTIONS.GET_TEACHER_LESSONS:
             return Getter.getTeacherLessons;
+        case ACTIONS.GET_TEACHER_SLACK_ID:
+            return Getter.getTeacherSlackId;
         case ACTIONS.GET_SESSION:
             return Getter.getSession;
         case ACTIONS.GET_USER_ID:

@@ -5,6 +5,10 @@
 @import "./css/db/datatables.min.css";
 @import "./css/jquery-ui-themes-1.12.1/jquery-ui.css";
 @import "../node_modules/bootstrap/scss/functions";
+// @import "react-multi-carousel/lib/styles.css";
+
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
 
 $nav-link-color: #fff;
 $nav-link-hover-color: #c1c1c1;
@@ -15,6 +19,7 @@ $nav-link-hover-color: #c1c1c1;
 .d-fixed {
     display: fixed !important;
 }
+$carousel-transition-duration: 0.1s;
 @import "./variable.scss";
 
 @each $color, $value in $custom-colors {
@@ -24,6 +29,9 @@ $nav-link-hover-color: #c1c1c1;
 
     .text-#{$color} {
         color: $value !important;
+    }
+    .border-#{$color} {
+        border-color: $value !important;
     }
 }
 
@@ -112,6 +120,8 @@ $utilities: map-merge(
                 180px: 180px,
                 190px: 190px,
                 200px: 200px,
+                258px: 258px,
+                264px: 264px,
                 300px: 300px,
                 360px: 360px,
                 400px: 400px,
@@ -186,7 +196,9 @@ $utilities: map-merge(
                 2em: 2em,
                 3em: 3em,
                 6rem: 6rem,
+                5px: 5px,
                 15px: 15px,
+                20px: 20px,
                 25px: 25px,
                 30px: 30px,
                 38px: 38px,
@@ -229,6 +241,19 @@ $utilities: map-merge(
                 5: 5rem,
             ),
         ),
+        "border-width": (
+            // css-var: true,
+            property: border-width,
+            class: border,
+            values:
+                map-merge(
+                    $border-widths,
+                    (
+                        1_2: 1.2px,
+                        1_3: 1.3px,
+                    )
+                ),
+        ),
     )
 );
 .ui-datepicker-trigger {
@@ -249,7 +274,7 @@ $utilities: map-merge(
 @import "../node_modules/bootstrap/scss/reboot";
 
 // @import "./reboot-custom";
-
+@import "../node_modules/bootstrap/scss/carousel";
 @import "../node_modules/bootstrap/scss/images";
 @import "../node_modules/bootstrap/scss/containers";
 @import "../node_modules/bootstrap/scss/modal";
@@ -372,3 +397,49 @@ $utilities: map-merge(
 .resize-none {
     resize: none;
 }
+
+// @media (min-width: 768px) {
+
+//     .carousel-inner .carousel-item-end.active,
+//     .carousel-inner .carousel-item-next {
+//       transform: translateX(25%);
+//     }
+
+//     .carousel-inner .carousel-item-start.active,
+//     .carousel-inner .carousel-item-prev {
+//       transform: translateX(-25%);
+//     }
+// }
+
+// .carousel-inner .carousel-item-end,
+// .carousel-inner .carousel-item-start {
+//   transform: translateX(0);
+// }
+
+// @media (min-width: 768px) {
+//     .carousel-inner {
+//         display: flex;
+//     }
+//     .carousel-item {
+//         margin-right: 0;
+//         flex: 0 0 33.333333%;
+//         display: block;
+//     }
+// }
+
+// .carousel-inner{
+//     padding: 1em;
+// }
+// .card{
+//     margin: 0 .5em;
+//     box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
+//     border: none;
+// }
+// .carousel-control-prev, .carousel-control-next{
+//     background-color: #e1e1e1;
+//     width: 6vh;
+//     height: 6vh;
+//     border-radius: 50%;
+//     top: 50%;
+//     transform: translateY(-50%);
+// }

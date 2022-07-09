@@ -40,6 +40,16 @@ const getDateSlot = () => {
     return nowDate
 }
 
+const getNowWeek = () => {
+    const nowDate = new Date();
+    const dateFormat = nowDate.toLocaleDateString('ru-Ru', OPTION).split('.').reverse().join('-')
+    const time = nowDate.toLocaleTimeString('ru-Ru', OPTION)
+    const nowDateMoscow = new Date(`${dateFormat} ${time}`);
+    const weekNum = nowDateMoscow.getDay()
+
+    return weekNum === 0 ? 7 : weekNum;
+}
+
 const creatNowDate = () => {
     // console.log('creatNowDate')
     let nowDataTimeBack = new Date();
@@ -75,7 +85,6 @@ const getDateForamte = (date: any) => {
 }
 
 const creatNowDateFormate = () => {
-    // console.log('creatNowDate')
     let nowDataTimeBack = new Date();
     let dateFormat = nowDataTimeBack.toLocaleDateString('ru-Ru', OPTION).split('.').reverse().join('-')
     DATE_TIME_SLOT.dateSlotForamte = dateFormat
@@ -179,6 +188,21 @@ const getDateWeekForButton = () => {
             // console.log(currentEndDate)
             const wkEnd = createDate(currentEndDate)
             return { wkStart, wkEnd, pickDate }
+        },
+        oldTimeTableDate: (date: any, dateInterval: number) => {
+            let pickDate
+            if (!date) {
+                pickDate = creatNowDateFormate()
+            } else {
+                pickDate = date
+            }
+            const dt = new Date(pickDate); // current date of week
+            const currentStartDate = new Date(new Date(dt).setDate(dt.getDate() - dateInterval));
+            const wkStart = createDateFront(currentStartDate)
+            const currentEndDate = new Date(new Date(dt).setDate(dt.getDate()));
+
+            const wkEnd = createDateFront(currentEndDate)
+            return { wkStart, wkEnd, pickDate }
         }
     }
 }
@@ -201,8 +225,21 @@ const createDate = (date: any) => {
     return formatDt;
 }
 
+const createDateFront = (date: any) => {
+    const currentDate = new Date(date);
+    const dt = currentDate.toLocaleDateString('ru-Ru')
+    const formatDt = dt.split('.').join('-')
+    return formatDt;
+}
+
 const createTime = (date: any) => {
     const currentDate = new Date(date);
+    const time = currentDate.toLocaleTimeString('ru-Ru', OPTION)
+    return time;
+}
+
+const getNowTime = () => {
+    const currentDate = new Date();
     const time = currentDate.toLocaleTimeString('ru-Ru', OPTION)
     return time;
 }
@@ -236,10 +273,13 @@ export {
     setDateForamteSlot,
     getTimeFromDate,
     getDateFormate,
+    getNowWeek,
+    getNowTime,
 
     createDate,
     creatNowDate,
     creatNowDateFormate,
+    createTime,
 
     checkNowDateSlot,
     getTimeForButton,

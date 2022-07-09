@@ -52,6 +52,9 @@
     background: url(../src/icon/time-table.png) 50% 50% no-repeat;
 }
 
+.slack-icon {
+    background: url(../src/icon/slack.png) 50% 50% no-repeat;
+}
 
 .eyes {
     cursor: pointer;
@@ -100,4 +103,34 @@
 
 .btn-close {
     filter: invert(1);
+}
+
+.slick-prev::before,
+.slick-next::before {
+    content: none !important;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+    background: none !important;
+}
+
+.slick-prev-cust {
+    left: -30px;
+    position: absolute;
+    top: 50%;
+    transform: translate(0px, -50%);
+    cursor: pointer;
+}
+
+.slick-next-cust {
+    right: -30px;
+    position: absolute;
+    top: 50%;
+    transform: translate(0px, -50%);
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none !important;
 }

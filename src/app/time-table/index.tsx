@@ -18,7 +18,7 @@ const TimTableInfo: React.FC = () => {
 
     const [START_SEARCH, setStartSearch] = useState(false)
 
-    const [TEACHER_ID, setTeacherId] = useState('')
+    const [TEACHER_ID, setTeacherId] = useState('11507042')
     const [ERROR, setError] = useState()
 
     const buttonCollapseRef = useRef<HTMLDivElement | null>(null)

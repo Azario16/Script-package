@@ -46,7 +46,7 @@ const GetterBackground = () => {
                 "timeRanges": [],
                 "expressions": [],
                 "teacherIds": [
-                    messageValue.props.teacherId
+                    messageValue.teacherId
                 ],
                 "isComplexSearch": false,
                 "intensity": null,
@@ -67,6 +67,37 @@ const GetterBackground = () => {
                     "content-type": "application/json; charset=UTF-8",
                 },
                 body: JSON.stringify(body),
+                method: "POST",
+                credentials: "include"
+            })
+            arrayResult['lessons'] = await result.json()
+            callback(arrayResult)
+            return arrayResult
+        },
+        getTeacherSlackId: async ({ messageValue, callback }: { messageValue: any, sender: any, callback: any }) => {
+            // console.log(messageValue)
+            const arrayResult: any = {
+                'lessons': {},
+            }
+
+            const body = [
+                `from=${messageValue.dateWeek.wkStart} 21:00:00`,
+                `to=${messageValue.dateWeek.wkEnd} 20:59:59`,
+                `offset=0`,
+                `filters[teacherIds][]=${messageValue.teacherId}`,
+                `limit=15`,
+                `sort=by_rating_small_package`
+            ]
+
+
+
+            const url = `https://timetable.skyeng.ru/api/teachers/search`;
+
+            const result = await productGet(url, {
+                headers: {
+                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                },
+                body: body.join('&'),
                 method: "POST",
                 credentials: "include"
             })
@@ -117,7 +148,7 @@ const GetterBackground = () => {
                     credentials: "include"
                 })
                 arrayResult['education-service'] = await resultEducation.json()
-                console.log(arrayResult['education-service'])
+                // console.log(arrayResult['education-service'])
             }
 
             const urlConfigurations = `https://backend.skyeng.ru/api/products/configurations/`;
@@ -135,7 +166,7 @@ const GetterBackground = () => {
                     credentials: "include"
                 })
                 arrayResult['configurations'] = await resultConfigurations.json()
-                console.log(arrayResult['configurations'])
+                // console.log(arrayResult['configurations'])
             }
 
             callback(arrayResult)
@@ -257,7 +288,7 @@ const GetterBackground = () => {
                     credentials: "include"
                 })
                 arrayResult['doc'] = await resultLoginLinkPost.text()
-                console.log(arrayResult['doc'])
+                // console.log(arrayResult['doc'])
             }
 
             let json = {
@@ -269,10 +300,10 @@ const GetterBackground = () => {
                 let domPars = new DOMParser()
                 let loginLinks: any = domPars.parseFromString(textHtml, `text/html`).querySelectorAll("[value^='https://id.skyeng.ru/auth/login-link/']")
                 let last = loginLinks[loginLinks.length - 1].value;
-                console.log(`Loginner: ${last}`)
+                // console.log(`Loginner: ${last}`)
                 json.loginLink = last
                 json.success = true
-                console.log(json)
+                // console.log(json)
             } catch (err) {
                 json.success = false
             }
@@ -325,10 +356,10 @@ const GetterBackground = () => {
                 let domPars = new DOMParser()
                 let loginLinks: any = domPars.parseFromString(textHtml, `text/html`).querySelectorAll("[value^='https://id.skyeng.ru/auth/login-link/']")
                 let last = loginLinks[loginLinks.length - 1].value;
-                console.log(`Loginner: ${last}`)
+                // console.log(`Loginner: ${last}`)
                 json.loginLink = last
                 json.success = true
-                console.log(json)
+                // console.log(json)
             } catch (err) {
                 json.success = false
             }
@@ -570,7 +601,7 @@ const GetterBackground = () => {
             return arrayResult
         },
         getAutofaqSendMessage: async ({ messageValue, callback }: { messageValue: any, sender: any, callback: any }) => {
-            console.log(messageValue)
+            // console.log(messageValue)
             const body = {
                 "sessionId": `${messageValue.sessionId}`,
                 "conversationId": `${messageValue.chatId}`,
