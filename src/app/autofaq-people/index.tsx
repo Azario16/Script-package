@@ -22,6 +22,7 @@ class Reservation extends React.Component<{}, {
     //userName: 'ТП-Гусейнов Рахид',
     userKbs: any,
     userId: any,
+    userGroup: any,
     error: any,
     data: any,
     isLoadedData: boolean,
@@ -50,6 +51,7 @@ class Reservation extends React.Component<{}, {
         this.state = {
             userKbs: [],
             userId: null,
+            userGroup: null,
             error: null,
             data: [],
             isLoadedData: false,
@@ -94,6 +96,7 @@ class Reservation extends React.Component<{}, {
             this.setState({
                 userKbs: result.settings.knowledgeBases,
                 userId: result.id,
+                userGroup: result.groupList[0]
             })
         })
         this.getCurrentState()
@@ -132,15 +135,22 @@ class Reservation extends React.Component<{}, {
         return parseResult
     }
 
-    ckechKbOperator(knowledgeBases: any) {
+    checkGroupoperator(knowledgeBases: any, groupValue: any) {
         let state = false
         // const testKB = [121779]
+
+
+
         this.state.userKbs.forEach((element: any) => {
             if (!state) {
                 state = knowledgeBases.includes(element);
             }
         });
 
+        // return state
+        if(!state && !knowledgeBases.length){
+            state = this.state.userGroup === groupValue
+        }
         return state
     }
 
@@ -153,7 +163,7 @@ class Reservation extends React.Component<{}, {
         data.forEach((person: any, index: any) => {
             // AF вместо 0 чатов отдает null, тут условие чтобы были нули
             if (person.operator !== null) {
-                if (person.operator.status === status && this.ckechKbOperator(person.operator.kbs)) {
+                if (person.operator.status === status && this.checkGroupoperator(person.operator.kbs, person.groupId)) {
                     if (person.aCnt === null) {
                         data[index].aCnt = 0;
                     }
