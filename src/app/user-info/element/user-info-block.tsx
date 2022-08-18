@@ -33,7 +33,7 @@ function InfoBlock(props: any) {
             message: 'create-chat',
             userId: props.userId,
             session: props.session,
-            afUserId: props.afUserId
+            afOperatorValue: props.afOperatorValue
         }
 
         sendMessage(ACTIONS.SEND_EVENT, messageValue, (result: any) => {
@@ -172,7 +172,7 @@ function InfoBlock(props: any) {
                         props.startValue &&
                         <EdauctionBlock
                             session={props.session}
-                            afUserId={props.afUserId}
+                            afOperatorValue={props.afOperatorValue}
                             howUser="student"
                             startValue={props.startValue}
                             userInfo={USER_INFO.data} />

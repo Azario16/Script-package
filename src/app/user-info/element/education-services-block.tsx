@@ -25,7 +25,7 @@ interface eduInfo {
     errors?: any;
 }
 
-function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: string; session: any, afUserId: string }) {
+function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: string; session: any, afOperatorValue: any }) {
     // console.log('InfoBlock')
     const [START, setStart] = useState(true)
     const [EDUCATION, setEducation] = useState([])
@@ -166,7 +166,7 @@ function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: s
                                                 {/* <ButtonBar howUser="teacher" /> */}
                                                 <InfoBlock
                                                     session={params.session}
-                                                    afUserId={params.afUserId}
+                                                    afOperatorValue={params.afOperatorValue}
                                                     howUser="teacher"
                                                     startValue={START}
                                                     userId={teacherId} />

@@ -537,11 +537,13 @@ const GetterBackground = () => {
             callback(arrayResult)
             return arrayResult
         },
-        getAutofaqStartChat: async ({ messageValue, callback }: { messageValue: any, sender: any, callback: any }) => {
+        getAutofaqStartChat: async ({ messageValue, callback }: { messageValue: any, callback: any }) => {
+            console.log(messageValue)
+            console.log(messageValue.afOperatorValue)
             const arrayResult: any = {
                 'start-chat': {},
             }
-            const urStartChat = `https://skyeng.autofaq.ai/api/conversation/start?channelId=eca64021-d5e9-4c25-b6e9-03c24s638d4d&userId=${messageValue.userId}&operatorId=${messageValue.operatorAfId}`;
+            const urStartChat = `https://skyeng.autofaq.ai/api/conversation/start?channelId=eca64021-d5e9-4c25-b6e9-03c24s638d4d&userId=${messageValue.userId}&operatorId=${messageValue.afOperatorValue.id}&groupId=${messageValue.afOperatorValue.groupList[0]}`;
             if (window.location.hostname === 'extension-test.ru') {
                 let bodyStartChat: any = {}
                 bodyStartChat['uer-get'] = urStartChat;

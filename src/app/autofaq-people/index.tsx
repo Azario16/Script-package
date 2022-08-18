@@ -197,6 +197,10 @@ class Reservation extends React.Component<{}, {
             if (operatorState.operator === null) {
                 if (this.state.userKbs.includes(operatorState.kb)) {
                     listCntUndistributed.push(operatorState.cCnt)
+                } else if(!this.state.userKbs.length){
+                    if (this.state.userGroup == operatorState.groupId) {
+                        listCntUndistributed.push(operatorState.cCnt)
+                    }
                 }
             }
         });

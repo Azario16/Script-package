@@ -123,7 +123,7 @@ const ModalElements = () => {
             const startChatAutofaq = (callback: any) => {
                 const getParams = {
                     userId: props.param.userId,
-                    operatorAfId: props.param.afUserId,
+                    afOperatorValue: props.param.afOperatorValue,
                 }
                 sendMessage(ACTIONS.GET_AUTOFAQ_START_CHAT, getParams, (result: any) => {
                     callback(result)

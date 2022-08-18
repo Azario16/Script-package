@@ -11,7 +11,7 @@ import createButtonSeacrhId from './function/create-button-to-af'
 const UserInfo: React.FC = () => {
     const [START, setStart] = useState(false)
     const [USER_ID, setUserId] = useState('')
-    const [AF_USER_ID, setAfUserId] = useState('')
+    const [AF_OPERATOR_VALUE, setAfOperatorValue] = useState('')
     const [CRM_SESSION, setCrmSession] = useState()
     const [ERROR, setError] = useState()
 
@@ -31,7 +31,7 @@ const UserInfo: React.FC = () => {
             setCrmSession(operatorCrmSession)
 
             sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: any) => {
-                setAfUserId(result.id)
+                setAfOperatorValue(result)
             })
         })
     }
@@ -145,7 +145,7 @@ const UserInfo: React.FC = () => {
                                 !!START &&
                                 <InfoBlock
                                     session={CRM_SESSION}
-                                    afUserId={AF_USER_ID}
+                                    afOperatorValue={AF_OPERATOR_VALUE}
                                     howUser="student"
                                     startValue={START}
                                     userId={USER_ID}
