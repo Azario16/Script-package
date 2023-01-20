@@ -107,10 +107,12 @@ class Reservation extends React.Component<{}, {
 
     async getCurrentState() {
         sendMessage(ACTIONS.GET_AUTOFAQ_PEOPLE, '', (result: any) => {
-            const operState = result['people-list']
+            console.log(result)
+            const operState = result['people-list'].onOperator
+            const unAssigned = result['people-list'].unAssigned
             const operStatus = this.parseStatus(operState)
             let operStatusRender = Object.assign({}, operStatus.Online, operStatus.Busy, operStatus.Pause);
-            let cCntUndistributedGroup = this.checkSumContTematicGroup(operState)
+            let cCntUndistributedGroup = this.checkSumContTematicGroup(unAssigned)
             this.setState({
                 isLoaded: true,
                 data: operState,
@@ -135,7 +137,7 @@ class Reservation extends React.Component<{}, {
         return parseResult
     }
 
-    checkGroupoperator(knowledgeBases: any, groupValue: any) {
+    checkGroupOperator(knowledgeBases: any, groupValue: any) {
         let state = false
         // const testKB = [121779]
 
@@ -163,7 +165,7 @@ class Reservation extends React.Component<{}, {
         data.forEach((person: any, index: any) => {
             // AF вместо 0 чатов отдает null, тут условие чтобы были нули
             if (person.operator !== null) {
-                if (person.operator.status === status && this.checkGroupoperator(person.operator.kbs, person.groupId)) {
+                if (person.operator.status === status && this.checkGroupOperator(person.operator.kbs, person.groupId)) {
                     if (person.aCnt === null) {
                         data[index].aCnt = 0;
                     }
@@ -191,16 +193,14 @@ class Reservation extends React.Component<{}, {
             return "bg-danger"
         }
     }
-    checkSumContTematicGroup(operState: any) {
+    checkSumContTematicGroup(unAssigned: any) {
         const listCntUndistributed: any = [];
-        operState.forEach((operatorState: any) => {
-            if (operatorState.operator === null) {
-                if (this.state.userKbs.includes(operatorState.kb)) {
-                    listCntUndistributed.push(operatorState.cCnt)
-                } else if(!this.state.userKbs.length){
-                    if (this.state.userGroup == operatorState.groupId) {
-                        listCntUndistributed.push(operatorState.cCnt)
-                    }
+        unAssigned.forEach((unAssignedBody: any) => {
+            if (this.state.userKbs.includes(unAssignedBody.kb)) {
+                listCntUndistributed.push(unAssignedBody.count)
+            } else if(!this.state.userKbs.length){
+                if (this.state.userGroup == unAssignedBody.groupId) {
+                    listCntUndistributed.push(unAssignedBody.count)
                 }
             }
         });

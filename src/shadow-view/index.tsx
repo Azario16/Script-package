@@ -5,6 +5,12 @@ import ReactDOM from 'react-dom/client';
 // import '../styles-extension.scss'
 // import styleText from '../../style.scss';
 import styleText from '../../build/static/css/styles_extension.css';
+
+// const sass = require('sass');
+
+// const styleText = sass.compile("../style-main.scss");
+// console.log(styleText.css);
+
 // import styleText from '../../build/static/css/style_main.css';
 
 // const test: any = styleText
@@ -22,34 +28,25 @@ export class ShadowView extends React.Component {
     attachShadow = (host: any) => {
         const { children }: any = this.props;
         const shadowRoot = host.attachShadow({ mode: "closed" });
+        
         sheet.replaceSync(styleText);
-        // console.log(styleText)
-
         shadowRoot.adoptedStyleSheets = [sheet];
-
-        // shadowRoot.appendChild(styleGreen);
-
         const root = ReactDOM.createRoot(
             shadowRoot as HTMLElement
         );
 
         root.render(
             <>
-                {/* <link rel="stylesheet" href="https://build.extension-test.ru/static/css/styles_extension.css"></link> */}
                 {children}
-
             </>
         );
     }
     render() {
-        // console.log('ShadowView render')
         return <div ref={this.attachShadow}></div>;
     }
 }
 
 export default function TimTableInfoShadow({ children }: any) {
-    // const { children }: any = props;
-    // const elemntDrop = useRef<any>()
     const [elemntDrop, setElementDrop] = useState<any>()
 
     useEffect(() => {
@@ -58,23 +55,9 @@ export default function TimTableInfoShadow({ children }: any) {
             console.log(elemntDrop.current)
             createDargAndDrop(elemntDrop, elemntDrop, 'win')
         }
-        // console.log('App useEffect')
-        // const mainElem = document.querySelector('#main-window-tt')
-        // const moveElem = document.querySelector('#main-window-tt')
     }, [elemntDrop])
 
-    // const { children }: any = props;
-    // console.log('App render')
     return <ShadowView >
         {children}
     </ShadowView>
 }
-
-// const root = ReactDOM.createRoot(
-//     document.getElementById('root') as HTMLElement
-// );
-
-// root.render(
-//     <App />
-// );
-

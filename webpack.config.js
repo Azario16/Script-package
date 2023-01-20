@@ -1,14 +1,14 @@
 const path = require('path');
 const resolve = require('resolve');
-// const paths = require('./paths');
-const { CheckerPlugin } = require('awesome-typescript-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 const { optimize } = require('webpack');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+// const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const { join } = require('path');
+require('./webpack.style.init');
 let prodPlugins = [];
 var publicUrl = ''
 
@@ -57,15 +57,15 @@ module.exports = {
   devtool: 'source-map',
   // devtool: "inline-source-map",
   entry: {
-    variable: '/src/variable.scss',
+    variable: '/src/bootstrap-custom/variable.scss',
     styles_extension: '/src/styles-extension.scss',
-    style_main: '/src/style-main.scss',
+    // style_main: '/src/style-main.scss',
     background: '/src/chrome/background.ts',
     main: '/src/index.tsx',
   },
   output: {
-    // path: path.resolve(__dirname + '/build'),
-    path: 'C:/OpenServer/domains/extension/build',
+    path: path.resolve(__dirname + '/build'),
+    // path: 'C:/OpenServer/domains/extension/build',
     filename: 'static/js/[name].js',
     publicPath: '/',
     assetModuleFilename: "static/media/[name].[hash][ext]"
@@ -126,7 +126,6 @@ module.exports = {
   },
   plugins:
     [
-      new CheckerPlugin(),
       ...prodPlugins,
       new MiniCssExtractPlugin({
         filename: "static/css/[name].css",
@@ -158,6 +157,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js'],
     alias: {
       "@src": path.resolve(__dirname, "src/"),
-  },
+      '@css': path.resolve(__dirname, 'src/css'),
+    },
   },
 };

@@ -1,4 +1,4 @@
-@import "./css/jquery-ui-themes-1.12.1/jquery-ui.css";
+@import "@css/jquery-ui-themes-1.12.1/jquery-ui.css";
 .ui-widget.ui-widget-content {
     z-index: 2001 !important;
 }
@@ -15,8 +15,8 @@
 .paddding-custom-cms{
     padding-top: 7px !important;
 }
-@import "../node_modules/bootstrap/scss/functions";
-@import "../node_modules/bootstrap/scss/variables";
+@import "./functions";
+@import "../../node_modules/bootstrap/scss/variables";
 
 $custom-colors: (
     "checkbox": #ebebeb,
@@ -48,4 +48,4 @@ $custom-colors: (
 
 $theme-colors: map-merge($theme-colors, $custom-colors);
 
-@import "../node_modules/bootstrap/scss/root";
+@import "../../node_modules/bootstrap/scss/root";

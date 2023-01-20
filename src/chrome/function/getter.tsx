@@ -376,14 +376,14 @@ const GetterBackground = () => {
                 let bodyCurrentList: any = {}
                 bodyCurrentList['uer-get'] = urlCurrentList;
                 const resultCurrentList = await testingGet(bodyCurrentList);
-                arrayResult['people-list'] = resultCurrentList.rows
+                arrayResult['people-list'] = resultCurrentList
             } else {
                 const resultCurrentList = await productGet(urlCurrentList, {
                     method: "GET",
                     credentials: "include"
                 })
                 const currentList = await resultCurrentList.json()
-                arrayResult['people-list'] = currentList.rows
+                arrayResult['people-list'] = currentList
             }
             callback(arrayResult)
             return arrayResult

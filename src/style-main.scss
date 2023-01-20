@@ -11,7 +11,7 @@
 // @import "./css/font-awesom/scss/duotone.scss";
 // @import "./css/font-awesom/scss/_duotone-icons.scss";
 @import "./css/jquery-ui-themes-1.12.1/jquery-ui.css";
-@import "../node_modules/bootstrap/scss/functions";
+@import "./src/bootstrap-custom/functions";
 // 2. Включите сюда любые переопределения переменных по умолчанию
 // $body-bg: #3a3c3d;
 $nav-link-color: #fff;
@@ -302,7 +302,7 @@ $utilities: map-merge(
 @import "../node_modules/bootstrap/scss/tables";
 @import "../node_modules/bootstrap/scss/reboot";
 
-@import "./reboot-custom";
+@import "./src/bootstrap-custom/reboot-custom";
 
 @import "../node_modules/bootstrap/scss/images";
 @import "../node_modules/bootstrap/scss/containers";
