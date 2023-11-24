@@ -5,7 +5,7 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 const { optimize } = require('webpack');
-// const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const { join } = require('path');
 require('./webpack.style.init');
@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'production') {
     new optimize.OccurrenceOrderPlugin()
   );
 }
-// console.log(path.resolve(__dirname))
+
 const sockHost = process.env.WDS_SOCKET_HOST;
 const sockPath = process.env.WDS_SOCKET_PATH; // default: '/ws'
 const sockPort = process.env.WDS_SOCKET_PORT;
@@ -32,9 +32,6 @@ module.exports = {
     port: process.env.PORT,
     client: {
       webSocketURL: {
-        // Enable custom sockjs pathname for websocket connection to hot reloading server.
-        // Enable custom sockjs hostname, pathname and port for websocket connection
-        // to hot reloading server.
         hostname: sockHost,
         pathname: sockPath,
         port: sockPort,

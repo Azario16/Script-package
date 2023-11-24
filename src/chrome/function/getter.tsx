@@ -634,6 +634,7 @@ const GetterBackground = () => {
                     }).join(''));
                     console.log(jsonPayload)
                     const userValuu = JSON.parse(jsonPayload).user
+                    console.log(userValuu)
                     callback(userValuu);
                 }
             });

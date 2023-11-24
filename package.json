@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "start": "set WDS_SOCKET_HOST=localhost&&set PORT=3000&&react-scripts start",
-    "start:webpack": "set WDS_SOCKET_HOST=localhost&&set MODE=development&&set PORT=3000&&webpack serve",
     "start-craco": "set NODE_ENV=development&&craco start -w",
     "build": "react-scripts build",
-    "build:wp": "webpack --mode production",
     "build-craco": "craco build",
     "test": "react-scripts test",
+    "start:webpack": "set WDS_SOCKET_HOST=localhost&&set MODE=development&&set PORT=3000&&webpack serve",
+    "build:wp": "webpack --mode production",
     "watch": "set MODE=development&&webpack --config webpack.config.js -w"
   },
   "eslintConfig": {
