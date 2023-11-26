@@ -1,4 +1,3 @@
-import { api } from '../../service/api-domain.service';
 import { isExtensionContext } from '../../service/chrome-runtime.service';
 import { Logger } from '../../service/logger/logger.service';
 import { ACTIONS } from '../actions';

@@ -12,6 +12,7 @@ import СreateCmsButtonfrom from './app/vimbox-cms'
 import ShadowView from './shadow-view';
 
 import SliderTest from './app/test-slider'
+import { Storage } from './service/storage/storage.service';
 
 
 /* 
@@ -142,6 +143,7 @@ const App: any = () => {
       </ShadowView>, 'main')
       break;
     case 'vimbox.skyeng.ru':
+      Storage.createSupportMark()
       СreateCmsButtonfrom()
       break;
     default:
