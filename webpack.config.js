@@ -51,7 +51,7 @@ module.exports = {
   },
   mode: process.env.MODE,
   // devtool: 'cheap-module-source-map',
-  devtool: 'source-map',
+  devtool: process.env.MODE === 'development' ? 'source-map' : false,
   // devtool: "inline-source-map",
   entry: {
     variable: '/src/bootstrap-custom/variable.scss',
