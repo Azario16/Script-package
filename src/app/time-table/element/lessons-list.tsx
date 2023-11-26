@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo, useCallback, createContext } from
 
 import React from 'react';
 import { sendMessage } from "../../../chrome/utils";
-import { ACTIONS } from "../../../chrome/actions-bg";
+import { ACTIONS } from "../../../chrome/actions";
 import { ACTIONS_WINDOW } from '../../modal-window/function/actions-window'
 import { getTimeFromDate, getDateWeekForButton, getDateFormate } from '../../../hooks/date-time'
 import { Logger } from '../../../service/logger/logger.service';

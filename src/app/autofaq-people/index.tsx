@@ -2,7 +2,7 @@ import React from 'react'
 import Colapse from 'bootstrap/js/dist/collapse.js';
 import ReactDOM from 'react-dom/client';
 import { sendMessage } from "../../chrome/utils";
-import { ACTIONS } from "../../chrome/actions-bg";
+import { ACTIONS } from "../../chrome/actions";
 
 import UserStatus from './element/user-statuc-block'
 import { Logger } from '../../service/logger/logger.service';

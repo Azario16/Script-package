@@ -12,7 +12,7 @@ import {
 import { BrowserRouter } from "react-router-dom";
 import Colapse from 'bootstrap/js/dist/collapse.js';
 import { sendMessage } from '../../chrome/utils';
-import { ACTIONS } from '../../chrome/actions-bg';
+import { ACTIONS } from '../../chrome/actions';
 import App from './App';
 import MessageBlock from './element/message-block'
 import ChatList from './page/chat-list'

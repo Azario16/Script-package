@@ -3,7 +3,7 @@ import Slider from "react-slick";
 // import "react-multi-carousel/lib/styles.css";
 import { useState, useEffect, useRef, useMemo, useCallback, createContext } from 'react';
 import { sendMessage } from "../../../../chrome/utils";
-import { ACTIONS } from "../../../../chrome/actions-bg";
+import { ACTIONS } from "../../../../chrome/actions";
 import {
     ClaendarIcon,
     TelehoneMissedIcon,

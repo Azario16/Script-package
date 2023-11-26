@@ -6,7 +6,7 @@ import { getDateWeekForButton } from '../../hooks/date-time'
 
 import { Collapse } from 'bootstrap';
 import { sendMessage } from "../../chrome/utils";
-import { ACTIONS } from "../../chrome/actions-bg";
+import { ACTIONS } from "../../chrome/actions";
 import { CreateDatePicker } from './element/datepicker-block'
 
 import LessonsList from './element/lessons-list'

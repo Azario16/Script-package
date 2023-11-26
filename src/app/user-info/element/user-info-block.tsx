@@ -7,7 +7,7 @@ import {
 import ButtonBar from './button-bar';
 import React from 'react';
 import { sendMessage } from "../../../chrome/utils";
-import { ACTIONS } from "../../../chrome/actions-bg";
+import { ACTIONS } from "../../../chrome/actions";
 import { ACTIONS_WINDOW } from '../../modal-window/function/actions-window'
 import EdauctionBlock from './education-services-block';
 import EyesNumber from './eyes-number'

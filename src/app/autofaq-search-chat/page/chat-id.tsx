@@ -8,7 +8,7 @@ import {
     Outlet
 } from 'react-router-dom';
 import { sendMessage } from "../../../chrome/utils";
-import { ACTIONS } from "../../../chrome/actions-bg";
+import { ACTIONS } from "../../../chrome/actions";
 import MessageBlock from '../element/message-block'
 const navigateComponent: any = {
     'getNavigate': Function

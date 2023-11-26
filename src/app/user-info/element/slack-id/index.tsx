@@ -1,6 +1,6 @@
 import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
 import { sendMessage } from "../../../../chrome/utils";
-import { ACTIONS } from "../../../../chrome/actions-bg";
+import { ACTIONS } from "../../../../chrome/actions";
 
 import { getDateWeekForButton } from '../../../../hooks/date-time'
 

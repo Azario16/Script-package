@@ -3,7 +3,7 @@ import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'r
 import { Collapse, Dropdown } from 'bootstrap';
 import { createPopper } from '@popperjs/core';
 import { sendMessage } from '../../../chrome/utils';
-import { ACTIONS } from '../../../chrome/actions-bg';
+import { ACTIONS } from '../../../chrome/actions';
 import { Logger } from '../../../service/logger/logger.service';
 
 const SendCommentAndAnswer = (props: any) => {

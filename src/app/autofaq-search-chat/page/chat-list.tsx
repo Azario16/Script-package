@@ -8,7 +8,7 @@ import {
     Outlet
 } from 'react-router-dom';
 import { sendMessage } from "../../../chrome/utils";
-import { ACTIONS } from "../../../chrome/actions-bg";
+import { ACTIONS } from "../../../chrome/actions";
 import MessageBlock from '../element/message-block'
 import { Collapse } from 'bootstrap';
 import { Logger } from '../../../service/logger/logger.service';

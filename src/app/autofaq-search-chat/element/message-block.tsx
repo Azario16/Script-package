@@ -13,7 +13,7 @@ import {
 } from 'react-router-dom';
 import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
 import { sendMessage } from "../../../chrome/utils";
-import { ACTIONS } from "../../../chrome/actions-bg";
+import { ACTIONS } from "../../../chrome/actions";
 import Event from './event'
 import Question from './question'
 import AnswerBot from './answer-bot'

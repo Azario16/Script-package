@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect, useRef, useMemo, useCallback, createContext } from 'react';
 import { sendMessage } from "../../../chrome/utils";
-import { ACTIONS } from "../../../chrome/actions-bg";
+import { ACTIONS } from "../../../chrome/actions";
 import InfoBlock from './user-info-block';
 import { Collapse } from 'bootstrap';
 

@@ -1,4 +1,4 @@
-import { ACTIONS } from "../../chrome/actions-bg"
+import { ACTIONS } from "../../chrome/actions"
 
 
 const mockResponseList = [

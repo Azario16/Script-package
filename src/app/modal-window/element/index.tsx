@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
 import { Modal } from 'bootstrap';
 import { sendMessage } from "../../../chrome/utils";
-import { ACTIONS } from "../../../chrome/actions-bg";
+import { ACTIONS } from "../../../chrome/actions";
 
 const ModalElements = () => {
     return {

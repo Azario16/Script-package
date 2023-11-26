@@ -5,7 +5,7 @@ import InfoBlock from './element/user-info-block';
 import EdauctionBlock from './element/education-services-block';
 import { Collapse } from 'bootstrap';
 import { sendMessage } from "../../chrome/utils";
-import { ACTIONS } from "../../chrome/actions-bg";
+import { ACTIONS } from "../../chrome/actions";
 import createButtonSeacrhId from './function/create-button-to-af'
 import { isExtensionContext } from '../../service/chrome-runtime.service';
 
@@ -68,7 +68,7 @@ const UserInfo: React.FC = () => {
         setUserId(userId)
         setStart(true)
     }
-    
+
     useEffect(() => {
         if (isExtensionContext()) {
             chrome.runtime.onMessage.addListener(
