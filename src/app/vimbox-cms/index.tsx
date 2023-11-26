@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Logger } from '../../service/logger/logger.service';
 import ShadowView from '../../shadow-view'
 
 const СreateCmsButton = () => {
@@ -56,14 +57,13 @@ async function StatusAutofaqPeopleRender() {
             let roomInfo = await this.getRoomInfo()
         }
         getStepUuid(elm: any) {
-            console.log(elm)
+            Logger.debug(elm)
             const stepElement: HTMLElement = document.querySelector('[class="title"] > span.title')!
             let stepName: string;
 
             stepName = innerTextElement(stepElement);
-            // const stepName = document.querySelector('[class="title"] > span.title').innerText
-            console.log(stepName)
-            console.log(this.state.data)
+            Logger.debug(stepName)
+            Logger.debug(this.state.data)
             this.state.data.map((body: any, count: any) => {
                 if (body.name === stepName) {
                     elm.target.className = "bg-success btn"
@@ -80,7 +80,6 @@ async function StatusAutofaqPeopleRender() {
             }
         }
         async getRoomInfo() {
-            //console.log("getRoomInfo")
             const locationPath = window.location.pathname.split('/')[2]
             const url = `https://api-${locationPath}.skyeng.ru/api/v2/rooms/${this.state.room}`;
             let roomInfoRes = await fetch(url, {
@@ -88,7 +87,7 @@ async function StatusAutofaqPeopleRender() {
                 credentials: 'include'
             })
             let roomInfo = await roomInfoRes.json();
-            console.log(roomInfo)
+            Logger.debug(roomInfo)
             let roomHW = roomInfo['homeworkCards'][0].themes[0].cards;
             let roomLesson = roomInfo['lessonCards'][0].themes[0].cards;
             let roomConcat = roomHW.concat(roomLesson)
@@ -100,7 +99,6 @@ async function StatusAutofaqPeopleRender() {
             return roomInfo['homeworkCards'];
         }
         render() {
-            //console.log('Render')
             const { error, isLoaded }: any = this.state;
             if (error) {
                 return <div>Ошибка: {error.message}</div>;

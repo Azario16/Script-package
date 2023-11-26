@@ -12,6 +12,7 @@ import { ACTIONS } from "../../../chrome/actions-bg";
 import MessageBlock from '../element/message-block'
 import { getDateWeekForButton } from '../../../hooks/date-time'
 import { Collapse } from 'bootstrap';
+import { Logger } from '../../../service/logger/logger.service';
 
 const ChatListOperator = (props: any) => {
     const [CHAT_LIST, setChatList] = useState<any>([])
@@ -20,18 +21,15 @@ const ChatListOperator = (props: any) => {
     const START = useRef<string>('')
     const END = useRef<string>('')
     const buttonCollapseRef = useRef<any>([])
-    // console.log('ChatList')
     const navigate = useNavigate();
 
     const OPERATOR_ID = useParams()
 
     const updateChatList = () => {
-        console.log("updateChatList")
+        Logger.debug("updateChatList")
         buttonCollapseRef.current = []
-        // console.log(buttonCollapseRef)
         if (!!OPERATOR_ID.id) {
             sendMessage(ACTIONS.GET_AUTOFAQ_CHAT_LIST_OPERATOR, { START, END, OPERATOR_ID }, (result: any) => {
-                // console.log(result)
                 const chatListUser: any = result["chat-list"]
                 if (chatListUser.items.length === 0) {
                     setChatList('0 чатов')
@@ -43,8 +41,6 @@ const ChatListOperator = (props: any) => {
                     const filterChatToOprator = chatListReversed.filter((element: any) => {
                         return element.stats.participatingOperators[0] === OPERATOR_ID.id
                     })
-                    // console.log(OPERATOR_ID)
-                    // console.log(filterChatToOprator)
                     setChatListOpen(chatListOpen)
                     setChatList(chatListReversed)
                 } else {
@@ -61,23 +57,16 @@ const ChatListOperator = (props: any) => {
     }
 
     useEffect(() => {
-        // console.log(OPERATOR_ID)
         setChatList([])
         setError(false)
         updateChatList()
     }, [OPERATOR_ID])
-    // console.log(OPERATOR_ID)
-
 
     useMemo(() => {
         const dateWeek = getDateWeekForButton().weekButton(null, 1)
         START.current = dateWeek.wkStart
         END.current = dateWeek.wkEnd
     }, [])
-
-    console.log('Список колласпов -------------------------------------------------')
-    console.log(buttonCollapseRef.current)
-    console.log('-------------------------------------------------')
 
     return (
         <div className="">
@@ -89,11 +78,11 @@ const ChatListOperator = (props: any) => {
                     }}
                 >вернуться к поиску</button>
 
-                <button type="button" className="btn btn-secondary mb-3 padding-btn-0 fs-6 text-light" id="change_week"
+                {/* <button type="button" className="btn btn-secondary mb-3 padding-btn-0 fs-6 text-light" id="change_week"
                     onClick={async () => {
-                        console.log(buttonCollapseRef)
+                        Logger.debug(buttonCollapseRef)
                     }}
-                >тест</button>
+                >тест</button> */}
             </div>
             <div className="table table-hover  text-center w-100 overflow-auto bg-dark">
                 <div>
@@ -109,7 +98,7 @@ const ChatListOperator = (props: any) => {
                                 const userType = value.channelUser.payload !== undefined
                                     ? value.channelUser.payload.userType
                                     : 'not type';
-                                console.log(value)
+                                Logger.debug(value)
                                 return (
                                     <div key={value.conversationId} className="mb-2 text-light">
                                         <div className='fs-custom-0_8 bg-secondary border border-b-dark rounded'
@@ -117,7 +106,7 @@ const ChatListOperator = (props: any) => {
                                                 const changeChatListOpen = CHAT_LIST_OPEN.map((valueChatOpen: boolean, keyChatOpen: number) => {
                                                     return keyChatOpen === key ? true : valueChatOpen
                                                 })
-                                                console.log(buttonCollapseRef)
+                                                Logger.debug(buttonCollapseRef)
                                                 coollapseToogle(true, buttonCollapseRef.current[value.conversationId])
                                                 setChatListOpen(changeChatListOpen)
                                             }}

@@ -7,6 +7,7 @@ import { CreateDatePicker } from '../element/datepicker-block'
 import { Collapse } from 'bootstrap';
 import { sendMessage } from '../../../chrome/utils';
 import { ACTIONS } from '../../../chrome/actions-bg';
+import { isExtensionContext } from '../../../service/chrome-runtime.service';
 
 
 const Home = (props: any) => {
@@ -23,7 +24,6 @@ const Home = (props: any) => {
         const checkShow = props.buttonToogle.current?.classList?.contains('show')
         if (!checkShow) {
             coollapseToogle(true, props.buttonToogle.current)
-            console.log('скрыть')
         }
     }
 
@@ -38,8 +38,7 @@ const Home = (props: any) => {
 
 
     useEffect(() => {
-        const hostName: any = window.location.hostname
-        if (hostName !== 'build.extension-test.ru' && hostName !== 'extension-test.ru') {
+        if (isExtensionContext()) {
             chrome.runtime.onMessage.addListener(
                 function (request, sender, sendResponse) {
                     switch (request.message) {

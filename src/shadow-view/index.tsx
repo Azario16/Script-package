@@ -1,36 +1,25 @@
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
-import { createDargAndDrop } from '../core/drag-and-drop'
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-// import '../styles-extension.scss'
-// import styleText from '../../style.scss';
-import styleText from '../../build/static/css/styles_extension.css';
-
-// const sass = require('sass');
-
-// const styleText = sass.compile("../style-main.scss");
-// console.log(styleText.css);
-
-// import styleText from '../../build/static/css/style_main.css';
-
-// const test: any = styleText
-// const styleGreen = document.createElement('style');
-// styleGreen.type = 'text/css';
-// styleGreen.appendChild(document.createTextNode(test));
-
-// import './style.scss'
-
-const sheet: any = new CSSStyleSheet();
+import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
+import { createDargAndDrop } from '../core/drag-and-drop'
+import { getUrl } from '../service/chrome-runtime.service';
+import { Logger } from '../service/logger/logger.service';
 export class ShadowView extends React.Component {
-    componentDidMount() {
-        // console.log('test')
+    sheet: any = new CSSStyleSheet();
+
+    async loadStyle(): Promise<string> {
+        const response = await fetch(getUrl('static/css/styles_extension.css'));
+        return await response.text();
     }
-    attachShadow = (host: any) => {
+
+    attachShadow = async (host: any) => {
         const { children }: any = this.props;
         const shadowRoot = host.attachShadow({ mode: "closed" });
-        
-        sheet.replaceSync(styleText);
-        shadowRoot.adoptedStyleSheets = [sheet];
+
+        const styleText = await this.loadStyle();
+        this.sheet.replaceSync(styleText);
+
+        shadowRoot.adoptedStyleSheets = [this.sheet];
         const root = ReactDOM.createRoot(
             shadowRoot as HTMLElement
         );
@@ -41,6 +30,7 @@ export class ShadowView extends React.Component {
             </>
         );
     }
+
     render() {
         return <div ref={this.attachShadow}></div>;
     }
@@ -51,8 +41,7 @@ export default function TimTableInfoShadow({ children }: any) {
 
     useEffect(() => {
         if (elemntDrop) {
-            console.log(elemntDrop)
-            console.log(elemntDrop.current)
+            Logger.debug(elemntDrop)
             createDargAndDrop(elemntDrop, elemntDrop, 'win')
         }
     }, [elemntDrop])

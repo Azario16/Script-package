@@ -6,9 +6,7 @@ import { ACTIONS } from "../../../chrome/actions-bg";
 const ModalElements = () => {
     return {
         AssignChat: (props: any) => {
-            console.log('CreateChat')
             const [show, setShow] = useState(false);
-            // setShow(false)
             const [showAnimat, setShowAnimat] = useState(false);
             const handleClose = () => setShow(false);
             const handleShow = () => setShow(true);
@@ -18,17 +16,11 @@ const ModalElements = () => {
 
             const toogelModalElenet = () => {
                 if (MODAL_ELEMENT !== undefined) {
-                    console.log(MODAL_ELEMENT)
-                    console.log(modalRef.current)
-                    // const myModal = new Modal(MODAL_ELEMENT)
                     modalRef.current.toggle()
                     setShowAnimat(true)
                     handleShow()
                 }
             }
-            useEffect(() => {
-                console.log('useEffect')
-            }, [])
 
             const assignChatAf = (callback: any) => {
                 const getParams = {
@@ -43,13 +35,9 @@ const ModalElements = () => {
             useEffect(() => {
                 if (MODAL_ELEMENT) {
                     MODAL_ELEMENT.addEventListener('hide.bs.modal', (event: any) => {
-                        console.log("Запущен ивент ")
-                        console.log(event)
                         setShowAnimat(false)
                     })
                     MODAL_ELEMENT.addEventListener('hidden.bs.modal', (event: any) => {
-                        console.log("Запущен ивент ")
-                        console.log(event)
                         props.handleClose()
                         handleClose()
                     })
@@ -88,11 +76,7 @@ const ModalElements = () => {
                                                         toogelModalElenet()
                                                     } else {
                                                         const value: string = `Не удалось создать чат`
-                                                        // errorValue.current = JSON.stringify(result, null, 2)
-                                                        // setError(true)
-                                                        // setBodyValue(value)
                                                     }
-                                                    console.log(result)
                                                 })
                                             }
                                         }}
@@ -108,9 +92,7 @@ const ModalElements = () => {
             )
         },
         CreateChat: (props: any) => {
-            console.log('CreateChat')
             const [show, setShow] = useState(false);
-            // setShow(false)
             const [showAnimat, setShowAnimat] = useState(false);
             const handleClose = () => setShow(false);
             const handleShow = () => setShow(true);
@@ -132,27 +114,18 @@ const ModalElements = () => {
 
             const toogelModalElenet = () => {
                 if (MODAL_ELEMENT !== undefined) {
-                    console.log(MODAL_ELEMENT)
-                    console.log(modalRef.current)
                     modalRef.current.toggle()
                     setShowAnimat(true)
                     handleShow()
                 }
             }
-            useEffect(() => {
-                console.log('useEffect')
-            }, [])
 
             useEffect(() => {
                 if (MODAL_ELEMENT) {
                     MODAL_ELEMENT.addEventListener('hide.bs.modal', (event: any) => {
-                        console.log("Запущен ивент ")
-                        console.log(event)
                         setShowAnimat(false)
                     })
                     MODAL_ELEMENT.addEventListener('hidden.bs.modal', (event: any) => {
-                        console.log("Запущен ивент ")
-                        console.log(event)
                         props.handleClose()
                         handleClose()
                     })
@@ -207,7 +180,6 @@ const ModalElements = () => {
                                                             setError(true)
                                                             setBodyValue(value)
                                                         }
-                                                        console.log(result)
                                                     })
 
 
@@ -226,7 +198,6 @@ const ModalElements = () => {
                                                             setError(true)
                                                             setBodyValue(value)
                                                         }
-                                                        console.log(result)
                                                     })
                                                 }
                                             }}

@@ -10,6 +10,7 @@ import { ACTIONS } from "../../chrome/actions-bg";
 import { CreateDatePicker } from './element/datepicker-block'
 
 import LessonsList from './element/lessons-list'
+import { Logger } from '../../service/logger/logger.service';
 
 
 const TimTableInfo: React.FC = () => {
@@ -33,21 +34,17 @@ const TimTableInfo: React.FC = () => {
     const collapseChagne = () => {
         const checkShow = buttonCollapseRef.current?.classList?.contains('show')
         if (TEACHER_ID !== '' && !checkShow) {
-            console.log('Развернуть')
             coollapseToogle(!checkShow, buttonCollapseRef.current)
             setStartSearch(!checkShow)
         } else if (checkShow) {
-            console.log('Свернуть')
             coollapseToogle(true, buttonCollapseRef.current)
-            // setTeacherId('')
             setStartSearch(false)
         }
-        // console.log(START)
     }
 
     useMemo(() => {
         const dateWeek = getDateWeekForButton().weekButton(null, 1)
-        console.log(dateWeek)
+        Logger.debug(dateWeek)
         START.current = dateWeek.wkEnd
         END.current = dateWeek.wkStart
     }, [])
@@ -58,7 +55,6 @@ const TimTableInfo: React.FC = () => {
         }
     }, [mainElement])
 
-    console.log(START_SEARCH)
     return (
         <div >
             <div className="d-flex w-auto position-fixed border-b-dark z-index-cs" id="main-window-tt" ref={ref => setMainelement(ref)}>
@@ -70,15 +66,12 @@ const TimTableInfo: React.FC = () => {
 
                                 value={TEACHER_ID}
                                 onChange={(e) => {
-                                    // console.log(e.target.value)
-                                    // userIdRef.current = (e.target.value.match(/[0-9]+/g)).join('')
                                     const validValueArray = e.target.value.match(/[0-9]+/g)
                                     const validValue = validValueArray !== null ? validValueArray.join('') : ''
                                     const checkShow = buttonCollapseRef.current?.classList?.contains('show')
-                                    // console.log(START)
+
                                     if (checkShow) {
                                         coollapseToogle(true, buttonCollapseRef.current)
-                                        // console.log('скрыть')
                                     }
                                     setTeacherId(validValue)
                                     setStartSearch(false)

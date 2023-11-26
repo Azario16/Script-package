@@ -28,14 +28,12 @@ const App = (props: any) => {
 
     const updateSessionAndAfUserId = () => {
         sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: any) => {
-            // console.log(result)
             setAfUserId(result.id)
         })
     }
 
     const updateOperatorIdNameAndEventName = () => {
         sendMessage(ACTIONS.GET_AUTOFAQ_PEOPLE_LIST, '', (result: any) => {
-            // console.log(result['people-list'])
             const operIdName = result['people-list'].map((value: any) => {
                 return {
                     'name': value.fullName !== null ? value.fullName : value.kb,
@@ -43,36 +41,19 @@ const App = (props: any) => {
                 }
             })
             setOperatorName(operIdName)
-            // operatorIdNameRef.current = operIdName
         })
         sendMessage(ACTIONS.GET_AUTOFAQ_EVENT_NAME, '', (result: any) => {
             setEventName(result["event-list"])
-            // operatorIdNameRef.current = operIdName
         })
     }
 
     useEffect(() => {
-        /* Debug */
-        // console.log(operatorList)
-        // console.log(events)
-        // const operIdName:any = operatorList.map((value: any) => {
-        //     return {
-        //         'name': value.fullName !== null ? value.fullName : value.kb,
-        //         'id': value.id !== null ? value.id : value.kb
-        //     }
-        // })
-        // setOperatorName(operIdName)
-        // setEventName(events)
-        /* ---------------------------------------- */
-
         updateOperatorIdNameAndEventName()
         updateSessionAndAfUserId()
     }, [])
     return (
         <div className="">
-
             <MemoryRouter initialEntries={["/chat-list"]}>
-            {/* <MemoryRouter initialEntries={["/chat-list/chat-id/1"]}> */}
                 <Routes>
                     <Route path="/chat-list" element={<Home buttonToogle={props.buttonToogle} />}>
                         <Route path="chat-id/:id" element={<ChatId operaotName={OPERATOR_NAME} eventName={EVENT_NAME} operatorAfId={AF_USER_ID} />} />

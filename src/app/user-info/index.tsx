@@ -7,6 +7,7 @@ import { Collapse } from 'bootstrap';
 import { sendMessage } from "../../chrome/utils";
 import { ACTIONS } from "../../chrome/actions-bg";
 import createButtonSeacrhId from './function/create-button-to-af'
+import { isExtensionContext } from '../../service/chrome-runtime.service';
 
 const UserInfo: React.FC = () => {
     const [START, setStart] = useState(false)
@@ -15,18 +16,14 @@ const UserInfo: React.FC = () => {
     const [CRM_SESSION, setCrmSession] = useState()
     const [ERROR, setError] = useState()
 
-
     const [mainElement, setMainelement] = useState<any>()
     const [elemntDrop, setElementDrop] = useState<any>()
 
     const buttonCollapseRef = useRef<HTMLDivElement | null>(null)
     const userInfo = useRef<any | undefined>(null)
 
-
-
     const updateSessionAndAfUserId = () => {
         sendMessage(ACTIONS.GET_SESSION, '', (result: any) => {
-            // console.log(result)
             const operatorCrmSession: any = result["session"]
             setCrmSession(operatorCrmSession)
 
@@ -50,16 +47,13 @@ const UserInfo: React.FC = () => {
 
         const checkShow = buttonCollapseRef.current?.classList?.contains('show')
         if (USER_ID !== '' && !checkShow) {
-            // console.log('Развернуть')
             coollapseToogle(!checkShow, buttonCollapseRef.current)
             setStart(!checkShow)
         } else if (checkShow) {
-            // console.log('Свернуть')
             coollapseToogle(true, buttonCollapseRef.current)
             setUserId('')
             setStart(false)
         }
-        // console.log(START)
     }
 
     const coollapseToogle = (value: boolean, element: any) => {
@@ -73,24 +67,10 @@ const UserInfo: React.FC = () => {
         coollapseToogle(!checkShow, buttonCollapseRef.current)
         setUserId(userId)
         setStart(true)
-
-
-        // if (userId !== null && !checkShow) {
-        //     // console.log('Развернуть')
-        //     coollapseToogle(!checkShow, buttonCollapseRef.current)
-        //     setUserId(userId)
-        //     setStart(!checkShow)
-        // } else if (checkShow) {
-        //     // console.log('Свернуть')
-        //     coollapseToogle(true, buttonCollapseRef.current)
-        //     setStart(false)
-        // }
     }
+    
     useEffect(() => {
-        const hostName: any = window.location.hostname
-        // console.log(hostName)
-        // console.log(hostName !== 'build.extension-test.ru' && hostName !== 'extension-test.ru')
-        if (hostName !== 'build.extension-test.ru' && hostName !== 'extension-test.ru') {
+        if (isExtensionContext()) {
             chrome.runtime.onMessage.addListener(
                 function (request, sender, sendResponse) {
                     if (request.message === "open-user-info") {
@@ -101,11 +81,6 @@ const UserInfo: React.FC = () => {
         }
     }, [])
 
-
-    // console.log('Сессия: ')
-    // console.log(CRM_SESSION)
-    // console.log('---------------------------------------------------------------')
-
     return (
         <div >
             <div className="d-flex w-auto position-fixed main-window border-b-dark" id="main-window" ref={ref => setMainelement(ref)}>
@@ -114,15 +89,12 @@ const UserInfo: React.FC = () => {
 
                         value={USER_ID}
                         onChange={(e) => {
-                            // console.log(e.target.value)
-                            // userIdRef.current = (e.target.value.match(/[0-9]+/g)).join('')
                             const validValueArray = e.target.value.match(/[0-9]+/g)
                             const validValue = validValueArray !== null ? validValueArray.join('') : ''
                             const checkShow = buttonCollapseRef.current?.classList?.contains('show')
-                            // console.log(START)
+
                             if (checkShow) {
                                 coollapseToogle(true, buttonCollapseRef.current)
-                                // console.log('скрыть')
                             }
                             setUserId(validValue)
                             setStart(false)

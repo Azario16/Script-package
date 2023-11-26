@@ -1,4 +1,5 @@
 import { ChromeMessage } from "../interface/types";
+import { isExtensionContext } from "../service/chrome-runtime.service";
 import { mapFunction } from "./function/map-function"
 
 export const getCurrentTabUrl = (callback: (url: string | undefined) => void): void => {
@@ -21,32 +22,26 @@ export const getMessage = (callback: () => void): void => {
     callback();
 }
 
-export const sendMessage = (mesageName: string, messageValue: any, callbackSend: any) => {
-    if (window.location.hostname === 'localhost' || window.location.hostname === 'extension-test.ru') {
-        // console.log('На текуйщей странице')
-        // const getFunction = mapFunction(mesageName)
-        // getFunction(messageValue, (result: any) => {
-        //     callback(result)
-        // })
-
+export const sendMessage = (messageName: string, messageValue: any, callbackSend: any) => {
+    if (isExtensionContext()) {
+        const message: ChromeMessage = {
+            messageValue: messageValue,
+            messageName: messageName,
+        }
+        chrome.runtime.sendMessage(message, (response) => {
+            callbackSend(response)
+        });
+    } else {
         const callback = (result: any) => {
             callbackSend(result)
         }
 
         const sender = null
 
-        const getFunction = mapFunction(mesageName)
-        getFunction({ messageValue, sender, callback })
-    } else {
-        // console.log('Страниа бэкграунда ')
-        const message: ChromeMessage = {
-            messageValue: messageValue,
-            messageName: mesageName,
+        const getFunction = mapFunction(messageName)
+
+        if(getFunction){
+            getFunction({ messageValue, sender, callback })
         }
-        chrome.runtime.sendMessage(message, (response) => {
-            // 3. Got an asynchronous response with the data from the background
-            callbackSend(response)
-            // console.log(response);
-        });
     }
 };

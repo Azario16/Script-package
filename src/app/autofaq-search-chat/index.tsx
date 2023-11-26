@@ -16,7 +16,6 @@ import { ACTIONS } from '../../chrome/actions-bg';
 import App from './App';
 import MessageBlock from './element/message-block'
 import ChatList from './page/chat-list'
-// import Frame, { FrameContextConsumer } from 'react-frame-component';
 import { Collapse } from 'bootstrap';
 
 const SearchChat = (props: any) => {
@@ -30,7 +29,7 @@ const SearchChat = (props: any) => {
     }
 
     return (
-        <div className={`${props.styleElement} bg-af-search-chat overflow-auto z-index-cs main-search-chat`}>
+        <div className={`${props.styleElement} p-rel bg-af-search-chat overflow-auto z-index-cs main-search-chat`}>
             <div className="btn-group">
                 <div className={`${props.styleElement} bg-dark`}>
                     <div className="accordion" id="accordionExample">

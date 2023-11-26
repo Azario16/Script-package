@@ -7814,8 +7814,6 @@
 		 */
 		_getInst: function (target) {
 			try {
-				// console.log(target)
-				// console.log($.data(target, "datepicker"))
 				return $.data(target, "datepicker");
 			} catch (err) {
 				throw "Missing instance data for this datepicker";

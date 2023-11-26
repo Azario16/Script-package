@@ -24,15 +24,9 @@ const Lessons = (props: any) => {
 
     const [ERROR, setError] = useState<string>()
 
-    console.log('ChatList')
     const navigate = useNavigate();
     const location = useLocation()
     const param = useParams()
-
-    useEffect(() => {
-        console.log(param)
-        // updateChatMessage()
-    }, [param])
 
 
     return (

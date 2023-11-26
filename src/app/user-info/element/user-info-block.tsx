@@ -17,8 +17,6 @@ import TimeTable from './teacher-time-table/teacher-time-table'
 import { getDateWeekForButton } from '../../../hooks/date-time'
 
 function InfoBlock(props: any) {
-    console.log(props)
-
     const [USER_INFO, setUserInfo] = useState<any>()
     const [ERROR, setError] = useState()
     const [RELATION, setRelation] = useState('')
@@ -26,7 +24,6 @@ function InfoBlock(props: any) {
     const mapRelation: any = {
         'kid': 'Skysmart - KIDS',
     }
-    // console.log(props.session)
 
     const openModalElenet = () => {
         const messageValue = {
@@ -44,14 +41,11 @@ function InfoBlock(props: any) {
     const updateUserInfo = () => {
         effectStatus.current = true
         sendMessage(ACTIONS.GET_USER_ID, props.userId, (result: any) => {
-            // console.log(result)
-            // console.log(effectStatus.current)
             const userInfo: any = result["user-info"]
             if (userInfo.data?.error || userInfo.data?.errors) {
                 const errorMessage = userInfo.data.error?.message ? userInfo.error.message : userInfo.errors[0].message
                 setError(errorMessage)
             } else if (userInfo.data && effectStatus.current) {
-                // console.log(effectStatus.current)
                 const findRelation = result.family.data.find((element: any) => {
                     return element.general.id === userInfo.data.id
                 })
@@ -62,7 +56,6 @@ function InfoBlock(props: any) {
     }
 
     useEffect(() => {
-        // console.log('updateUserInfo')
         if (props.startValue && props.userId !== '') {
             updateUserInfo()
         } else {
@@ -71,11 +64,9 @@ function InfoBlock(props: any) {
         }
         return () => {
             effectStatus.current = false;
-            // console.log(effectStatus.current)
         }
     }, [props.userId, props.startValue])
 
-    // console.log(props.session)
     return (
         <>
             <ButtonBar user-info={USER_INFO} user-id={props.userId} startValue={props.startValue} />
@@ -115,15 +106,6 @@ function InfoBlock(props: any) {
                             </div>
                         </div>
 
-                        {/* <div className="position-absolute bottom-0 start-0 rounded border border-b-dark  bg-secondary">
-                            <div className='bg-none custom-icon time-table'
-                                onClick={() => {
-                                    window.open(`https://crm2.skyeng.ru/persons/${USER_INFO.data.id}/customer-support/manual`)
-                                }}
-                            >
-                            </div>
-                        </div> */}
-
                         <div className="position-absolute bottom-50 end-50"></div>
                         <div className="position-absolute bottom-0 start-0"></div>
                         <div className="position-absolute bottom-0 end-0"></div>
@@ -138,7 +120,6 @@ function InfoBlock(props: any) {
                             <span>
                                 {`ID: ${USER_INFO.data.id}`}
                             </span>
-                            {/* <br /> */}
                             <span>
                                 {`Name: ${USER_INFO.data.name}`}
                             </span>

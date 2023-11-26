@@ -3,19 +3,18 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { mapModalWindow } from './function/map-window';
 import { ACTIONS_WINDOW } from "./function/actions-window";
 import React from 'react';
+import { isExtensionContext } from '../../service/chrome-runtime.service';
 
 const ModalWindow = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    // console.log(show)
+
     const [MODAL, setModal] = useState<any>()
     useEffect(() => {
-        const hostName: any = window.location.hostname
-        if (hostName !== 'build.extension-test.ru' && hostName !== 'extension-test.ru') {
+        if (isExtensionContext()) {
             chrome.runtime.onMessage.addListener(
                 function (request, sender, sendResponse) {
-                    // console.log(request)
                     handleShow()
                     switch (request.message) {
                         case 'create-chat':
@@ -30,12 +29,10 @@ const ModalWindow = () => {
                 }
             );
         } else {
-            // console.log('Create modal -------------------------------------------------------------')
             const ModalReturn = mapModalWindow(ACTIONS_WINDOW.CREATE_CHAT, '5152265', handleClose)
             setModal(ModalReturn)
         }
     }, [])
-    // console.log(show)
     return (
         show === false
             ? <></>

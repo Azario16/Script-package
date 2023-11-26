@@ -5,13 +5,14 @@ import { ACTIONS } from "../../../chrome/actions-bg";
 import {
     EyeIcon
 } from '../../../icon'
+import { Logger } from '../../../service/logger/logger.service';
 
 function EyesNumber(params: any) {
     const [NUMBER, setNumber] = useState()
     const [DISPLAY_EYE, setDisplayEye] = useState(true)
     const getNumber = () => {
         sendMessage(ACTIONS.GET_USER_NUMBER, params.userInfo.id, (result: any) => {
-            console.log(result)
+            Logger.debug(result)
             setDisplayEye(false)
             setNumber(result["user-number"].data.value)
         })

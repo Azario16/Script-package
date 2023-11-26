@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect, useRef, useMemo, useCallback, createContext } from 'react';
 import { sendMessage } from "../../../chrome/utils";
 import { ACTIONS } from "../../../chrome/actions-bg";
+import { Logger } from '../../../service/logger/logger.service';
 
 function ButtonBar(params: any) {
     const [TYPE_USER, setTypeUser] = useState()
@@ -11,7 +12,7 @@ function ButtonBar(params: any) {
     const effectStatus = useRef(true)
     const updateTecacherIdTrm = () => {
         sendMessage(ACTIONS.GET_TEACHER_ID, params['user-id'], (result: any) => {
-            console.log(result)
+            Logger.debug(result)
             if (result["teacher-id"].length) {
                 setIdTrm(result["teacher-id"][0].id)
             }
@@ -20,7 +21,6 @@ function ButtonBar(params: any) {
     useEffect(() => {
         if (params['user-info'] !== undefined) {
             setTypeUser(params["user-info"].data.type)
-            // console.log(params.startValue)
             if (params["user-info"].data.type === 'teacher' && params.startValue) {
                 updateTecacherIdTrm()
             }
@@ -37,10 +37,9 @@ function ButtonBar(params: any) {
         effectStatus.current = true
         setButtonColorLL('warning')
         sendMessage(ACTIONS.GET_LOGIN_LINK, userId, (result: any) => {
-            console.log(result)
+            Logger.debug(result)
             if (result.success && effectStatus.current) {
-                console.log('Логин получено и скопирован')
-                // setLoginLink(result.loginLink)
+                Logger.debug('Логин получено и скопирован')
                 navigator.clipboard.writeText(result.loginLink)
                 setButtonColorLL('success')
                 setTimeout(() => {

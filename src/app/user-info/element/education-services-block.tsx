@@ -1,6 +1,5 @@
 import React from 'react';
 import { useState, useEffect, useRef, useMemo, useCallback, createContext } from 'react';
-import { getEducationInfo } from '../function/get-education-info'
 import { sendMessage } from "../../../chrome/utils";
 import { ACTIONS } from "../../../chrome/actions-bg";
 import InfoBlock from './user-info-block';
@@ -26,7 +25,6 @@ interface eduInfo {
 }
 
 function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: string; session: any, afOperatorValue: any }) {
-    // console.log('InfoBlock')
     const [START, setStart] = useState(true)
     const [EDUCATION, setEducation] = useState([])
     const [ERROR, setError] = useState<any>()
@@ -69,16 +67,13 @@ function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: s
     }
     const updateEducation = async () => {
         sendMessage(ACTIONS.GET_EDUCATION_INFO, params.userInfo.id, (result: any) => {
-            // const resData = result["education-service"]
             const educationInfo: any = result["education-service"]
-            // educationInfo["data"] = result["education-service"]
             if (educationInfo.data?.length === 0 || educationInfo?.data?.error || educationInfo.data?.errors) {
                 if (educationInfo.data?.error) {
                     const errorMessage = educationInfo.data?.error?.message ? educationInfo?.error.message : educationInfo?.errors[0].message
                     setError(errorMessage)
                 }
             } else if (educationInfo.data) {
-                // console.log(result)
                 const resultConfog: any = result["configurations"].data
                 configurationsRef.current = resultConfog
                 setEducation(educationInfo.data)
@@ -90,7 +85,6 @@ function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: s
     }
 
     useEffect(() => {
-        // console.log('updateUserIngo')
         if (params.userInfo.type === 'student') {
             updateEducation()
         } else {
@@ -136,7 +130,6 @@ function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: s
 
                                                     <div className={`w-65px fs-custom-0_7 d-grid bg-${mapEducationColor(educationValue)}`}>
                                                         <div className='btn-group'>
-                                                            {/* <span>{`П: `}</span> */}
                                                             <span>{educationValue.teacher !== null ? 'П: ' + educationValue.teacher.general.id : 'П: -'}
                                                             </span>
                                                         </div>
@@ -145,7 +138,6 @@ function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: s
                                                             </div>
                                                             <span className='ms-1 text-nowrap'>
                                                                 : {educationValue.balance === null ? '-' : educationValue.balance}
-                                                                {/* {educationValue.balance} */}
                                                             </span>
                                                         </div>
                                                     </div>

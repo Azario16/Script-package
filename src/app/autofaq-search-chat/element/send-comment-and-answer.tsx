@@ -4,6 +4,7 @@ import { Collapse, Dropdown } from 'bootstrap';
 import { createPopper } from '@popperjs/core';
 import { sendMessage } from '../../../chrome/utils';
 import { ACTIONS } from '../../../chrome/actions-bg';
+import { Logger } from '../../../service/logger/logger.service';
 
 const SendCommentAndAnswer = (props: any) => {
     const [TYPE_SEND, setTypeSend] = useState(true)
@@ -65,7 +66,7 @@ const SendCommentAndAnswer = (props: any) => {
                     }
                 ],
                 onFirstUpdate: (elem) => {
-                    console.log(elem)
+                    Logger.debug(elem)
                 }
             }
         }
@@ -73,7 +74,7 @@ const SendCommentAndAnswer = (props: any) => {
         dropdown.toggle()
     }
     const sendCommentOrAnswer = () => {
-        console.log(props)
+        Logger.debug(props)
         const valueMessage = {
             sessionId: props.messageInfo.sessionId,
             chatId: props.chatId,
@@ -104,7 +105,7 @@ const SendCommentAndAnswer = (props: any) => {
                     id="staticEmail2"
                     value={TEXT_SEND}
                     onChange={(e) => {
-                        console.log(e.target.value)
+                        Logger.debug(e.target.value)
                         setText(e.target.value)
                     }}
                     onClick={() => {

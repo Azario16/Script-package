@@ -1,3 +1,5 @@
+import { Logger } from "../../service/logger/logger.service";
+
 const DATE_TIME_SLOT = {
     dateTimeslot: '',
     dateSlot: '',
@@ -28,15 +30,11 @@ const getDateTimeSlot = () => {
 }
 
 const setDateSlot = (dateTime: any) => {
-    // console.log('setDateSlot')
-    // console.log(DATE_TIME_SLOT.dateSlot)
     DATE_TIME_SLOT.dateSlot = dateTime
 }
 
 const getDateSlot = () => {
     const nowDate = DATE_TIME_SLOT.dateSlot === '' ? creatNowDate() : DATE_TIME_SLOT.dateSlot
-    // console.log('getDateSlot')
-    // console.log(DATE_TIME_SLOT.dateSlot)
     return nowDate
 }
 
@@ -51,7 +49,6 @@ const getNowWeek = () => {
 }
 
 const creatNowDate = () => {
-    // console.log('creatNowDate')
     let nowDataTimeBack = new Date();
     let dateFormat = nowDataTimeBack.toLocaleDateString('ru-Ru', OPTION).split('.').join('-')
     DATE_TIME_SLOT.dateSlot = dateFormat
@@ -60,8 +57,6 @@ const creatNowDate = () => {
 
 
 const setDateForamteSlot = (dateTime: any) => {
-    // console.log('setDateSlot')
-    // console.log(DATE_TIME_SLOT.dateSlot)
     DATE_TIME_SLOT.dateSlotForamte = dateTime
 }
 
@@ -164,11 +159,11 @@ const getDateWeekForButton = () => {
 
             currentDate.dtStart.setDate(currentDate.dtStart.getDate() + days + 1);
             const wkStart = createDate(currentDate.dtStart)
-            console.log(currentDate.dtStart)
+            Logger.debug(currentDate.dtStart)
 
             currentDate.dtEnd.setDate(currentDate.dtEnd.getDate() + days + 1);
             const wkEnd = createDate(currentDate.dtEnd)
-            console.log(wkEnd)
+            Logger.debug(wkEnd)
 
             return { wkStart, wkEnd, pickDate }
         },
@@ -179,13 +174,10 @@ const getDateWeekForButton = () => {
             } else {
                 pickDate = date
             }
-            const dt = new Date(pickDate); // current date of week
-            // console.log(dt)
+            const dt = new Date(pickDate);
             const currentStartDate = new Date(new Date(dt).setDate(dt.getDate() - dateInterval));
-            // console.log(currentStartDate)
             const wkStart = createDate(currentStartDate)
             const currentEndDate = new Date(new Date(dt).setDate(dt.getDate()));
-            // console.log(currentEndDate)
             const wkEnd = createDate(currentEndDate)
             return { wkStart, wkEnd, pickDate }
         },
@@ -209,11 +201,11 @@ const getDateWeekForButton = () => {
 
 const createDateAndTime = (date: any) => {
     const currentDate = new Date(date);
-    console.log(currentDate)
+    Logger.debug(currentDate)
     const dt = currentDate.toLocaleDateString('ru-Ru', OPTION)
-    console.log(dt)
+    Logger.debug(dt)
     const formatDt = dt.split('.').join('-')
-    console.log(formatDt)
+    Logger.debug(formatDt)
     const time = currentDate.toLocaleTimeString('ru-Ru', OPTION)
     return `${formatDt} ${time}`;
 }
@@ -251,9 +243,9 @@ const getTimeFromDate = (date: any) => {
 }
 
 const getDateFormate = (date: any) => {
-    console.log(date)
     const dt = new Date(date);
-    console.log(dt)
+    Logger.debug(dt)
+    Logger.debug(date)
     const newDate = createDateAndTime(dt)
 
     return newDate

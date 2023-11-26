@@ -35,30 +35,58 @@ function createDivIdForReact() {
 
 
 const App: any = () => {
-  // console.log('App')
   renderApp(
     <ShadowView>
       <ModalWindow />
     </ShadowView>,
-    'modal-window')
-  // renderApp(<ModalWindow />, 'modal-window1')
+    'modal-window'
+  )
+
 
   switch (window.location.hostname) {
     case 'localhost':
       renderApp(<UserInfo />, 'main')
-      break;
-    case 'crm2.skyeng.ru':  // if (x === 'value2')
-      renderApp(<ShadowView>
-        <UserInfo />
-      </ShadowView>, 'main')
+
       renderApp(
         <ShadowView>
           <SearchChat styleElement="position-fixed top-0 end-0" />
         </ShadowView>
-        , 'search-chat')
+        , 'search-chat'
+      )
+
+
       // renderApp(
-      //   <SearchChat styleElement="position-fixed top-0 end-0" />
-      //   , 'search-chat')
+      //   <div className='app-content'>
+      //     <ul role="menu"></ul>
+      //   </div>,
+      //   'people_head'
+      // )
+
+      // window.onload = () => {
+      //   setTimeout(async function () {
+      //     createDivIdForReact();
+      //     const root = ReactDOM.createRoot(
+      //       document.getElementById('people_head') as HTMLElement
+      //     );
+
+      //     root.render(
+      //       <ShadowView>
+      //         <Reservation />
+      //       </ShadowView>
+      //     );
+      //   }, 100)
+      // }
+      break;
+    case 'crm2.skyeng.ru':  // if (x === 'value2')
+      renderApp(<ShadowView>
+        <UserInfo />
+      </ShadowView>, 'main'
+      )
+      renderApp(
+        <ShadowView>
+          <SearchChat styleElement="position-fixed top-0 end-0" />
+        </ShadowView>, 'search-chat'
+      )
       break;
     case 'build.extension-test.ru':  // if (x === 'value2')
       renderApp(<ShadowView>
@@ -67,8 +95,9 @@ const App: any = () => {
       renderApp(
         <ShadowView>
           <SearchChat styleElement="position-fixed top-0 end-0" />
-        </ShadowView>
-        , 'search-chat')
+        </ShadowView>,
+        'search-chat'
+      )
       break;
     case 'datsy.ru':  // if (x === 'value2')
       renderApp(<ShadowView>
@@ -77,8 +106,9 @@ const App: any = () => {
       renderApp(
         <ShadowView>
           <SearchChat styleElement="position-fixed top-0 end-0" />
-        </ShadowView>
-        , 'search-chat')
+        </ShadowView>,
+        'search-chat'
+      )
       break;
     case 'skyeng.autofaq.ai':  // if (x === 'value2')
       renderApp(<ShadowView>
@@ -87,8 +117,9 @@ const App: any = () => {
       renderApp(
         <ShadowView>
           <SearchChat styleElement="float-end vh-100" />
-        </ShadowView>
-        , 'search-chat')
+        </ShadowView>,
+        'search-chat'
+      )
       window.onload = () => {
         setTimeout(async function () {
           createDivIdForReact();
@@ -113,80 +144,8 @@ const App: any = () => {
     case 'vimbox.skyeng.ru':
       СreateCmsButtonfrom()
       break;
-    case 'extension-test.ru':
-      // renderApp(<ShadowView>
-      //   <UserInfo />
-      // </ShadowView>, 'main')
-
-      renderApp(
-        <SliderTest />
-        , 'main')
-
-      // renderApp(
-      //   // <ShadowView>
-      //   <SearchChat styleElement="position-fixed top-0 end-0" />
-      //   // </ShadowView>
-      //   , 'search-chat')
-
-      // window.onload = () => {
-      //   setTimeout(async function () {
-      //     createDivIdForReact();
-      //     const root = ReactDOM.createRoot(
-      //       document.getElementById('people_head') as HTMLElement
-      //     );
-
-      //     root.render(
-      //       <ShadowView>
-      //         <Reservation />
-      //       </ShadowView>
-      //     );
-      //   }, 3000)
-      // }
-      break;
-    case 'app.extension-test.ru':
-      renderApp(
-        <ShadowView>
-          <UserInfo />
-        </ShadowView>
-        , 'main')
-      renderApp(
-        <ShadowView>
-          <SearchChat styleElement="position-fixed top-0 end-0" />
-        </ShadowView>
-        , 'search-chat')
-      break;
     default:
-    // // console.log('default')
-    // renderApp(<ShadowView>
-    //   <UserInfo />
-    // </ShadowView>, 'main')
-    // // renderApp(<UserInfo />, 'main-test')
-    // renderApp(
-    //   <ShadowView>
-    //     <SearchChat styleElement="position-fixed top-0 end-0" />
-    //   </ShadowView>
-    //   , 'search-chat')
-
-    // window.onload = () => {
-    //   setTimeout(async function () {
-    //     createDivIdForReact();
-    //     const root = ReactDOM.createRoot(
-    //       document.getElementById('people_head') as HTMLElement
-    //     );
-
-    //     root.render(
-    //       <ShadowView>
-    //         <Reservation />
-    //       </ShadowView>
-    //     );
-    //   }, 3000)
-    // }
   }
-  // return(
-  //   <div>
-  //     Test
-  //   </div>
-  // )
 }
 
 export default App;

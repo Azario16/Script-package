@@ -1,6 +1,6 @@
 const ACTIONS = {
     SEND_EVENT: 'send-event',
-
+    
     GET_TEACHER_LESSONS: 'get-teacher-lessons',
     GET_TEACHER_SLACK_ID: 'get-teacher-slack-id',
     GET_SESSION: 'get-session',

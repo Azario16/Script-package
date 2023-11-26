@@ -26,34 +26,31 @@
 }
 
 .calendar {
-    background: url(../src/icon/cal2.svg) 50% 50% no-repeat !important;
+    background: url(../../icon/cal2.svg) 50% 50% no-repeat !important;
 }
 
 .telephone-messid {
-    background: url(../src/icon/telephone-missed-call.png) 50% 50% no-repeat;
-    /* background-image: urвставитьl(../src/icon/telephone-missed-call1.svg); */
+    background: url(../../icon/telephone-missed-call.png) 50% 50% no-repeat;
 }
 
 .life-buoy {
     cursor: pointer;
-    /* background: url(../src//icon/life-buoy2.png) 50% 50% no-repeat; */
-    /* filter: grayscale(1) !important; */
 }
 
 .coin {
-    background: url(../src/icon/coin.png) 50% 50% no-repeat;
+    background: url(../../icon/coin.png) 50% 50% no-repeat;
 }
 
 .autoFaq {
-    background: url(../src/icon/autofaq.png) 50% 50% no-repeat;
+    background: url(../../icon/autofaq.png) 50% 50% no-repeat;
 }
 
 .time-table {
-    background: url(../src/icon/time-table.png) 50% 50% no-repeat;
+    background: url(../../icon/time-table.png) 50% 50% no-repeat;
 }
 
 .slack-icon {
-    background: url(../src/icon/slack.png) 50% 50% no-repeat;
+    background: url(../../icon/slack.png) 50% 50% no-repeat;
 }
 
 .eyes {
@@ -76,17 +73,12 @@
 .main-window {
     height: 83px;
     width: 81px;
-    /* background: wheat; */
-    /* top: 181px;
-    left: 84px; */
     font-size: 14px;
-    z-index: 9000;
-    /* position: fixed; */
-    /* border: 1px solid rgb(56, 56, 56); */
+    z-index: 99999;
 }
 
 .z-index-cs {
-    z-index: 2000;
+    z-index: 999999;
 }
 
 .z-index-test {

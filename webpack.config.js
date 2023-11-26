@@ -56,25 +56,15 @@ module.exports = {
   entry: {
     variable: '/src/bootstrap-custom/variable.scss',
     styles_extension: '/src/styles-extension.scss',
-    // style_main: '/src/style-main.scss',
     background: '/src/chrome/background.ts',
     main: '/src/index.tsx',
   },
   output: {
     path: path.resolve(__dirname + '/build'),
-    // path: 'C:/OpenServer/domains/extension/build',
     filename: 'static/js/[name].js',
     publicPath: '/',
     assetModuleFilename: "static/media/[name].[hash][ext]"
   },
-  // optimization: {
-  //   runtimeChunk: 'single',
-  // },
-  // optimization: {
-  //   runtimeChunk: false,
-  //   minimizer: [new OptimizeCSSAssetsPlugin({})],
-  // },
-
   module: {
     strictExportPresence: true,
     rules: [
@@ -93,7 +83,6 @@ module.exports = {
       {
         test: /\.scss$/,
         use: [
-          // MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader',
           MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
@@ -126,7 +115,6 @@ module.exports = {
       ...prodPlugins,
       new MiniCssExtractPlugin({
         filename: "static/css/[name].css",
-        // chunkFilename: "static/css/[name].chunk.css",
       }),
 
       new HtmlWebpackPlugin({
@@ -142,7 +130,6 @@ module.exports = {
             from: "public", to: "",
             globOptions: {
               ignore: [
-                // Ignore all `txt` files
                 "**/index.html",
               ],
             },
@@ -151,7 +138,7 @@ module.exports = {
       }),
     ],
   resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
+    extensions: ['.ts', '.tsx', '.js', '.scss'],
     alias: {
       "@src": path.resolve(__dirname, "src/"),
       '@css': path.resolve(__dirname, 'src/css'),

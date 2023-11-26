@@ -10,17 +10,11 @@ const parseRegularTime = (timeList: any) => {
         const week: any = hourseMoscow > 24
             ? Math.trunc(hourseMoscow / 24)
             : 0;
-        // console.log('Неделя ' + week)
         let start: any = hourseMoscow - (week * 24);
-        // console.log('Время недели ' + (week * 24))
-        // console.log('Время по МСК ' + hourseMoscow)
-        // console.log('Результат делания на неделю ' + start)
         start = ("0" + String(start)).slice(-2)
         start = `${start}:${minuteSt}`
         const weekNumber = week + 1
         if (!times[weekNumber]) {
-            // console.log(times[week])
-            // console.log('Массив пустой ')
             times[weekNumber] = []
         }
         times[weekNumber].push(start)

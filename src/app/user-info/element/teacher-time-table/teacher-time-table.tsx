@@ -13,6 +13,7 @@ import ButtonGroup from './custom-button'
 
 import { getDateWeekForButton, getNowWeek, createTime, getNowTime } from '../../../../hooks/date-time'
 import { parseRegularTime, parseSinglTime } from '../../../../hooks/time-type-parse'
+import { Logger } from '../../../../service/logger/logger.service';
 
 function SamplePrevArrow(props: any) {
     const { className, style, onClick } = props;
@@ -21,9 +22,7 @@ function SamplePrevArrow(props: any) {
             className={`slick-prev-cust carousel-control-prev-icon h-15px`}
             style={{ ...style, display: "block", }}
             onClick={onClick}
-        >
-            {/* <span className="carousel-control-prev-icon h-15px" aria-hidden="true"></span> */}
-        </div>
+        ></div>
     );
 }
 
@@ -34,9 +33,7 @@ function SampleNextArrow(props: any) {
             className={`slick-next-cust carousel-control-next-icon h-15px`}
             style={{ ...style, display: "block", }}
             onClick={onClick}
-        >
-            {/* <div className="carousel-control-next-icon h-15px" aria-hidden="true"></div> */}
-        </div>
+        ></div>
     );
 }
 
@@ -50,12 +47,10 @@ function TeacherTimeTable(props: any) {
     const [WEEK, setWeek] = useState<any>()
 
     const [slider, setSliderRef] = useState<any>();
-    // const slider = useRef<any>();
 
     useEffect(() => {
         /* Fix initialSlide https://github.com/akiran/react-slick/issues/1946 */
         if (slider && TIME_INIT) {
-            console.log('Test')
             slider?.slickGoTo(TIME_INIT, false);
         }
     }, [TIME_INIT, slider]);
@@ -63,19 +58,12 @@ function TeacherTimeTable(props: any) {
     const updateTeacherSchedule = () => {
         const dateWeek = getDateWeekForButton().weekButton(null, 1)
         const messageValue = {
-            // dateWeek: {
-            //     wkStart: '2022-07-07',
-            //     wkEnd: '2022-07-08'
-            // },
             dateWeek,
             teacherId: props.userId
         }
-        console.log(messageValue)
-        // console.log(dateWeek)
+        Logger.debug(messageValue)
         sendMessage(ACTIONS.GET_TEACHER_LESSONS, messageValue, (result: any) => {
-            // console.log(result)
             const lessons: any = result["lessons"]
-            // console.log(lessons)
             if (lessons[0].count === 0) {
                 const errorMessage = 'Не найден преподаватель'
                 setError(errorMessage)
@@ -85,15 +73,10 @@ function TeacherTimeTable(props: any) {
 
                     return formateString
                 })
-                // console.log(filetStart)
                 const weekTimeList = parseRegularTime(filetStart)
                 const singlClassList = parseSinglTime(lessons[0].result[0].classes)
-                // console.log(singlClassList)
-                // console.log(weekTimeList)
-                // console.log(HOUR_LIST)
 
                 const mapActivLessonRegular = HOUR_LIST.map((element: any) => {
-                    // console.log(element)
                     const lessonActiv = !!weekTimeList[WEEK] ? weekTimeList[WEEK].includes(element.time) : false
                     return {
                         lessonActiv: lessonActiv,
@@ -101,13 +84,11 @@ function TeacherTimeTable(props: any) {
                         time: element.time
                     }
                 })
-                // console.log(mapActivLessonRegular)
 
                 const mapStatusClass: any = mapActivLessonRegular.map((element: any) => {
                     return statusLesson(element, singlClassList)
                 })
 
-                // console.log(mapStatusClass)
                 setTimeList(mapStatusClass)
             }
         })
@@ -119,11 +100,9 @@ function TeacherTimeTable(props: any) {
             status: '',
             time: ''
         }
-        // console.log(classElement)
-        // console.log(classSingleList)
+
         let searchValue = false
         classSingleList.forEach((element: any) => {
-            // console.log(element)
             if (classElement.time === element.time) {
                 searchValue = true
                 body.lessonActiv = element.lessonActiv;
@@ -161,10 +140,10 @@ function TeacherTimeTable(props: any) {
         }
         const week = getNowWeek()
         const timeNumber = Number(getNowTime().slice(0, -6))
-        console.log(getNowTime())
-        console.log(timeNumber)
+        Logger.debug(getNowTime())
+        Logger.debug(timeNumber)
         const timeInit: number = timeNumber >= 3 ? timeNumber - 3 : 1
-        console.log(timeInit)
+        Logger.debug(timeInit)
         setTimeInit(timeInit)
         setHourList(times)
         setWeek(week)
@@ -180,7 +159,7 @@ function TeacherTimeTable(props: any) {
         prevArrow: <SamplePrevArrow />,
         nextArrow: <SampleNextArrow />
     };
-    console.log(TIME_INIT)
+    Logger.debug(TIME_INIT)
     return (
         <>
             {
@@ -192,7 +171,6 @@ function TeacherTimeTable(props: any) {
                             }}>
                                 {
                                     TIME_LIST.map((element: any, key: number) => {
-                                        // console.log(key)
                                         return (
                                             <div
                                                 key={key}

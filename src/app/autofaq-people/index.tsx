@@ -5,6 +5,7 @@ import { sendMessage } from "../../chrome/utils";
 import { ACTIONS } from "../../chrome/actions-bg";
 
 import UserStatus from './element/user-statuc-block'
+import { Logger } from '../../service/logger/logger.service';
 
 interface ClassValue {
     status: string,
@@ -12,14 +13,10 @@ interface ClassValue {
 }
 
 function innerTextElement(node: HTMLElement): string {
-    return node.innerText; // Property 'innerText' does not exist on 'T'
+    return node.innerText;
 }
-// async function StatusAutofaqPeopleRender() {
+
 class Reservation extends React.Component<{}, {
-    // userGroup: string,
-    //userGroup: 'ТП',
-    // userName: string,
-    //userName: 'ТП-Гусейнов Рахид',
     userKbs: any,
     userId: any,
     userGroup: any,
@@ -33,20 +30,6 @@ class Reservation extends React.Component<{}, {
     class: Array<ClassValue>,
 }> {
     constructor(props: any) {
-        // sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: any) => {
-        //     console.log(result)
-        //     userGroup = result.settings.knowledgeBases;
-        //     userName = '';
-        //     userId = result.id;
-        // })
-
-        // const userGroupElem: HTMLElement = document.querySelector('.user_menu-dropdown-user_name')!
-        // const userNameElem: HTMLElement = document.querySelector('.user_menu-dropdown-user_name')!
-
-        // userGroup = innerTextElement(userGroupElem).split('-')[0];;
-        // userName = innerTextElement(userNameElem);
-
-
         super(props);
         this.state = {
             userKbs: [],
@@ -90,9 +73,8 @@ class Reservation extends React.Component<{}, {
     }
 
     componentDidMount() {
-        //console.log("componentDidUpdate")
         sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: any) => {
-            console.log(result)
+            Logger.debug(result)
             this.setState({
                 userKbs: result.settings.knowledgeBases,
                 userId: result.id,
@@ -100,14 +82,13 @@ class Reservation extends React.Component<{}, {
             })
         })
         this.getCurrentState()
-        // setTimeout(this.getCurrentState.bind(this), 3000)
         setInterval(this.getCurrentState.bind(this), 15000)
     }
 
 
     async getCurrentState() {
         sendMessage(ACTIONS.GET_AUTOFAQ_PEOPLE, '', (result: any) => {
-            console.log(result)
+            Logger.debug(result)
             const operState = result['people-list'].onOperator
             const unAssigned = result['people-list'].unAssigned
             const operStatus = this.parseStatus(operState)
@@ -120,11 +101,9 @@ class Reservation extends React.Component<{}, {
                 groupCnt: cCntUndistributedGroup,
                 ArrPeople: operStatusRender
             })
-            // console.log(this.state)
         })
     }
     parseStatus(data: any) {
-        //console.log('parseStatus')
         const online = this.parse('Online', data);
         const busy = this.parse('Busy', data);
         const pause = this.parse('Pause', data);
@@ -139,17 +118,12 @@ class Reservation extends React.Component<{}, {
 
     checkGroupOperator(knowledgeBases: any, groupValue: any) {
         let state = false
-        // const testKB = [121779]
-
-
-
         this.state.userKbs.forEach((element: any) => {
             if (!state) {
                 state = knowledgeBases.includes(element);
             }
         });
 
-        // return state
         if(!state && !knowledgeBases.length){
             state = this.state.userGroup === groupValue
         }
@@ -204,7 +178,7 @@ class Reservation extends React.Component<{}, {
                 }
             }
         });
-        console.log(listCntUndistributed)
+        Logger.debug(listCntUndistributed)
         const summCnt = listCntUndistributed.reduce((sum: any, current: any) => sum + current, 0);
         return summCnt;
     }
@@ -273,15 +247,5 @@ class Reservation extends React.Component<{}, {
         }
     }
 }
-// const root = ReactDOM.createRoot(
-//     document.querySelector('#people_head') as HTMLElement
-// );
 
-// root.render(
-//     <Reservation />
-// );
-// ReactDom.render(
-//     <Reservation />, document.querySelector('#people_head'),
-// );
-// }
 export default Reservation;

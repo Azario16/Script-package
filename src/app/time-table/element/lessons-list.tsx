@@ -5,10 +5,9 @@ import { sendMessage } from "../../../chrome/utils";
 import { ACTIONS } from "../../../chrome/actions-bg";
 import { ACTIONS_WINDOW } from '../../modal-window/function/actions-window'
 import { getTimeFromDate, getDateWeekForButton, getDateFormate } from '../../../hooks/date-time'
+import { Logger } from '../../../service/logger/logger.service';
 
 function InfoBlock(props: any) {
-    // console.log(props)
-
     const [LESSONS_INFO, setLessonsInfo] = useState<any>()
     const [ERROR, setError] = useState<any>()
 
@@ -16,7 +15,6 @@ function InfoBlock(props: any) {
     const mapRelation: any = {
         'kid': 'Skysmart - KIDS',
     }
-    // console.log(params.session)
 
     const openModalElenet = () => {
         const messageValue = {
@@ -38,9 +36,9 @@ function InfoBlock(props: any) {
             dateWeek,
             teacherId: props.teacherId
         }
-        console.log(dateWeek)
+        Logger.debug(dateWeek)
         sendMessage(ACTIONS.GET_TEACHER_LESSONS, messageValue, (result: any) => {
-            console.log(result)
+            Logger.debug(result)
             const lessons: any = result["lessons"]
             if (lessons[0].count === 0) {
                 const errorMessage = 'Не найден преподаватель'
@@ -55,7 +53,7 @@ function InfoBlock(props: any) {
         if (element.classStatus) {
             const status = element.classStatus
             const time = getDateFormate(status.createdAt)
-            console.log(time)
+            Logger.debug(time)
             const text = `${status.status} | ${time} | created ${status.createdByUserId} | comment ' ${status.comment} '`
             return text
         }
@@ -63,7 +61,7 @@ function InfoBlock(props: any) {
             const classProperties = element.classProperties
             const propertyId = element.classProperties.length !== 0 ? classProperties[0].propertyId : null
             const time = getDateFormate(element.removedAt)
-            console.log(time)
+            Logger.debug(time)
             const text = `удален/перенос | ${time} | created ${element.createdByUserId} | ${propertyId}`
             return text
         }
@@ -72,7 +70,7 @@ function InfoBlock(props: any) {
 
     useEffect(() => {
         if (props.startValue && props.teacherId !== '') {
-            console.log(props)
+            Logger.debug(props)
             updateLessonsInfo()
         } else {
             setError(undefined)

@@ -9,7 +9,6 @@ export default function createDatePicker({ START, END, elementList, DATE_PICK, c
         return {
 
             beforeShow: function (input: any, inst: any) {
-                // console.log(`offsetHeight: ${input.offsetHeight}`)
                 const coordinate = input.getBoundingClientRect();
                 setTimeout(() => {
                     $(".ui-datepicker-month").addClass('bg-light')
@@ -27,13 +26,11 @@ export default function createDatePicker({ START, END, elementList, DATE_PICK, c
             showOtherMonths: true,
             selectOtherMonths: true,
             dateFormat: "dd-mm-yy",
-            // dateFormat: "yy-mm-dd",
             showOn: show === undefined ? "both" : show,
             buttonText: '',
             yearRange: "-1:+1",
             onSelect: (e: any, { id }: any) => {
                 if (cb2) {
-                    // START_DATE.current = e.split('-').reverse().join('-')
                     cb2(e)
                 }
                 if (DATE_PICK) {
@@ -56,8 +53,6 @@ export default function createDatePicker({ START, END, elementList, DATE_PICK, c
                     END.current = e.split('-').reverse().join('-')
                 }
 
-                // console.log(START)
-                // console.log(END)
             }
         }
     }
@@ -76,7 +71,6 @@ export default function createDatePicker({ START, END, elementList, DATE_PICK, c
             dayNamesMin: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
             weekHeader: "Нед",
             dateFormat: "dd.mm.yy",
-            // firstDay: 1,
             showMonthAfterYear: false,
             yearSuffix: ""
         });

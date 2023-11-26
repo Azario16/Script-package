@@ -11,6 +11,7 @@ import { sendMessage } from "../../../chrome/utils";
 import { ACTIONS } from "../../../chrome/actions-bg";
 import MessageBlock from '../element/message-block'
 import { Collapse } from 'bootstrap';
+import { Logger } from '../../../service/logger/logger.service';
 
 const navigateComponent: any = {
     'getNavigate': Function
@@ -18,14 +19,13 @@ const navigateComponent: any = {
 
 const ChatListUser = (props: any) => {
     const { START, END, USER_ID, CHAT_ID, AF_USER_ID }: any = useOutletContext()
-    console.log(START, END, USER_ID, CHAT_ID, AF_USER_ID)
+    Logger.debug(START, END, USER_ID, CHAT_ID, AF_USER_ID)
     const [CHAT_LIST, setChatList] = useState<any>([])
     const [ERROR, setError] = useState<string>('')
     const [CHAT_LIST_OPEN, setChatListOpen] = useState<any>([])
 
     const buttonCollapseRef = useRef<any>([])
 
-    // console.log('ChatList')
     const navigate = useNavigate();
     navigateComponent.getNavigate = navigate
     const location = useLocation()
@@ -60,10 +60,9 @@ const ChatListUser = (props: any) => {
         }
     }
     useEffect(() => {
-        console.log(param)
+        Logger.debug(param)
         updateChatList()
     }, [param])
-    console.log(param)
 
     return (
         ERROR !== ''

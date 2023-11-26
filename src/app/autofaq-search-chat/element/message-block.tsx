@@ -23,24 +23,23 @@ import SendCommentAndAnswer from './send-comment-and-answer'
 import { Modal, Button } from 'react-bootstrap';
 
 import MessageValueDebug from '../debug/message-value'
+import { Logger } from '../../../service/logger/logger.service';
 
 const MessageBlock = (props: any) => {
-    console.log(props)
+    Logger.debug(props)
     const [MESSAGE_VALUE, setMessageValue] = useState<any>([])
     const [MESSAGE_INFO, setMessageInfo] = useState<any>([])
     const [USER_ID, setUserId] = useState<any>('')
     const [ERROR, setError] = useState<boolean>(false)
     const [USER_NAME, setUserName] = useState<string>()
     const updateChatList = () => {
-        // console.log('updateChatList')
+
         sendMessage(ACTIONS.GET_AUTOFAQ_MESSAGE_VALUE, props.chatId, (result: any) => {
-            // console.log(result)
             const messageValue: any = result["message-value"].messages
             if (messageValue?.length === 0) {
                 setMessageValue("Пользователь не писал в этот преиод")
                 setError(true)
             } else if (messageValue) {
-                // console.log(result["message-value"].channelUser)
                 const name = result["message-value"].channelUser.fullName !== undefined
                     ? result["message-value"].channelUser.fullName
                     : result["message-value"].channelUser.email
@@ -67,17 +66,6 @@ const MessageBlock = (props: any) => {
 
     useEffect(() => {
         if (props.chatOpen) {
-            // console.log(MessageValueDebug)
-            // const name = MessageValueDebug.channelUser.fullName !== undefined
-            //     ? MessageValueDebug.channelUser.fullName
-            //     : MessageValueDebug.channelUser.email
-
-            // setUserId(MessageValueDebug.channelUser.id)
-            // setUserName(name)
-            // setMessageValue(MessageValueDebug.messages)
-
-
-
             updateChatList()
             setUserId('')
         }
