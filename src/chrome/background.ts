@@ -48,10 +48,9 @@ const main = () => {
         chrome.webRequest.onCompleted.addListener(onBeforeWebRequest,
             {
                 urls: [
-                    "*://customer-support.test-y34.skyeng.link/task/priority",
-                    // "*://customer-support.test-y34.skyeng.link/task/*",
-                    "*://customer-support.test-y34.skyeng.link/task/*/take",
-                    "*://customer-support.test-y34.skyeng.link/task/*/complete",
+                    "*://customer-support.skyeng.ru/task/priority",
+                    "*://customer-support.skyeng.ru/task/*/take",
+                    "*://customer-support.skyeng.ru/task/*/complete",
                 ]
             }
         )
