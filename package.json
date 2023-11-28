@@ -5,7 +5,8 @@
   "scripts": {
     "start": "set WDS_SOCKET_HOST=localhost&&set MODE=development&&set PORT=3000&&webpack serve",
     "watch": "set MODE=development&&webpack --config webpack.config.js -w",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "lint": "eslint . --max-warnings=0"
   },
   "eslintConfig": {
     "extends": [

@@ -4,7 +4,7 @@ import { ACTIONS } from '../actions';
 import { Getter } from './getter.interface';
 
 const generalGet = async (url: string, methodOption: any) => {
-    let get: any = await fetch(url, methodOption)
+    const get: any = await fetch(url, methodOption)
     return get
 }
 
@@ -89,7 +89,7 @@ const GetterBackground = (): Getter[] => {
         },
         {
             name: ACTIONS.GET_SESSION,
-            call: async ({ messageValue, callback }) => {
+            call: async ({ callback }) => {
                 const arrayResult: any = {
                     'session': {},
                 }
@@ -272,7 +272,7 @@ const GetterBackground = (): Getter[] => {
                     'success': true
                 }
                 const urlLoginLinkPost = `https://id.skyeng.ru/admin/auth/login-links`
-                let bodyLoginLinkPost: any = {}
+                const bodyLoginLinkPost: any = {}
                 bodyLoginLinkPost['uer-get'] = urlLoginLinkPost;
                 bodyLoginLinkPost['body'] = `login_link_form%5Bid%5D=${messageValue}`;
                 bodyLoginLinkPost['body'] += '&login_link_form%5Btarget%5D=https%3A%2F%2Fskyeng.ru'
@@ -292,15 +292,15 @@ const GetterBackground = (): Getter[] => {
                 })
                 arrayResult['doc'] = await resultLoginLinkPost.text()
 
-                let json = {
+                const json = {
                     'loginLink': '',
                     'success': true
                 }
                 try {
                     const textHtml = arrayResult['doc'];
-                    let domPars = new DOMParser()
-                    let loginLinks: any = domPars.parseFromString(textHtml, `text/html`).querySelectorAll("[value^='https://id.skyeng.ru/auth/login-link/']")
-                    let last = loginLinks[loginLinks.length - 1].value;
+                    const domPars = new DOMParser()
+                    const loginLinks: any = domPars.parseFromString(textHtml, `text/html`).querySelectorAll("[value^='https://id.skyeng.ru/auth/login-link/']")
+                    const last = loginLinks[loginLinks.length - 1].value;
                     json.loginLink = last
                     json.success = true
                 } catch (err) {
@@ -342,7 +342,7 @@ const GetterBackground = (): Getter[] => {
         },
         {
             name: ACTIONS.GET_AUTOFAQ_PEOPLE,
-            call: async ({ messageValue, callback }) => {
+            call: async ({ callback }) => {
                 const arrayResult: any = {
                     'people-list': {},
                 }
@@ -361,7 +361,7 @@ const GetterBackground = (): Getter[] => {
         },
         {
             name: ACTIONS.GET_AUTOFAQ_PEOPLE_LIST,
-            call: async ({ messageValue, callback }) => {
+            call: async ({ callback }) => {
                 const arrayResult: any = {
                     'people-list': {},
                 }
@@ -380,7 +380,7 @@ const GetterBackground = (): Getter[] => {
         },
         {
             name: ACTIONS.GET_AUTOFAQ_EVENT_NAME,
-            call: async ({ messageValue, callback }) => {
+            call: async ({ callback }) => {
                 const arrayResult: any = {
                     'event-list': {},
                 }
@@ -404,7 +404,7 @@ const GetterBackground = (): Getter[] => {
                 }
                 const urlChatListUser = `https://skyeng.autofaq.ai/api/conversations/history`;
 
-                let bodyChatListUser: any = {}
+                const bodyChatListUser: any = {}
                 bodyChatListUser['uer-get'] = urlChatListUser;
                 bodyChatListUser['body'] = `{\"serviceId\":\"361c681b-340a-4e47-9342-c7309e27e7b5\",\"mode\":\"Json\",\"channelUserFullTextLike\":\"${messageValue.USER_ID}\",\"tsFrom\":\"${messageValue.START.current}T00:00:00.000Z\",\"tsTo\":\"${messageValue.END.current}T23:59:59.059Z\",\"orderBy\":\"ts\",\"orderDirection\":\"Desc\",\"page\":1,\"limit\":10}`;
                 bodyChatListUser['method'] = 'POST'
@@ -451,7 +451,7 @@ const GetterBackground = (): Getter[] => {
                     "limit": 10
                 }
 
-                let bodyChatListOperator: any = {}
+                const bodyChatListOperator: any = {}
                 bodyChatListOperator['uer-get'] = urlChatListOperator;
                 // bodyChatListOperator['body'] = `{\"serviceId\":\"361c681b-340a-4e47-9342-c7309e27e7b5\",\"mode\":\"Json\",\"channelUserFullTextLike\":\"${data.USER_ID}\",\"tsFrom\":\"${data.START.current}T00:00:00.000Z\",\"tsTo\":\"${data.END.current}T23:59:59.059Z\",\"orderBy\":\"ts\",\"orderDirection\":\"Desc\",\"page\":1,\"limit\":10}`;
                 bodyChatListOperator['body'] = JSON.stringify(bodyOperator)

@@ -44,7 +44,7 @@ function CreateDatePicker({ date: { START }, date: { END } }: { date: { START: a
                         ref={ref => setStartElem(ref)}
                         id="datepStartUser"
                         value={START_DATE}
-                        onChange={(e) => {
+                        onChange={() => {
                             // setStart(e.target.value)
                         }}
                     />
@@ -52,7 +52,7 @@ function CreateDatePicker({ date: { START }, date: { END } }: { date: { START: a
                         ref={ref => setEndElem(ref)}
                         id="datepEndUser"
                         value={END_DATE}
-                        onChange={(e) => {
+                        onChange={() => {
                             // setEnd(e.target.value)
                         }}
                     />

@@ -1,8 +1,8 @@
 const createDargAndDrop = (mainElemnt: any, dragDropElement: any, prefName: string) => {
     // Указываем главное окно
-    let generalElm = mainElemnt
+    const generalElm = mainElemnt
     // Теперь элементы нажатием на которые оно будет перемещаться
-    let dragAndDrop = dragDropElement
+    const dragAndDrop = dragDropElement
 
     //Сохранение позиции окна
     if (localStorage.getItem(`${prefName}Top`) === null) {
@@ -46,7 +46,7 @@ const createDargAndDrop = (mainElemnt: any, dragDropElement: any, prefName: stri
     };
 
     function getCoords(elem: any) {   // кроме IE8-
-        var box = elem.getBoundingClientRect();
+        const box = elem.getBoundingClientRect();
         return {
             top: box.top,
             left: box.left

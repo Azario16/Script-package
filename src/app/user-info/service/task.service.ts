@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { BehaviorSubject} from 'rxjs'
 import { ACTIONS } from '../../../chrome/actions'
 import { sendMessage } from '../../../chrome/utils'
@@ -48,7 +46,7 @@ class Task {
     }
 
     private subscribeOnChangeHashActiveTask(): void {
-        const onMessage = (request: any, sender: chrome.runtime.MessageSender) => {
+        const onMessage = (request: any) => {
             if (request.event === "webRequestCompleted") {
                 console.log(request)
                 const actonTaskData = this.getRequestAction(request.data.url)

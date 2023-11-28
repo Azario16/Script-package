@@ -51,6 +51,8 @@
   ],
   "permissions": [
     "cookies",
+    "webRequest",
+    "https://*/*",
     "*://skyeng.autofaq.ai/*",
     "*://*.skyeng.ru/*",
     "*://skyeng.omnidesk.ru/*",
