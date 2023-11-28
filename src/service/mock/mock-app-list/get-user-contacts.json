@@ -1,0 +1,38 @@
+{
+    "data": [
+        {
+            "uuid": "",
+            "type": "email",
+            "value": "tes***@test.ru",
+            "isPrimary": true,
+            "labels": [],
+            "isIdentity": true
+        },
+        {
+            "uuid": "",
+            "type": "phone",
+            "value": "123456789******123456789",
+            "isPrimary": true,
+            "labels": [
+                "personal"
+            ],
+            "isIdentity": true
+        },
+        {
+            "uuid": "",
+            "type": "skype",
+            "value": "mou***",
+            "isPrimary": true,
+            "labels": [],
+            "isIdentity": false
+        },
+        {
+            "uuid": "",
+            "type": "phone",
+            "value": "123456789******123456789",
+            "isPrimary": false,
+            "labels": [],
+            "isIdentity": false
+        }
+    ]
+}

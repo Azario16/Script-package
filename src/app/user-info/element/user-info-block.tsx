@@ -1,24 +1,23 @@
-import { useState, useEffect, useRef, useMemo, useCallback, createContext } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, useEffect, useRef } from 'react';
 import {
-    ClaendarIcon,
     TelehoneMissedIcon,
-    LifeBuoyIcon
+    LifeBuoyIcon,
+    EyeIcon
 } from '../../../icon'
 import ButtonBar from './button-bar';
-import React from 'react';
 import { sendMessage } from "../../../chrome/utils";
 import { ACTIONS } from "../../../chrome/actions";
-import { ACTIONS_WINDOW } from '../../modal-window/function/actions-window'
 import EdauctionBlock from './education-services-block';
-import EyesNumber from './eyes-number'
+import EyesContact from './eyes-number'
 import SlackId from './slack-id'
 import TimeTable from './teacher-time-table/teacher-time-table'
 
-import { getDateWeekForButton } from '../../../hooks/date-time'
-
 function InfoBlock(props: any) {
     const [USER_INFO, setUserInfo] = useState<any>()
-    const [CONTACTS, setContacts] = useState<any>()
+    const [CONTACTS, setContacts] = useState([])
+    const [DISPLAY_EYE, setDisplayEye] = useState(true)
+
     const [ERROR, setError] = useState()
     const [RELATION, setRelation] = useState('')
     const effectStatus = useRef(true)
@@ -34,16 +33,15 @@ function InfoBlock(props: any) {
             afOperatorValue: props.afOperatorValue
         }
 
-        sendMessage(ACTIONS.SEND_EVENT, messageValue, (result: any) => {
-
-        })
+        sendMessage(ACTIONS.SEND_EVENT, messageValue, () => {})
     }
 
     const updateUserInfo = () => {
         effectStatus.current = true
 
-        sendMessage(ACTIONS.GET_USER_CONTACT_PHONE, props.userId, (result: any) => {
-            setContacts(result)
+        sendMessage(ACTIONS.GET_USER_CONTACTS, props.userId, (result: any) => {
+            console.log(result)
+            setContacts(result.data)
         })
 
         sendMessage(ACTIONS.GET_USER_ID, props.userId, (result: any) => {
@@ -60,6 +58,16 @@ function InfoBlock(props: any) {
             }
         })
     }
+
+    const getAllPersonalContact = () => {
+        if(DISPLAY_EYE){
+            sendMessage(ACTIONS.GET_ALL_PERSONAL_DATA, props.userId, (result: any) => {
+                setDisplayEye(false)
+                setContacts(result.data)
+            })
+        }
+    }
+
 
     useEffect(() => {
         if (props.startValue && props.userId !== '') {
@@ -116,44 +124,54 @@ function InfoBlock(props: any) {
                         <div className="position-absolute bottom-0 start-0"></div>
                         <div className="position-absolute bottom-0 end-0"></div>
                         <div className="text-light text-center bg-exten-UI d-grid">
-                            {RELATION === 'kid' &&
-                                <>
-                                    <span className="text-info fs-6 fw-bold">
-                                        {mapRelation[RELATION]}
-                                    </span>
-                                </>
-                            }
-                            <span>
-                                {`ID: ${USER_INFO.data.id}`}
-                            </span>
-                            <span>
-                                {`Name: ${USER_INFO.data.name}`}
-                            </span>
-                            <span>
-                                {`eMail: ${USER_INFO.data.email}`}
-                            </span>
-                            {
-                                CONTACTS.map((contact: any, index: number) => {
-                                    return (
-                                        <span  key={index} >
-                                            <EyesNumber userID={USER_INFO.data.id} contactData={contact}/>
-                                        </span>
-                                    )
-                                })
-                            }
-                            <span>
-                                {`Skype: ${USER_INFO.data.skype}`}
-                            </span>
-                            <span>
-                                {`Identity: ${USER_INFO.data.identity}`}
-                            </span>
-                            <span>
-                                {`Время: ${USER_INFO.data.utcOffset} UTC`}
-                            </span>
 
-                            <span>
-                                <SlackId userId={props.userId} />
-                            </span>
+                            <div className='text-center btn-group justify-content-center'>
+                                {
+                                    DISPLAY_EYE &&
+                                    <div className="d-flex h-100 bg-none border-none eyes" onClick={getAllPersonalContact}>
+                                        <EyeIcon />
+                                    </div>
+                                }
+                                <div className="text-light text-center bg-exten-UI d-grid">
+                                    {RELATION === 'kid' &&
+                                        <>
+                                            <span className="text-info fs-6 fw-bold">
+                                                {mapRelation[RELATION]}
+                                            </span>
+                                        </>
+                                    }
+                                    <span>
+                                        {`ID: ${USER_INFO.data.id}`}
+                                    </span>
+                                    <span>
+                                        {`Name: ${USER_INFO.data.name}`}
+                                    </span>
+
+                                    {
+                                        CONTACTS.map((contact: any, index: number) => {
+                                            console.log(contact)
+                                            console.log(index)
+                                            return (
+                                                <span key={index} >
+                                                    <EyesContact contactData={contact} />
+                                                </span>
+                                            )
+                                        })
+                                    }
+                                    <span>
+                                        {`Identity: ${USER_INFO.data.identity}`}
+                                    </span>
+                                    <span>
+                                        {`Время: ${USER_INFO.data.utcOffset} UTC`}
+                                    </span>
+
+                                    <span>
+                                        <SlackId userId={props.userId} />
+                                    </span>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
                     {

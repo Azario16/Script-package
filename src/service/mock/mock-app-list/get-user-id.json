@@ -1,0 +1,18 @@
+{
+    "user-info": {
+        "data": {
+            "id": 1,
+            "name": "test",
+            "roles": ["TEST"]
+        }
+    },
+    "family": {
+        "data": [
+            {
+                "general": {
+                    "id": 1
+                }
+            }
+        ]
+    }
+}

@@ -1,5 +1,7 @@
 export interface ContactData {
-    id: number;
-    contact: string;
-    general: boolean;
+    type: string,
+    value: string,
+    isPrimary: boolean,
+    labels: [],
+    isIdentity: boolean
 }

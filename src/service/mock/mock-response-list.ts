@@ -1,5 +1,13 @@
-import { ACTIONS } from "../../chrome/actions"
+import { ACTIONS } from "../../chrome/actions";
 
+import getUserId from "./mock-app-list/get-user-id.json";
+import getSession from "./mock-app-list/get-session.json";
+import getTeacherSlackId from "./mock-app-list/get-teacher-slack-id.json";
+import getCurrentTask from "./mock-app-list/get-current-task.json";
+import getTaskHashAvailable from "./mock-app-list/get-task-hash-available.json";
+import getUserContactPhone from "./mock-app-list/get-user-contact-phone.json";
+import getUserContacts from "./mock-app-list/get-user-contacts.json";
+import geAllPersonalData from "./mock-app-list/get-all-personal-data.json";
 
 const mockResponseList = [
     {
@@ -8,38 +16,15 @@ const mockResponseList = [
     },
     {
         name: ACTIONS.GET_TEACHER_SLACK_ID,
-        response: {}
+        response: getTeacherSlackId
     },
     {
         name: ACTIONS.GET_SESSION,
-        response: {
-            "session": {
-                data: {
-                    roles: ['TEST']
-                }
-            }
-        }
+        response: getSession
     },
     {
         name: ACTIONS.GET_USER_ID,
-        response: {
-            'user-info': {
-                data: {
-                    id: 1,
-                    name: 'test',
-                    roles: ['TEST']
-                }
-            },
-            family: {
-                data: [
-                    {
-                        general: {
-                            id: 1
-                        }
-                    }
-                ]
-            }
-        }
+        response: getUserId
     },
     {
         name: ACTIONS.GET_EDUCATION_INFO,
@@ -52,6 +37,26 @@ const mockResponseList = [
     {
         name: ACTIONS.GET_USER_NUMBER,
         response: {}
+    },
+    {
+        name: ACTIONS.GET_USER_CONTACTS,
+        response: getUserContacts
+    },
+    {
+        name: ACTIONS.GET_ALL_PERSONAL_DATA,
+        response: geAllPersonalData
+    },
+    {
+        name: ACTIONS.GET_USER_CONTACT_PHONE,
+        response: getUserContactPhone
+    },
+    {
+        name: ACTIONS.GET_CURRENT_TASK,
+        response: getCurrentTask
+    },
+    {
+        name: ACTIONS.GET_TASK_HASH_AVAILABLE,
+        response: getTaskHashAvailable
     },
     {
         name: ACTIONS.GET_AUTOFAQ_PEOPLE,

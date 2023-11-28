@@ -194,6 +194,32 @@ const GetterBackground = (): Getter[] => {
             }
         },
         {
+            name: ACTIONS.GET_USER_CONTACTS,
+            call: async ({ messageValue, callback }) => {
+                const urlUserNumber = `https://backend.skyeng.ru/api/persons/${messageValue}/contacts`;
+                const resultUserNumber = await generalGet(urlUserNumber, {
+                    method: "GET",
+                    credentials: "include"
+                })
+                const userContacts = await resultUserNumber.json()
+                callback(userContacts)
+                return userContacts
+            }
+        },
+        {
+            name: ACTIONS.GET_ALL_PERSONAL_DATA,
+            call: async ({ messageValue, callback }) => {
+                const urlUserNumber = `https://backend.skyeng.ru/api/persons/${messageValue}/all-personal-data/`;
+                const resultUserNumber = await generalGet(urlUserNumber, {
+                    method: "GET",
+                    credentials: "include"
+                })
+                const userContacts = await resultUserNumber.json()
+                callback(userContacts)
+                return userContacts
+            }
+        },
+        {
             name: ACTIONS.GET_USER_CONTACT_PHONE,
             call: async ({ messageValue, callback }) => {
                 const GENERAL_CONTACT = 'Телефон(основной)'
@@ -282,6 +308,36 @@ const GetterBackground = (): Getter[] => {
                 }
                 callback(json)
                 return arrayResult
+            }
+        },
+        {
+            name: ACTIONS.GET_CURRENT_TASK,
+            call: async ({ callback }) => {
+                const urlUserNumber = `https://customer-support.skyeng.ru/task/current`;
+                const resultUserNumber = await generalGet(urlUserNumber, {
+                    method: "GET",
+                    credentials: "include"
+                })
+
+                const response = await resultUserNumber.json()
+
+                callback(response)
+                return response
+            }
+        },
+        {
+            name: ACTIONS.GET_TASK_HASH_AVAILABLE,
+            call: async ({ callback }) => {
+                const urlUserNumber = `https://customer-support.skyeng.ru/task/has-available`;
+                const resultUserNumber = await generalGet(urlUserNumber, {
+                    method: "GET",
+                    credentials: "include"
+                })
+
+                const response = await resultUserNumber.json()
+
+                callback(response)
+                return response
             }
         },
         {

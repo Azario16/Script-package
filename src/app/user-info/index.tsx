@@ -1,23 +1,26 @@
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useRef, useState } from 'react';
 import { createDargAndDrop } from '../../core/drag-and-drop'
 import React from 'react';
 import InfoBlock from './element/user-info-block';
-import EdauctionBlock from './element/education-services-block';
+import TimerComponent from './component/crm-timer-task.component/crm-timer-task.component'
 import { Collapse } from 'bootstrap';
 import { sendMessage } from "../../chrome/utils";
 import { ACTIONS } from "../../chrome/actions";
-import createButtonSeacrhId from './function/create-button-to-af'
 import { isExtensionContext } from '../../service/chrome-runtime.service';
+import { TaskService } from './service/task.service';
 
 const UserInfo: React.FC = () => {
-    const [START, setStart] = useState(false)
+    const [IS_EXPANDED, setIsExpanded] = useState(false)
+    const [IS_ACTIVE_TASK, setIsActiveTask] = useState(false)
+    const [START_TASK_ASSIGN_DATE, setStartTaskAssignDate] = useState<string>('');
+
     const [USER_ID, setUserId] = useState('')
     const [AF_OPERATOR_VALUE, setAfOperatorValue] = useState('')
     const [CRM_SESSION, setCrmSession] = useState()
-    const [ERROR, setError] = useState()
 
     const [mainElement, setMainelement] = useState<any>()
-    const [elemntDrop, setElementDrop] = useState<any>()
+    const [elementDrop, setElementDrop] = useState<any>()
 
     const buttonCollapseRef = useRef<HTMLDivElement | null>(null)
     const userInfo = useRef<any | undefined>(null)
@@ -34,10 +37,26 @@ const UserInfo: React.FC = () => {
     }
 
     useEffect(() => {
-        if (mainElement && elemntDrop) {
-            createDargAndDrop(mainElement, elemntDrop, 'win')
+        if (mainElement && elementDrop) {
+            createDargAndDrop(mainElement, elementDrop, 'win')
         }
-    }, [mainElement, elemntDrop])
+    }, [mainElement, elementDrop])
+
+    useEffect(() => {
+        TaskService.startAssignDate$
+            .pipe()
+            .subscribe(startAssignDate => {
+                // console.log(startAssignDate)
+                setStartTaskAssignDate(startAssignDate)
+            })
+
+        TaskService.isActiveTask$
+            .pipe()
+            .subscribe(isActiveTask => {
+                // console.log(isActiveTask)
+                setIsActiveTask(isActiveTask)
+            })
+    }, [])
 
     useEffect(() => {
         updateSessionAndAfUserId()
@@ -48,11 +67,11 @@ const UserInfo: React.FC = () => {
         const checkShow = buttonCollapseRef.current?.classList?.contains('show')
         if (USER_ID !== '' && !checkShow) {
             coollapseToogle(!checkShow, buttonCollapseRef.current)
-            setStart(!checkShow)
+            setIsExpanded(!checkShow)
         } else if (checkShow) {
             coollapseToogle(true, buttonCollapseRef.current)
             setUserId('')
-            setStart(false)
+            setIsExpanded(false)
         }
     }
 
@@ -66,13 +85,13 @@ const UserInfo: React.FC = () => {
         const checkShow = buttonCollapseRef.current?.classList?.contains('show')
         coollapseToogle(!checkShow, buttonCollapseRef.current)
         setUserId(userId)
-        setStart(true)
+        setIsExpanded(true)
     }
 
     useEffect(() => {
         if (isExtensionContext()) {
             chrome.runtime.onMessage.addListener(
-                function (request, sender, sendResponse) {
+                function (request) {
                     if (request.message === "open-user-info") {
                         apiGetUserInfo(request.userId)
                     }
@@ -97,16 +116,22 @@ const UserInfo: React.FC = () => {
                                 coollapseToogle(true, buttonCollapseRef.current)
                             }
                             setUserId(validValue)
-                            setStart(false)
+                            setIsExpanded(false)
                         }}
                     ></input>
                     <div className="d-flex flex-row justify-content-center mt-2">
                         <button type="button" className="btn btn-secondary padding-btn-0 fs-6 text-light"
 
                             onClick={collapseChagne}
-                        >{!START ? 'найти' : 'свернуть'}
+                        >{!IS_EXPANDED ? 'найти' : 'свернуть'}
                         </button>
+
                     </div>
+                    {
+                        !!IS_ACTIVE_TASK &&
+                        <TimerComponent startDate={START_TASK_ASSIGN_DATE} />
+                    }
+
                 </div>
                 <div style={{ "minHeight": "120px" }} className="rounded bg-exten-UI">
                     <div className={`collapse collapse-horizontal border-none`} id="collapseWidthExample"
@@ -114,12 +139,12 @@ const UserInfo: React.FC = () => {
                     >
                         <div className="card  text-border bg-dark border rounded border-b-dark" style={{ "width": "300px" }}>
                             {
-                                !!START &&
+                                !!IS_EXPANDED &&
                                 <InfoBlock
                                     session={CRM_SESSION}
                                     afOperatorValue={AF_OPERATOR_VALUE}
                                     howUser="student"
-                                    startValue={START}
+                                    startValue={IS_EXPANDED}
                                     userId={USER_ID}
                                     userInfo={userInfo}
                                     key={USER_ID}

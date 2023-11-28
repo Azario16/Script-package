@@ -9,6 +9,8 @@ const ACTIONS = {
     GET_TEACHER_ID: 'get-teacher-id',
     GET_LOGIN_LINK: 'get-login-link',
     GET_USER_NUMBER: 'get-user-number',
+    GET_USER_CONTACTS: 'get-user-contacts',
+    GET_ALL_PERSONAL_DATA: 'get-all-personal-data',
     GET_USER_CONTACT_PHONE: 'get-user-contact-number',
     GET_CURRENT_TASK: 'get-current-task',
     GET_TASK_HASH_AVAILABLE: 'get-task-hash-available',

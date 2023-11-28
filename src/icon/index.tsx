@@ -1,5 +1,3 @@
-import React from "react"
-
 const ClaendarIcon = () => {
     return (
         <svg id="Capa_1"
