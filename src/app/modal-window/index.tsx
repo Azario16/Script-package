@@ -1,8 +1,6 @@
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
 import { mapModalWindow } from './function/map-window';
 import { ACTIONS_WINDOW } from "./function/actions-window";
-import React from 'react';
 import { isExtensionContext } from '../../service/chrome-runtime.service';
 
 const ModalWindow = () => {
@@ -14,7 +12,7 @@ const ModalWindow = () => {
     useEffect(() => {
         if (isExtensionContext()) {
             chrome.runtime.onMessage.addListener(
-                function (request, sender, sendResponse) {
+                function (request) {
                     handleShow()
                     switch (request.message) {
                         case 'create-chat':

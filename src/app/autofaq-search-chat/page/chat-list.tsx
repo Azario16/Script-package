@@ -1,10 +1,8 @@
-import React from 'react';
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
     useNavigate,
     useOutletContext,
     useParams,
-    useLocation,
     Outlet
 } from 'react-router-dom';
 import { sendMessage } from "../../../chrome/utils";
@@ -28,7 +26,6 @@ const ChatListUser = (props: any) => {
 
     const navigate = useNavigate();
     navigateComponent.getNavigate = navigate
-    const location = useLocation()
     const param = useParams()
 
     const coollapseToogle = (value: boolean, element: any) => {
@@ -75,8 +72,8 @@ const ChatListUser = (props: any) => {
                                 const OPTION = {
                                     timeZone: 'Europe/Moscow',
                                 };
-                                let nowDataTimeBack = new Date(value.ts.slice(0, -5));
-                                let dateFormat = nowDataTimeBack.toLocaleString('ru-Ru', OPTION).split('.').join('-')
+                                const nowDataTimeBack = new Date(value.ts.slice(0, -5));
+                                const dateFormat = nowDataTimeBack.toLocaleString('ru-Ru', OPTION).split('.').join('-')
                                 const userType = value.channelUser.payload !== undefined
                                     ? value.channelUser.payload.userType
                                     : 'not type'

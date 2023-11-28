@@ -24,7 +24,7 @@ function outerHTMLElement(node: HTMLElement): void {
 }
 
 function createDivIdForReact() {
-    let elm: HTMLElement = document.createElement('div');
+    const elm: HTMLElement = document.createElement('div');
     const appenfElem = document.querySelector('[class="root -type-primary"]');
     if (appenfElem !== null) {
         appenfElem.append(elm)
@@ -33,7 +33,7 @@ function createDivIdForReact() {
 }
 
 async function StatusAutofaqPeopleRender() {
-    class CmsButton extends React.Component<{}, {
+    class CmsButton extends React.Component<object, {
         room: any,
         error: any,
         data: any,
@@ -53,18 +53,14 @@ async function StatusAutofaqPeopleRender() {
 
         }
 
-        async componentDidMount() {
-            let roomInfo = await this.getRoomInfo()
-        }
         getStepUuid(elm: any) {
             Logger.debug(elm)
             const stepElement: HTMLElement = document.querySelector('[class="title"] > span.title')!
-            let stepName: string;
+            const stepName = innerTextElement(stepElement);
 
-            stepName = innerTextElement(stepElement);
             Logger.debug(stepName)
             Logger.debug(this.state.data)
-            this.state.data.map((body: any, count: any) => {
+            this.state.data.map((body: any) => {
                 if (body.name === stepName) {
                     elm.target.className = "bg-success btn"
                     const url = `https://content.vimbox.skyeng.ru/cms/stepStore/update/stepId/${body.stepUuid}`
@@ -82,15 +78,15 @@ async function StatusAutofaqPeopleRender() {
         async getRoomInfo() {
             const locationPath = window.location.pathname.split('/')[2]
             const url = `https://api-${locationPath}.skyeng.ru/api/v2/rooms/${this.state.room}`;
-            let roomInfoRes = await fetch(url, {
+            const roomInfoRes = await fetch(url, {
                 method: 'GET',
                 credentials: 'include'
             })
-            let roomInfo = await roomInfoRes.json();
+            const roomInfo = await roomInfoRes.json();
             Logger.debug(roomInfo)
-            let roomHW = roomInfo['homeworkCards'][0].themes[0].cards;
-            let roomLesson = roomInfo['lessonCards'][0].themes[0].cards;
-            let roomConcat = roomHW.concat(roomLesson)
+            const roomHW = roomInfo['homeworkCards'][0].themes[0].cards;
+            const roomLesson = roomInfo['lessonCards'][0].themes[0].cards;
+            const roomConcat = roomHW.concat(roomLesson)
 
             this.setState({
                 isLoaded: true,

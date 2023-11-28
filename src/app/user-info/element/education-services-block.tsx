@@ -1,31 +1,12 @@
-import React from 'react';
-import { useState, useEffect, useRef, useMemo, useCallback, createContext } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { sendMessage } from "../../../chrome/utils";
 import { ACTIONS } from "../../../chrome/actions";
 import InfoBlock from './user-info-block';
 import { Collapse } from 'bootstrap';
 
-interface HitLog {
-    serviceTypeKey: string;
-    shortTitle: string;
-}
-
-interface eduInfo {
-    data?: {
-
-        error?: {
-            message?: string
-        };
-        errors?: object;
-    };
-    error?: {
-        message?: string
-    };
-    errors?: any;
-}
 
 function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: string; session: any, afOperatorValue: any }) {
-    const [START, setStart] = useState(true)
+    const [START] = useState(true)
     const [EDUCATION, setEducation] = useState([])
     const [ERROR, setError] = useState<any>()
     const configurationsRef = useRef<any>({})
@@ -40,7 +21,7 @@ function EducationBlock(params: { userInfo: any; startValue: unknown; howUser: s
 
     const mapEducation = (educationValue: string) => {
         if (null !== configurationsRef.current) {
-            const result = configurationsRef.current.filter((value: { serviceTypeKey: string; }, key: any) => {
+            const result = configurationsRef.current.filter((value: { serviceTypeKey: string; }) => {
                 return value.serviceTypeKey === educationValue
             })
             return result[0].shortTitle

@@ -1,4 +1,3 @@
-import { createTimeList } from './create-time-list'
 import { createTime } from '../date-time'
 
 
@@ -19,7 +18,7 @@ const parseRegularTime = (timeList: any) => {
         }
         times[weekNumber].push(start)
     });
-    return times;
+    return times; 
 }
 
 const parseSinglTime = (timeList: any) => {

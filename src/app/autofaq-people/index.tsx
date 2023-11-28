@@ -1,6 +1,4 @@
 import React from 'react'
-import Colapse from 'bootstrap/js/dist/collapse.js';
-import ReactDOM from 'react-dom/client';
 import { sendMessage } from "../../chrome/utils";
 import { ACTIONS } from "../../chrome/actions";
 
@@ -12,11 +10,7 @@ interface ClassValue {
     color: string,
 }
 
-function innerTextElement(node: HTMLElement): string {
-    return node.innerText;
-}
-
-class Reservation extends React.Component<{}, {
+class Reservation extends React.Component<object, {
     userKbs: any,
     userId: any,
     userGroup: any,
@@ -67,7 +61,7 @@ class Reservation extends React.Component<{}, {
             operatorAfId: operatorId
         }
 
-        sendMessage(ACTIONS.SEND_EVENT, messageValue, (result: any) => {
+        sendMessage(ACTIONS.SEND_EVENT, messageValue, () => {
 
         })
     }
@@ -92,8 +86,8 @@ class Reservation extends React.Component<{}, {
             const operState = result['people-list'].onOperator
             const unAssigned = result['people-list'].unAssigned
             const operStatus = this.parseStatus(operState)
-            let operStatusRender = Object.assign({}, operStatus.Online, operStatus.Busy, operStatus.Pause);
-            let cCntUndistributedGroup = this.checkSumContTematicGroup(unAssigned)
+            const operStatusRender = Object.assign({}, operStatus.Online, operStatus.Busy, operStatus.Pause);
+            const cCntUndistributedGroup = this.checkSumContTematicGroup(unAssigned)
             this.setState({
                 isLoaded: true,
                 data: operState,
@@ -132,7 +126,6 @@ class Reservation extends React.Component<{}, {
 
     parse(status: any, data: any) {
         const userList: any = []
-        const userKB: any = []
         let userInfo = {};
         // статус операторов на английском, решил в массиве сразу интерпретировать а не в момент когда буду делать строку для отправки
         // используется для бота, здесь просто оставлю возможно пригодится
@@ -206,7 +199,7 @@ class Reservation extends React.Component<{}, {
                                 <div className="card card-body ant-menu-dark ant-menu ant-menu-sub ant-menu-inline">
                                     <div className="">
                                         {
-                                            this.state.operStatus.Online.map((body: any, number: any) => {
+                                            this.state.operStatus.Online.map((body: any) => {
                                                 const status = this.state.class.find((value: ClassValue) => {
                                                     return value.status === body.stats
                                                 })
@@ -227,7 +220,7 @@ class Reservation extends React.Component<{}, {
                                             })
                                         }
                                         {
-                                            this.state.operStatus.Pause.map((body: any, number: any) => {
+                                            this.state.operStatus.Pause.map((body: any) => {
                                                 const status = this.state.class.find((value: ClassValue) => {
                                                     return value.status === body.stats
                                                 })

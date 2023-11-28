@@ -1,17 +1,4 @@
-import React from 'react';
-import {
-    BrowserRouter,
-    Routes,
-    Route,
-    Link,
-    Navigate,
-    useNavigate,
-    useParams,
-    useLocation,
-    Outlet,
-    useOutletContext
-} from 'react-router-dom';
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
+import { useEffect, useState } from 'react';
 import { sendMessage } from "../../../chrome/utils";
 import { ACTIONS } from "../../../chrome/actions";
 import Event from './event'
@@ -20,9 +7,9 @@ import AnswerBot from './answer-bot'
 import AnswerOperator from './answer-operator'
 import OperatorComment from './operator-comment'
 import SendCommentAndAnswer from './send-comment-and-answer'
-import { Modal, Button } from 'react-bootstrap';
 
-import MessageValueDebug from '../debug/message-value'
+
+
 import { Logger } from '../../../service/logger/logger.service';
 
 const MessageBlock = (props: any) => {
@@ -78,7 +65,7 @@ const MessageBlock = (props: any) => {
             afUserId: props.operatorAfId
         }
 
-        sendMessage(ACTIONS.SEND_EVENT, messageValue, (result: any) => {
+        sendMessage(ACTIONS.SEND_EVENT, messageValue, () => {
 
         })
     }
@@ -121,7 +108,7 @@ const MessageBlock = (props: any) => {
                                 timeZone: 'Europe/Moscow',
                                 hour12: false,
                             };
-                            let nowDataTimeBack = new Date(value.ts);
+                            const nowDataTimeBack = new Date(value.ts);
                             const dateTime = nowDataTimeBack.toLocaleDateString('ru-Ru', OPTION)
                             const time = dateTime.split(', ')[1]
                             let operatorName = ''

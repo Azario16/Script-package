@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChromeMessage, ChromeMessageApi } from "../interface/types";
 import { isExtensionContext } from "../service/chrome-runtime.service";
 import { mapFunction } from "./function/map-function"

@@ -3,7 +3,7 @@ import {
     Routes,
     Route,
 } from "react-router-dom";
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
+import { useEffect, useState } from 'react';
 import { sendMessage } from "../../chrome/utils";
 import { ACTIONS } from "../../chrome/actions";
 
@@ -11,20 +11,13 @@ import Home from "./page/home";
 import ChatList from './page/chat-list'
 import ChatListOperator from './page/chat-list-operator'
 import ChatId from './page/chat-id'
-import Lessons from './page/lessons'
 
-/* Debug */
-import events from './debug/event'
-import operatorList from './debug/operator-list'
 
 const App = (props: any) => {
     const [OPERATOR_NAME, setOperatorName] = useState([])
     const [EVENT_NAME, setEventName] = useState({})
     const [AF_USER_ID, setAfUserId] = useState('')
 
-    const innerTextElement = (node: HTMLElement): string => {
-        return node.innerText; // Property 'innerText' does not exist on 'T'
-    }
 
     const updateSessionAndAfUserId = () => {
         sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: any) => {

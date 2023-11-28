@@ -1,5 +1,4 @@
 import $ from "jquery";
-// import "jquery-ui-dist/jquery-ui";
 
 import "./jquery-ui-custom/jquery-ui";
 
@@ -9,7 +8,6 @@ export default function createDatePicker({ START, END, elementList, DATE_PICK, c
         return {
 
             beforeShow: function (input: any, inst: any) {
-                const coordinate = input.getBoundingClientRect();
                 setTimeout(() => {
                     $(".ui-datepicker-month").addClass('bg-light')
                 }, 10);

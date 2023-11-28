@@ -1,21 +1,6 @@
-import React from 'react'
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
-import type { RouteObject } from "react-router-dom";
-import {
-    Outlet,
-    Link,
-    MemoryRouter,
-    Routes,
-    Route,
-    useRoutes
-} from "react-router-dom";
-import { BrowserRouter } from "react-router-dom";
-import Colapse from 'bootstrap/js/dist/collapse.js';
-import { sendMessage } from '../../chrome/utils';
-import { ACTIONS } from '../../chrome/actions';
+import { useRef } from 'react';
+
 import App from './App';
-import MessageBlock from './element/message-block'
-import ChatList from './page/chat-list'
 import { Collapse } from 'bootstrap';
 
 const SearchChat = (props: any) => {

@@ -1,10 +1,7 @@
-import React from 'react';
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
+import { useEffect, useRef, useMemo, useState } from 'react';
 import {
     useNavigate,
-    useOutletContext,
     useParams,
-    useLocation,
     Outlet
 } from 'react-router-dom';
 import { sendMessage } from "../../../chrome/utils";
@@ -38,9 +35,7 @@ const ChatListOperator = (props: any) => {
                     const chatListOpen = chatListUser.items.map(() => false)
                     /* Переворачиваем массив чтобы чаты были в хронологии от старого к новому  */
                     const chatListReversed = chatListUser.items.reverse();
-                    const filterChatToOprator = chatListReversed.filter((element: any) => {
-                        return element.stats.participatingOperators[0] === OPERATOR_ID.id
-                    })
+
                     setChatListOpen(chatListOpen)
                     setChatList(chatListReversed)
                 } else {
@@ -93,8 +88,8 @@ const ChatListOperator = (props: any) => {
                                 const OPTION = {
                                     timeZone: 'Europe/Moscow',
                                 };
-                                let nowDataTimeBack = new Date(value.ts.slice(0, -5));
-                                let dateFormat = nowDataTimeBack.toLocaleString('ru-Ru', OPTION).split('.').join('-')
+                                const nowDataTimeBack = new Date(value.ts.slice(0, -5));
+                                const dateFormat = nowDataTimeBack.toLocaleString('ru-Ru', OPTION).split('.').join('-')
                                 const userType = value.channelUser.payload !== undefined
                                     ? value.channelUser.payload.userType
                                     : 'not type';

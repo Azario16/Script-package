@@ -1,15 +1,15 @@
-import { isExtensionContext } from "./chrome-runtime.service";
+// import { isExtensionContext } from "./chrome-runtime.service";
 
 export class HtppClient {
-    private isExtensionContext = isExtensionContext()
+    // private isExtensionContext = isExtensionContext()
 
     constructor() {
 
     }
 
-    async get(url: string,) {
+    // async get(url: string,) {
 
-    }
+    // }
 
     async post() {
 

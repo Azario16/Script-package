@@ -1,12 +1,9 @@
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
+import { useEffect, useRef, useMemo, useState } from 'react';
 import { createDargAndDrop } from '../../core/drag-and-drop'
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import { getDateWeekForButton } from '../../hooks/date-time'
 
 import { Collapse } from 'bootstrap';
-import { sendMessage } from "../../chrome/utils";
-import { ACTIONS } from "../../chrome/actions";
 import { CreateDatePicker } from './element/datepicker-block'
 
 import LessonsList from './element/lessons-list'
@@ -20,7 +17,7 @@ const TimTableInfo: React.FC = () => {
     const [START_SEARCH, setStartSearch] = useState(false)
 
     const [TEACHER_ID, setTeacherId] = useState('')
-    const [ERROR, setError] = useState()
+
 
     const buttonCollapseRef = useRef<HTMLDivElement | null>(null)
     const [mainElement, setMainelement] = useState<any>()

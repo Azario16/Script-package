@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState, useEffect, useRef, useMemo, useCallback, createContext } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { sendMessage } from "../../../chrome/utils";
 import { ACTIONS } from "../../../chrome/actions";
 import { Logger } from '../../../service/logger/logger.service';

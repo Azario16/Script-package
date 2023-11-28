@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
+import { useEffect, useState } from 'react';
 import { sendMessage } from "../../../../chrome/utils";
 import { ACTIONS } from "../../../../chrome/actions";
 

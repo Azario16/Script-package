@@ -1,10 +1,7 @@
-import { useState, useEffect, useRef, useMemo, useCallback, createContext } from 'react';
-
-import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { sendMessage } from "../../../chrome/utils";
 import { ACTIONS } from "../../../chrome/actions";
-import { ACTIONS_WINDOW } from '../../modal-window/function/actions-window'
-import { getTimeFromDate, getDateWeekForButton, getDateFormate } from '../../../hooks/date-time'
+import { getDateWeekForButton, getDateFormate } from '../../../hooks/date-time'
 import { Logger } from '../../../service/logger/logger.service';
 
 function InfoBlock(props: any) {
@@ -12,22 +9,6 @@ function InfoBlock(props: any) {
     const [ERROR, setError] = useState<any>()
 
     const effectStatus = useRef(true)
-    const mapRelation: any = {
-        'kid': 'Skysmart - KIDS',
-    }
-
-    const openModalElenet = () => {
-        const messageValue = {
-            message: 'create-chat',
-            userId: props.userId,
-        }
-
-        sendMessage(ACTIONS.SEND_EVENT, messageValue, (result: any) => {
-
-        })
-    }
-
-
 
     const updateLessonsInfo = () => {
         effectStatus.current = true

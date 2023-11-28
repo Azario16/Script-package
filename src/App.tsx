@@ -11,7 +11,6 @@ import СreateCmsButtonfrom from './app/vimbox-cms'
 
 import ShadowView from './shadow-view';
 
-import SliderTest from './app/test-slider'
 import { Storage } from './service/storage/storage.service';
 
 
@@ -26,7 +25,7 @@ function outerHTMLElement(node: HTMLElement): void {
 }
 
 function createDivIdForReact() {
-  let elm: HTMLElement = document.createElement('div');
+  const elm: HTMLElement = document.createElement('div');
   const appenfElem = document.querySelector('div[class="app-content"] > ul[role="menu"]');
   if (appenfElem !== null) {
     appenfElem.append(elm)

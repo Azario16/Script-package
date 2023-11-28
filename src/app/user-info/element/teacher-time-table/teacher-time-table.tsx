@@ -1,22 +1,15 @@
-import React from 'react';
 import Slider from "react-slick";
 // import "react-multi-carousel/lib/styles.css";
-import { useState, useEffect, useRef, useMemo, useCallback, createContext } from 'react';
+import { useState, useEffect } from 'react';
 import { sendMessage } from "../../../../chrome/utils";
 import { ACTIONS } from "../../../../chrome/actions";
-import {
-    ClaendarIcon,
-    TelehoneMissedIcon,
-    LifeBuoyIcon
-} from '../../../../icon'
-import ButtonGroup from './custom-button'
 
-import { getDateWeekForButton, getNowWeek, createTime, getNowTime } from '../../../../hooks/date-time'
+import { getDateWeekForButton, getNowWeek, getNowTime } from '../../../../hooks/date-time'
 import { parseRegularTime, parseSinglTime } from '../../../../hooks/time-type-parse'
 import { Logger } from '../../../../service/logger/logger.service';
 
 function SamplePrevArrow(props: any) {
-    const { className, style, onClick } = props;
+    const { style, onClick } = props;
     return (
         <div
             className={`slick-prev-cust carousel-control-prev-icon h-15px`}
@@ -27,7 +20,7 @@ function SamplePrevArrow(props: any) {
 }
 
 function SampleNextArrow(props: any) {
-    const { className, style, onClick } = props;
+    const { style, onClick } = props;
     return (
         <div
             className={`slick-next-cust carousel-control-next-icon h-15px`}
@@ -41,9 +34,9 @@ function TeacherTimeTable(props: any) {
 
     const [TIME_INIT, setTimeInit] = useState<number>()
     const [HOUR_LIST, setHourList] = useState([])
-    const [LESSONS_INFO, setLessonsInfo] = useState<any>([])
+
     const [TIME_LIST, setTimeList] = useState([])
-    const [ERROR, setError] = useState<any>()
+    // const [ERROR, setError] = useState<any>()
     const [WEEK, setWeek] = useState<any>()
 
     const [slider, setSliderRef] = useState<any>();
@@ -65,8 +58,8 @@ function TeacherTimeTable(props: any) {
         sendMessage(ACTIONS.GET_TEACHER_LESSONS, messageValue, (result: any) => {
             const lessons: any = result["lessons"]
             if (lessons[0].count === 0) {
-                const errorMessage = 'Не найден преподаватель'
-                setError(errorMessage)
+                // const errorMessage = 'Не найден преподаватель'
+                // setError(errorMessage)
             } else if (lessons[0].count > 0) {
                 const filetStart = lessons[0].result[0].classesRegular.map((element: any) => {
                     const formateString = element.startAt.substring(1).split('+')[0]
@@ -130,7 +123,7 @@ function TeacherTimeTable(props: any) {
         let hh = 0;
         const times: any = [];
         while (hh < 24) {
-            let start = ("0" + String(hh)).slice(-2)
+            const start = ("0" + String(hh)).slice(-2)
             times.push({
                 lessonActiv: false,
                 status: '',

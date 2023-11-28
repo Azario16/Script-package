@@ -1,7 +1,3 @@
-import React from 'react';
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
-
-
 const Event = (params: any) => {
     const eventName: any = {
         "NewConversation": 'Начат новый диалог',

@@ -1,7 +1,3 @@
-import React from 'react';
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
-
-
 const Question = (params: any) => {
     return (
         <div className="chat-message chat-question">

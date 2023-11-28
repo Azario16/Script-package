@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
 import { createDargAndDrop } from '../../core/drag-and-drop'
 import React from 'react';

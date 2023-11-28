@@ -1,7 +1,5 @@
-import React from 'react';
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
-import { Collapse, Dropdown } from 'bootstrap';
-import { createPopper } from '@popperjs/core';
+import { useRef, useMemo, useState } from 'react';
+import { Dropdown } from 'bootstrap';
 import { sendMessage } from '../../../chrome/utils';
 import { ACTIONS } from '../../../chrome/actions';
 import { Logger } from '../../../service/logger/logger.service';
@@ -81,7 +79,7 @@ const SendCommentAndAnswer = (props: any) => {
             sendText: TEXT_SEND,
             commentValue: TYPE_SEND,
         }
-        sendMessage(ACTIONS.GET_AUTOFAQ_SEND_MESSAGE, valueMessage, (result: any) => {
+        sendMessage(ACTIONS.GET_AUTOFAQ_SEND_MESSAGE, valueMessage, () => {
             props.updateChat()
             setText('')
         })

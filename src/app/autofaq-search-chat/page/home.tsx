@@ -1,17 +1,12 @@
-import React from 'react';
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
-import { BrowserRouter, Routes, Route, Link, Navigate, useNavigate, useParams, useLocation, Outlet } from 'react-router-dom';
-import createDatePicker from '../../../hooks/date-picker/datapicker.general.conf'
+import { useEffect, useRef, useMemo, useState } from 'react';
+import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { getDateWeekForButton } from '../../../hooks/date-time'
 import { CreateDatePicker } from '../element/datepicker-block'
 import { Collapse } from 'bootstrap';
-import { sendMessage } from '../../../chrome/utils';
-import { ACTIONS } from '../../../chrome/actions';
 import { isExtensionContext } from '../../../service/chrome-runtime.service';
 
 
 const Home = (props: any) => {
-    const buttonCollapseRef = useRef<HTMLButtonElement | null>(null)
     const navigate = useNavigate();
     const coollapseToogle = (value: boolean, element: any) => {
         new Collapse(element, {
@@ -28,7 +23,7 @@ const Home = (props: any) => {
     }
 
     const location = useLocation()
-    const param = useParams()
+
     const [USER_ID, setUserId] = useState('')
     const [CHAT_ID, setChatId] = useState('')
 
@@ -40,7 +35,7 @@ const Home = (props: any) => {
     useEffect(() => {
         if (isExtensionContext()) {
             chrome.runtime.onMessage.addListener(
-                function (request, sender, sendResponse) {
+                function (request) {
                     switch (request.message) {
                         case 'search-user-chat':
                             toogleButton()

@@ -1,5 +1,4 @@
-const ButtonGroup = ({ next, previous, goToSlide, ...rest }: any) => {
-    const { carouselState: { currentSlide } } = rest;
+const ButtonGroup = ({ next, previous}: any) => {
     return (
         <div className="carousel-button-group">
             <button className="border-none bg-none" type="button"

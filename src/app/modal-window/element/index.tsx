@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Modal } from 'bootstrap';
 import { sendMessage } from "../../../chrome/utils";
 import { ACTIONS } from "../../../chrome/actions";
@@ -34,10 +34,10 @@ const ModalElements = () => {
 
             useEffect(() => {
                 if (MODAL_ELEMENT) {
-                    MODAL_ELEMENT.addEventListener('hide.bs.modal', (event: any) => {
+                    MODAL_ELEMENT.addEventListener('hide.bs.modal', () => {
                         setShowAnimat(false)
                     })
-                    MODAL_ELEMENT.addEventListener('hidden.bs.modal', (event: any) => {
+                    MODAL_ELEMENT.addEventListener('hidden.bs.modal', () => {
                         props.handleClose()
                         handleClose()
                     })
@@ -74,8 +74,6 @@ const ModalElements = () => {
                                                 assignChatAf((result: any) => {
                                                     if (result["assign-chat"]?.id) {
                                                         toogelModalElenet()
-                                                    } else {
-                                                        const value: string = `Не удалось создать чат`
                                                     }
                                                 })
                                             }
@@ -122,10 +120,10 @@ const ModalElements = () => {
 
             useEffect(() => {
                 if (MODAL_ELEMENT) {
-                    MODAL_ELEMENT.addEventListener('hide.bs.modal', (event: any) => {
+                    MODAL_ELEMENT.addEventListener('hide.bs.modal', () => {
                         setShowAnimat(false)
                     })
-                    MODAL_ELEMENT.addEventListener('hidden.bs.modal', (event: any) => {
+                    MODAL_ELEMENT.addEventListener('hidden.bs.modal', () => {
                         props.handleClose()
                         handleClose()
                     })

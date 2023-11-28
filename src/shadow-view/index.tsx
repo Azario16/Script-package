@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
+import { useEffect, useState } from 'react';
 import { createDargAndDrop } from '../core/drag-and-drop'
 import { getUrl } from '../service/chrome-runtime.service';
 import { Logger } from '../service/logger/logger.service';
@@ -8,8 +8,13 @@ export class ShadowView extends React.Component {
     sheet: any = new CSSStyleSheet();
 
     async loadStyle(): Promise<string> {
-        const response = await fetch(getUrl('static/css/styles_extension.css'));
-        return await response.text();
+        const responseStyleExtension = await fetch(getUrl('static/css/styles_extension.css'));
+        const responseMain = await fetch(getUrl('static/css/main.css'));
+
+        const textStyleExtension = await responseStyleExtension.text();
+        const textMain = await responseMain.text();
+
+        return textStyleExtension + '\r\n' + textMain;
     }
 
     attachShadow = async (host: any) => {
@@ -37,7 +42,7 @@ export class ShadowView extends React.Component {
 }
 
 export default function TimTableInfoShadow({ children }: any) {
-    const [elemntDrop, setElementDrop] = useState<any>()
+    const [elemntDrop] = useState<any>()
 
     useEffect(() => {
         if (elemntDrop) {

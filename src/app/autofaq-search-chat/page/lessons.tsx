@@ -1,20 +1,14 @@
-import React from 'react';
-import { useEffect, useRef, useCallback, useMemo, useState, StrictMode } from 'react';
+import { useRef, useState } from 'react';
 import {
     useNavigate,
-    useOutletContext,
-    useParams,
     useLocation,
     Outlet
 } from 'react-router-dom';
-import { sendMessage } from "../../../chrome/utils";
-import { ACTIONS } from "../../../chrome/actions";
 import { CreateDatePicker } from '../element/datepicker-block'
 
-import MessageBlock from '../element/message-block'
 
 
-const Lessons = (props: any) => {
+const Lessons = () => {
     const [STUDENT_ID, setUserId] = useState('')
     const [TEACHER_ID, setChatId] = useState('')
 
@@ -22,11 +16,9 @@ const Lessons = (props: any) => {
     const START = useRef<string>('')
     const END = useRef<string>('')
 
-    const [ERROR, setError] = useState<string>()
 
     const navigate = useNavigate();
     const location = useLocation()
-    const param = useParams()
 
 
     return (
