@@ -45,14 +45,12 @@ const UserInfo: React.FC = () => {
         TaskService.startAssignDate$
             .pipe()
             .subscribe(startAssignDate => {
-                // console.log(startAssignDate)
                 setStartTaskAssignDate(startAssignDate)
             })
 
         TaskService.isActiveTask$
             .pipe()
             .subscribe(isActiveTask => {
-                // console.log(isActiveTask)
                 setIsActiveTask(isActiveTask)
             })
     }, [])

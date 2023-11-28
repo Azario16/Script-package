@@ -48,9 +48,7 @@ class Task {
     private subscribeOnChangeHashActiveTask(): void {
         const onMessage = (request: any) => {
             if (request.event === "webRequestCompleted") {
-                console.log(request)
                 const actonTaskData = this.getRequestAction(request.data.url)
-                console.log(actonTaskData)
 
                 switch (actonTaskData?.action) {
                     case 'take':

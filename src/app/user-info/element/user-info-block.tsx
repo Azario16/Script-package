@@ -39,7 +39,6 @@ function InfoBlock(props: any) {
         effectStatus.current = true
 
         sendMessage(ACTIONS.GET_USER_CONTACTS, props.userId, (result: any) => {
-            console.log(result)
             setContacts(result.data)
         })
 
@@ -148,8 +147,6 @@ function InfoBlock(props: any) {
 
                                     {
                                         CONTACTS.map((contact: any, index: number) => {
-                                            console.log(contact)
-                                            console.log(index)
                                             return (
                                                 <span key={index} >
                                                     <EyesContact contactData={contact} />
