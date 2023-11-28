@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "contact": "+791*********",
+        "general": false
+    },
+    {
+        "id": 2,
+        "contact": "+792********",
+        "general": true
+    }
+]

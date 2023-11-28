@@ -18,6 +18,7 @@ import { getDateWeekForButton } from '../../../hooks/date-time'
 
 function InfoBlock(props: any) {
     const [USER_INFO, setUserInfo] = useState<any>()
+    const [CONTACTS, setContacts] = useState<any>()
     const [ERROR, setError] = useState()
     const [RELATION, setRelation] = useState('')
     const effectStatus = useRef(true)
@@ -40,6 +41,11 @@ function InfoBlock(props: any) {
 
     const updateUserInfo = () => {
         effectStatus.current = true
+
+        sendMessage(ACTIONS.GET_USER_CONTACT_PHONE, props.userId, (result: any) => {
+            setContacts(result)
+        })
+
         sendMessage(ACTIONS.GET_USER_ID, props.userId, (result: any) => {
             const userInfo: any = result["user-info"]
             if (userInfo.data?.error || userInfo.data?.errors) {
@@ -126,9 +132,15 @@ function InfoBlock(props: any) {
                             <span>
                                 {`eMail: ${USER_INFO.data.email}`}
                             </span>
-                            <span>
-                                <EyesNumber userInfo={USER_INFO.data} />
-                            </span>
+                            {
+                                CONTACTS.map((contact: any, index: number) => {
+                                    return (
+                                        <span  key={index} >
+                                            <EyesNumber userID={USER_INFO.data.id} contactData={contact}/>
+                                        </span>
+                                    )
+                                })
+                            }
                             <span>
                                 {`Skype: ${USER_INFO.data.skype}`}
                             </span>
@@ -138,7 +150,7 @@ function InfoBlock(props: any) {
                             <span>
                                 {`Время: ${USER_INFO.data.utcOffset} UTC`}
                             </span>
-                            
+
                             <span>
                                 <SlackId userId={props.userId} />
                             </span>

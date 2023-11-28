@@ -183,18 +183,58 @@ const GetterBackground = (): Getter[] => {
         {
             name: ACTIONS.GET_USER_NUMBER,
             call: async ({ messageValue, callback }) => {
-                const arrayResult: any = {
-                    'user-number': {},
-                }
-                const urlUserNumber = `https://backend.skyeng.ru/api/persons/${messageValue}/personal-data/?pdType=phone&source=persons.profile`;
+                const urlUserNumber = `https://id.skyeng.ru/user-api/v1/users/${messageValue.userID}/unmasked-contact?contactId=${messageValue.contactId}`;
                 const resultUserNumber = await generalGet(urlUserNumber, {
                     method: "GET",
                     credentials: "include"
                 })
-                arrayResult['user-number'] = await resultUserNumber.json()
+                const userNumber = await resultUserNumber.json()
+                callback(userNumber.result)
+                return userNumber
+            }
+        },
+        {
+            name: ACTIONS.GET_USER_CONTACT_PHONE,
+            call: async ({ messageValue, callback }) => {
+                const GENERAL_CONTACT = 'Телефон(основной)'
+                const CONTACT_COLUMN_NAME = ['Телефон', GENERAL_CONTACT]
 
-                callback(arrayResult)
-                return arrayResult
+                const urlUserNumber = `https://id.skyeng.ru/admin/users/${messageValue}`;
+                const resultUserNumber = await generalGet(urlUserNumber, {
+                    method: "GET",
+                    credentials: "include"
+                })
+                const textHtmlResult = await resultUserNumber.text()
+
+                try {
+                    const domPars = new DOMParser()
+                    const userContactsTableTr = domPars.parseFromString(textHtmlResult, `text/html`).querySelectorAll("body > main > div:nth-child(9) > table > tbody > tr")
+
+                    const userContacts = Array.from(userContactsTableTr)
+                        .filter(userContactTableTr => {
+                            const columnName = userContactTableTr.querySelector('th')?.innerHTML.replace(/\s+/g, '');
+                            if (columnName && CONTACT_COLUMN_NAME.includes(columnName)) {
+                                return true;
+                            }
+                        })
+                        .map(userContactTableTr => {
+                            const contact = userContactTableTr?.querySelector('span > span')?.innerHTML.replace(/\s+/g, '');
+                            const dataContactIdNumber = userContactTableTr.querySelector('span')?.getAttribute('data-contact-id')?.replace(/\s+/g, '');
+                            const isGeneralContact = userContactTableTr.querySelector('th')?.innerHTML.replace(/\s+/g, '') === GENERAL_CONTACT;
+
+                            return {
+                                id: dataContactIdNumber,
+                                contact: contact,
+                                general: isGeneralContact
+                            }
+                        })
+
+                    callback(userContacts)
+                    return userContacts
+
+                } catch (err) {
+                    callback({ error: err })
+                }
             }
         },
         {

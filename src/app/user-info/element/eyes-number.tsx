@@ -6,39 +6,36 @@ import {
     EyeIcon
 } from '../../../icon'
 import { Logger } from '../../../service/logger/logger.service';
+import { ContactData } from './eyes.interface';
 
-function EyesNumber(params: any) {
-    const [NUMBER, setNumber] = useState()
+function EyesNumber({ contactData, userID }: { contactData: ContactData, userID: number }) {
+    const [NUMBER, setNumber] = useState<string>()
     const [DISPLAY_EYE, setDisplayEye] = useState(true)
     const getNumber = () => {
-        sendMessage(ACTIONS.GET_USER_NUMBER, params.userInfo.id, (result: any) => {
+        const messageValue = {
+            userID,
+            contactId: contactData.id
+        }
+        sendMessage(ACTIONS.GET_USER_NUMBER, messageValue, (result: any) => {
             Logger.debug(result)
             setDisplayEye(false)
-            setNumber(result["user-number"].data.value)
+            setNumber(result)
         })
     }
 
     useEffect(() => {
-        if (params.userInfo.phone !== undefined) {
-            setNumber(params.userInfo.phone)
-            // updateTecacherIdTrm()
+        setNumber(contactData.contact)
+    }, [contactData])
 
-        } else {
-            setNumber(undefined)
-        }
-    }, [params])
     return (
         <div className="text-center btn-group">
             {!!DISPLAY_EYE &&
-                <div className="bg-none border-none eyes"
-                    onClick={getNumber}
-                >
+                <div className="bg-none border-none eyes" onClick={getNumber}>
                     <EyeIcon />
-                    {/* <i className="fa-solid fa-eye text-border eyes"></i> */}
                 </div>
             }
             <div className="text-light d-flex justify-content-center align-items-center">
-                <span className="fs-custom-0_8 ms-1">Номер: </span>
+                <span className="fs-custom-0_8 ms-1">Номер{contactData.general ? ' (основной)' : ''}: </span>
                 <span className="fs-custom-0_7 ms-1">{NUMBER}</span>
             </div>
         </div>
