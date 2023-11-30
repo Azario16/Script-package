@@ -31,7 +31,7 @@ const messagesFromApiExtension = (
 }
 
 const onBeforeWebRequest = (message: chrome.webRequest.WebResponseHeadersDetails) => {
-    if (message.tabId) {
+    if (message.tabId !== -1) {
         const tabId: any = message.tabId
         chrome.tabs.sendMessage(tabId, { event: 'webRequestCompleted', data: message });
     }

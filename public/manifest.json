@@ -52,7 +52,8 @@
   "permissions": [
     "cookies",
     "webRequest",
-    "https://*/*",
+    "*://crm2.skyeng.ru/*",
+    "*://customer-support.skyeng.ru/*",
     "*://skyeng.autofaq.ai/*",
     "*://*.skyeng.ru/*",
     "*://skyeng.omnidesk.ru/*",
