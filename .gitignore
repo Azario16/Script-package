@@ -10,6 +10,7 @@
 
 # production
 /build
+/old_build
 *.zip
 
 # vs code
