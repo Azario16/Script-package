@@ -49,7 +49,7 @@ const ModalElements = () => {
             return (
                 <>
                     <div
-                        className="modal fade"
+                        className="modal fade z-i-100000"
                         ref={ref => setModalElement(ref)}
                     >
                         <div className="modal-dialog">
@@ -135,7 +135,7 @@ const ModalElements = () => {
             return (
                 <>
                     <div
-                        className="modal fade"
+                        className="modal fade z-i-100000"
                         ref={ref => setModalElement(ref)}
                     >
                         <div className="modal-dialog">
