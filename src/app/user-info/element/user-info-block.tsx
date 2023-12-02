@@ -109,7 +109,7 @@ function InfoBlock(props: any) {
                         </>
 
 
-                        <div className="position-absolute top-0 end-0 rounded border border-b-dark  bg-secondary">
+                        <div className="z-i-1 position-absolute top-0 end-0 rounded border border-b-dark  bg-secondary">
                             <div className='bg-none custom-icon'
                                 onClick={() => {
                                     window.open(`https://crm2.skyeng.ru/persons/${USER_INFO.data.id}/customer-support/manual`)
