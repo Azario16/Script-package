@@ -32,7 +32,7 @@ function InfoBlock(props: any) {
             afOperatorValue: props.afOperatorValue
         }
 
-        sendMessage(ACTIONS.SEND_EVENT, messageValue, () => {})
+        sendMessage(ACTIONS.SEND_EVENT, messageValue, () => { })
     }
 
     const updateUserInfo = () => {
@@ -58,7 +58,7 @@ function InfoBlock(props: any) {
     }
 
     const getAllPersonalContact = () => {
-        if(DISPLAY_EYE){
+        if (DISPLAY_EYE) {
             sendMessage(ACTIONS.GET_ALL_PERSONAL_DATA, props.userId, (result: any) => {
                 setDisplayEye(false)
                 setContacts(result.data)
@@ -91,8 +91,9 @@ function InfoBlock(props: any) {
                 : <>
                     <div className="text-center position-relative">
                         <>
-                            <div className="position-absolute top-0 start-0 btn-group">
-                                {props.howUser === 'student' &&
+                            <div className="z-i-1 position-absolute top-0 start-0 btn-group">
+                                {
+                                    props.howUser === 'student' &&
                                     <div className='bg-none custom-icon me-1 rounded bg-secondary border border-b-dark '>
                                         <TelehoneMissedIcon />
                                     </div>
@@ -121,12 +122,12 @@ function InfoBlock(props: any) {
                         <div className="position-absolute bottom-50 end-50"></div>
                         <div className="position-absolute bottom-0 start-0"></div>
                         <div className="position-absolute bottom-0 end-0"></div>
-                        <div className="text-light text-center bg-exten-UI d-grid">
+                        <div className="text-light bg-exten-UI d-grid">
 
-                            <div className='text-center btn-group justify-content-center'>
+                            <div className='align-items-center btn-group justify-content-center'>
                                 {
                                     DISPLAY_EYE &&
-                                    <div className="d-flex h-100 bg-none border-none eyes" onClick={getAllPersonalContact}>
+                                    <div className="d-flex bg-none border-none eyes" onClick={getAllPersonalContact}>
                                         <EyeIcon />
                                     </div>
                                 }
