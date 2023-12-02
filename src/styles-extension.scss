@@ -253,6 +253,20 @@ $utilities: map-merge(
                     )
                 ),
         ),
+        "z-index": (
+            property: z-index,
+            class: z-i,
+            values:
+                map-merge(
+                    $border-widths,
+                    (
+                        1: 1,
+                        10: 10,
+                        100: 100,
+                        1000: 1000,
+                    )
+                ),
+        ),
     )
 );
 .ui-datepicker-trigger {
