@@ -59,8 +59,6 @@
     "*://skyeng.omnidesk.ru/*",
     "*://datsy.ru/api/*",
     "*://kibana-logs.skyeng.link/",
-    "storage",
-    "notifications",
     "activeTab"
   ]
 }
