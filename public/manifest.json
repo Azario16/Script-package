@@ -1,15 +1,15 @@
 {
   "name": "Script Package",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "Сборник скриптов для быстрого доступа к ресурсам: ://.skyeng.ru/* , ://datsy.ru/, ://skyeng.autofaq.ai/, ://skyeng.omnidesk.ru/*",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "icons": {
     "16": "script-pack.png",
     "48": "script-pack.png",
     "128": "script-pack.png"
   },
   "options_page": "options.html",
-  "browser_action": {
+  "action": {
     "default_popup": "options.html",
     "default_icon": {
       "16": "script-pack.png",
@@ -18,12 +18,9 @@
     }
   },
   "background": {
-    "scripts": [
-      "static/js/background.js"
-    ],
-    "persistent": true
-  },
-  
+    "service_worker": "static/js/background.js",
+    "type": "module"
+  },  
   "content_scripts": [
     {
       "js": [
@@ -33,32 +30,51 @@
         "static/css/variable.css"
       ],
       "matches": [
-        "*://crm2.skyeng.ru/*",
-        "*://app.extension-test.ru/*",
-        "*://skyeng.autofaq.ai/*",
-        "*://extension-test.ru/*",
-        "*://api.extension-test.ru/*",
-        "*://app.extension-test.ru/*",
-        "*://vimbox.skyeng.ru/*",
-        "*://timetable.skyeng.ru/*"
+        "https://crm2.skyeng.ru/*",
+        "http://crm2.skyeng.ru/*",
+        "https://app.extension-test.ru/*",
+        "http://app.extension-test.ru/*",
+        "https://skyeng.autofaq.ai/*",
+        "http://skyeng.autofaq.ai/*",
+        "https://extension-test.ru/*",
+        "http://extension-test.ru/*",
+        "https://api.extension-test.ru/*",
+        "http://api.extension-test.ru/*",
+        "https://app.extension-test.ru/*",
+        "http://app.extension-test.ru/*",
+        "https://vimbox.skyeng.ru/*",
+        "http://vimbox.skyeng.ru/*",
+        "https://timetable.skyeng.ru/*",
+        "http://timetable.skyeng.ru/*"
       ]
     }
   ],
   "web_accessible_resources": [
-    "static/*",
-    "libs/*",
-    "autofaq/*"
+    {
+      "resources": ["static/*"],
+      "matches": ["http://*/*", "https://*/*"],
+      "use_dynamic_url": true
+    }
   ],
   "permissions": [
     "cookies",
     "webRequest",
-    "*://crm2.skyeng.ru/*",
-    "*://customer-support.skyeng.ru/*",
-    "*://skyeng.autofaq.ai/*",
-    "*://*.skyeng.ru/*",
-    "*://skyeng.omnidesk.ru/*",
-    "*://datsy.ru/api/*",
-    "*://kibana-logs.skyeng.link/",
     "activeTab"
+  ],
+  "host_permissions": [
+    "https://crm2.skyeng.ru/*",
+    "http://crm2.skyeng.ru/*",
+    "https://customer-support.skyeng.ru/*",
+    "http://customer-support.skyeng.ru/*",
+    "https://skyeng.autofaq.ai/*",
+    "http://skyeng.autofaq.ai/*",
+    "https://*.skyeng.ru/*",
+    "http://*.skyeng.ru/*",
+    "https://skyeng.omnidesk.ru/*",
+    "http://skyeng.omnidesk.ru/*",
+    "https://datsy.ru/api/*",
+    "http://datsy.ru/api/*",
+    "https://kibana-logs.skyeng.link/",
+    "http://kibana-logs.skyeng.link/"
   ]
 }

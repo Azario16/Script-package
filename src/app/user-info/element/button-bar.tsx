@@ -3,25 +3,22 @@ import { sendMessage } from "../../../chrome/utils";
 import { ACTIONS } from "../../../chrome/actions";
 import { Logger } from '../../../service/logger/logger.service';
 
+function capitalizeFirstLetter(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 function ButtonBar(params: any) {
     const [TYPE_USER, setTypeUser] = useState()
     const [ID_TRM, setIdTrm] = useState()
     const [BUTTON_COLOR__L_L, setButtonColorLL] = useState('secondary')
     const [BUTTON_COLOR_CLIPBOARD, setButtonColorClipboard] = useState('')
     const effectStatus = useRef(true)
-    const updateTecacherIdTrm = () => {
-        sendMessage(ACTIONS.GET_TEACHER_ID, params['user-id'], (result: any) => {
-            Logger.debug(result)
-            if (result["teacher-id"].length) {
-                setIdTrm(result["teacher-id"][0].id)
-            }
-        })
-    }
+
     useEffect(() => {
         if (params['user-info'] !== undefined) {
             setTypeUser(params["user-info"].data.type)
             if (params["user-info"].data.type === 'teacher' && params.startValue) {
-                updateTecacherIdTrm()
+                setIdTrm(params['user-id']);
             }
         } else {
             setTypeUser(undefined)
@@ -52,9 +49,9 @@ function ButtonBar(params: any) {
         const infoIser = [
             `ID: ${params["user-info"].data.id}`,
             `Name: ${params["user-info"].data.name}`,
-            `eMail: ${params["user-info"].data.email}`,
-            `Phone: ${params["user-info"].data.phone}`,
-            `Identity: ${params["user-info"].data.identity}`,
+            ...params["user-contacts"].map((contact: any) => {
+                return `${capitalizeFirstLetter(contact.type)}: ${contact.value}`
+            }),
             `Time: ${params["user-info"].data.timezone}`
         ]
         navigator.clipboard.writeText(infoIser.join('\n'))
@@ -76,7 +73,7 @@ function ButtonBar(params: any) {
                             ? ID_TRM !== undefined
                                 ? <button className="rounded-pill btn btn-secondary padding-btn-0 fs-custom-0_8 w-40px" type="button"
                                     onClick={() => {
-                                        window.open(`https://tramway.skyeng.ru/teacher/${ID_TRM}/show`, '_blank')
+                                        window.open(`https://trm.skyeng.ru/teacher/${ID_TRM}`, '_blank')
                                     }}
                                 >
                                     TRM

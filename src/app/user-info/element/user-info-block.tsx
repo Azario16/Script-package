@@ -81,7 +81,7 @@ function InfoBlock(props: any) {
 
     return (
         <>
-            <ButtonBar user-info={USER_INFO} user-id={props.userId} startValue={props.startValue} />
+            <ButtonBar user-info={USER_INFO} user-id={props.userId} user-contacts={CONTACTS} startValue={props.startValue} />
             {USER_INFO === undefined ?
                 ERROR === undefined
                     ? <></>

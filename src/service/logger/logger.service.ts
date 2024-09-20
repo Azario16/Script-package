@@ -1,17 +1,17 @@
 class LoggerService {
 
-    private isDebug = localStorage.getItem(`extensionDebug`)
+    static isDebug = false;
 
     debug(...logs: any): void {
-        if(this.isDebug){
+        if (LoggerService.isDebug) {
             logs
-                .forEach((log: any )=> {           
+                .forEach((log: any) => {
                     console.log(log)
                 });
         }
     }
 }
 
-const Logger = new LoggerService()
+const Logger = new LoggerService();
 
 export { Logger };

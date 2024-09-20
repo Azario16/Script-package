@@ -2,6 +2,7 @@ import { isExtensionContext } from '../../service/chrome-runtime.service';
 import { Logger } from '../../service/logger/logger.service';
 import { ACTIONS } from '../actions';
 import { Getter } from './getter.interface';
+import { load } from 'cheerio';
 
 const generalGet = async (url: string, methodOption: any) => {
     const get: any = await fetch(url, methodOption)
@@ -134,6 +135,7 @@ const GetterBackground = (): Getter[] => {
             },
         },
         {
+            // OUTDATED!
             name: ACTIONS.GET_TEACHER_ID,
             call: async ({ messageValue, callback }) => {
                 const arrayResult: any = {
@@ -144,7 +146,8 @@ const GetterBackground = (): Getter[] => {
                 const resultTrmId = await generalGet(urlTeacherTrmId, {
                     method: "GET",
                     credentials: "include"
-                })
+                }).catch(err => {}) || "[]";
+
                 arrayResult['teacher-id'] = await resultTrmId.json()
 
                 callback(arrayResult)
@@ -233,20 +236,21 @@ const GetterBackground = (): Getter[] => {
                 const textHtmlResult = await resultUserNumber.text()
 
                 try {
-                    const domPars = new DOMParser()
-                    const userContactsTableTr = domPars.parseFromString(textHtmlResult, `text/html`).querySelectorAll("body > main > div:nth-child(9) > table > tbody > tr")
+                    const $ = load(textHtmlResult);
+                    const userContactsTableTr = $("body > main > div:nth-child(9) > table > tbody > tr");
 
                     const userContacts = Array.from(userContactsTableTr)
-                        .filter(userContactTableTr => {
-                            const columnName = userContactTableTr.querySelector('th')?.innerHTML.replace(/\s+/g, '');
+                        .filter((userContactTableTr: any) => {
+                            const columnName = userContactTableTr.find('th').text().replace(/\s+/g, '');
+                            debugger;
                             if (columnName && CONTACT_COLUMN_NAME.includes(columnName)) {
                                 return true;
                             }
                         })
-                        .map(userContactTableTr => {
-                            const contact = userContactTableTr?.querySelector('span > span')?.innerHTML.replace(/\s+/g, '');
-                            const dataContactIdNumber = userContactTableTr.querySelector('span')?.getAttribute('data-contact-id')?.replace(/\s+/g, '');
-                            const isGeneralContact = userContactTableTr.querySelector('th')?.innerHTML.replace(/\s+/g, '') === GENERAL_CONTACT;
+                        .map((userContactTableTr: any) => {
+                            const contact = userContactTableTr?.find('span > span')?.text().replace(/\s+/g, '');
+                            const dataContactIdNumber = userContactTableTr.find('span')?.attribs['data-contact-id']?.replace(/\s+/g, '');
+                            const isGeneralContact = userContactTableTr.find('th')?.text().replace(/\s+/g, '') === GENERAL_CONTACT;
 
                             return {
                                 id: dataContactIdNumber,
@@ -298,9 +302,10 @@ const GetterBackground = (): Getter[] => {
                 }
                 try {
                     const textHtml = arrayResult['doc'];
-                    const domPars = new DOMParser()
-                    const loginLinks: any = domPars.parseFromString(textHtml, `text/html`).querySelectorAll("[value^='https://id.skyeng.ru/auth/login-link/']")
-                    const last = loginLinks[loginLinks.length - 1].value;
+
+                    const $ = load(textHtml);
+                    const loginLinks: any = $("[value^='https://id.skyeng.ru/auth/login-link/']");
+                    const last = loginLinks[loginLinks.length - 1].attribs.value;
                     json.loginLink = last
                     json.success = true
                 } catch (err) {
