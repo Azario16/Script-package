@@ -27,7 +27,7 @@ const App = (props: any) => {
 
     const updateOperatorIdNameAndEventName = () => {
         sendMessage(ACTIONS.GET_AUTOFAQ_PEOPLE_LIST, '', (result: any) => {
-            const operIdName = result['people-list'].map((value: any) => {
+            const operIdName = (result['people-list'] || []).map((value: any) => {
                 return {
                     'name': value.fullName !== null ? value.fullName : value.kb,
                     'id': value.id !== null ? value.id : value.kb

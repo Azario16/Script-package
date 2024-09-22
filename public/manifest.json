@@ -1,6 +1,6 @@
 {
   "name": "Script Package",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "Сборник скриптов для быстрого доступа к ресурсам: ://.skyeng.ru/* , ://datsy.ru/, ://skyeng.autofaq.ai/, ://skyeng.omnidesk.ru/*",
   "manifest_version": 3,
   "icons": {
@@ -59,7 +59,8 @@
   "permissions": [
     "cookies",
     "webRequest",
-    "activeTab"
+    "activeTab",
+    "storage"
   ],
   "host_permissions": [
     "https://crm2.skyeng.ru/*",

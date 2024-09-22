@@ -79,11 +79,11 @@ class Reservation extends React.Component<object, {
         setInterval(this.getCurrentState.bind(this), 15000)
     }
 
-
     async getCurrentState() {
         sendMessage(ACTIONS.GET_AUTOFAQ_PEOPLE, '', (result: any) => {
-            Logger.debug(result)
-            const operState = result['people-list'].onOperator
+            Logger.debug(result);
+
+            const operState = this.mutateToUniquePersons(result['people-list'].onOperator);
             const unAssigned = result['people-list'].unAssigned
             const operStatus = this.parseStatus(operState)
             const operStatusRender = Object.assign({}, operStatus.Online, operStatus.Busy, operStatus.Pause);
@@ -97,6 +97,7 @@ class Reservation extends React.Component<object, {
             })
         })
     }
+
     parseStatus(data: any) {
         const online = this.parse('Online', data);
         const busy = this.parse('Busy', data);
@@ -151,8 +152,10 @@ class Reservation extends React.Component<object, {
                 }
             }
         });
+
         return userList;
     }
+
     colorUndistributed() {
         if (this.state.groupCnt < 5) {
             return "bg-success"
@@ -160,6 +163,7 @@ class Reservation extends React.Component<object, {
             return "bg-danger"
         }
     }
+
     checkSumContTematicGroup(unAssigned: any) {
         const listCntUndistributed: any = [];
         unAssigned.forEach((unAssignedBody: any) => {
@@ -175,6 +179,7 @@ class Reservation extends React.Component<object, {
         const summCnt = listCntUndistributed.reduce((sum: any, current: any) => sum + current, 0);
         return summCnt;
     }
+
     render() {
         const { error, isLoaded } = this.state;
         if (error) {
@@ -240,6 +245,29 @@ class Reservation extends React.Component<object, {
             )
 
         }
+    }
+
+    private mutateToUniquePersons(array: any) {
+        return Object.values(
+            array.reduce((result: any, person: any) => {
+                const id = person.operator.id;
+            
+                if (!result.hasOwnProperty(id)) {
+                    result[id] = person;
+                    return result;
+                }
+
+                if (
+                    (result[id].aCnt === 0 && person.aCnt > 0) ||
+                    (result[id].cCnt === 0 && person.cCnt > 0)
+                ) {
+                    result[id] = person;
+                    return result;
+                }
+            
+                return result;
+            }, {})
+        );
     }
 }
 
