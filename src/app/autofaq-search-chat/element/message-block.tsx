@@ -73,14 +73,14 @@ const MessageBlock = (props: any) => {
         <div className="chat-messages">
             <div className="d-flex flex-row justify-content-between ">
 
-                <button type="button" className="btn btn-info mb-3 padding-btn-0 fs-6 text-light" id="change_week"
+                <button type="button" className="btn btn-info mb-3 fs-6 text-light" id="change_week"
                     onClick={async () => {
                         navigator.clipboard.writeText(`https://hdi.skyeng.ru/autofaq/conversation/-11/${props.chatId}`);
                     }}
                 >ссылка на чат hdi</button>
 
                 {window.location.hostname === 'skyeng.autofaq.ai' &&
-                    <button type="button" className="btn btn-warning mb-3 padding-btn-0 fs-6 text-light" id="change_week"
+                    <button type="button" className="btn btn-warning mb-3 fs-6 text-light" id="change_week"
                         onClick={openModalElenet}
                     >Забрать</button>
                 }

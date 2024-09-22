@@ -66,18 +66,11 @@ const ChatListOperator = (props: any) => {
     return (
         <div className="">
             <div className="d-flex flex-row justify-content-between ">
-
-                <button type="button" className="btn btn-secondary mb-3 padding-btn-0 fs-6 text-light" id="change_week"
+                <button type="button" className="btn btn-secondary mb-3 fs-6 text-light" id="change_week"
                     onClick={async () => {
                         navigate("/chat-list");
                     }}
                 >вернуться к поиску</button>
-
-                {/* <button type="button" className="btn btn-secondary mb-3 padding-btn-0 fs-6 text-light" id="change_week"
-                    onClick={async () => {
-                        Logger.debug(buttonCollapseRef)
-                    }}
-                >тест</button> */}
             </div>
             <div className="table table-hover  text-center w-100 overflow-auto bg-dark">
                 <div>

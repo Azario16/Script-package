@@ -187,7 +187,9 @@ class Reservation extends React.Component<object, {
                     <li className="ant-menu-submenu ant-menu-submenu-inline ant-menu-submenu-active" role="PeopleList">
                         <div>
                             <div className="ant-menu-item ant-menu-item-only-child">
-                                <div className={this.colorUndistributed() + " asign-slot-box fs-el-0_7 badge rounded-pill col-auto row g-0 badge border border-3 border-border-green"}>{this.state.groupCnt}</div>
+                                <div className={this.colorUndistributed() + " asign-slot-box fs-el-0_7 badge rounded-pill col-auto row g-0 badge border border-3 border-border-green"}>
+                                    <div style={{ top: "1px", position: "relative" }}>{this.state.groupCnt}</div>
+                                </div>
                                 <span className="">
                                     <span className="ant-badge user-select-none  mx-1">Нераспред</span>
                                 </span>
