@@ -572,6 +572,9 @@ const GetterBackground = (): Getter[] => {
             name: ACTIONS.GET_AUTOFAQ_OPERATOR_INFO,
             call: async ({ callback }: { callback: any }) => {
                 if (isExtensionContext()) {
+                    const getPeople = GetterBackground().find((getter: any) => getter.name === ACTIONS.GET_AUTOFAQ_PEOPLE);
+                    const people = await (new Promise(r => getPeople?.call({ callback: r } as any))) as any;
+
                     chrome.cookies.get({ "url": "http://skyeng.autofaq.ai", "name": "jwt" }, function (cookie: any) {
                         if (callback) {
                             const base64Url = cookie.value.split('.')[1];
@@ -579,9 +582,18 @@ const GetterBackground = (): Getter[] => {
                             const jsonPayload: any = decodeURIComponent(WINDOW.atob(base64).split('').map(function (c) {
                                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                             }).join(''));
-                            Logger.debug(jsonPayload)
-                            const user = JSON.parse(jsonPayload).user
+
+                            Logger.debug(jsonPayload);
+
+                            const user = JSON.parse(jsonPayload).user;
+                            const operator = people['people-list'].onOperator.find((o: any) => o.operator.id === user.id);
+
+                            user.groupList = [operator.groupId || undefined];
+                            user.settings = {};
+                            user.settings.knowledgeBases = operator?.operator?.kbs || [];
+
                             Logger.debug(user)
+
                             callback(user);
                         }
                     });

@@ -111,18 +111,32 @@ class Reservation extends React.Component<object, {
         return parseResult
     }
 
-    checkGroupOperator(knowledgeBases: any, groupValue: any) {
-        let state = false
-        this.state.userKbs.forEach((element: any) => {
-            if (!state) {
-                state = knowledgeBases.includes(element);
-            }
-        });
-
-        if(!state && !knowledgeBases.length){
-            state = this.state.userGroup === groupValue
+    checkGroupOperator(person: {
+        groupId: string,
+        groupsId?: Array<string>,
+        operator: {
+            kbs: Array<number>
         }
-        return state
+    }) {
+        let state = false;
+
+        for (let i = 0; i < this.state.userKbs.length; i++) {
+            if (person.operator.kbs.includes(this.state.userKbs[i])) {
+                state = true;
+                break;
+            }
+        }
+
+        if(!state || !person.operator.kbs.length){
+            state = this.state.userGroup === person.groupId;
+
+            const groupsId = person.groupsId || [];
+            if (!state && groupsId.length) {
+                state = groupsId.includes(this.state.userGroup);
+            }
+        }
+
+        return state;
     }
 
     parse(status: any, data: any) {
@@ -133,7 +147,7 @@ class Reservation extends React.Component<object, {
         data.forEach((person: any, index: any) => {
             // AF вместо 0 чатов отдает null, тут условие чтобы были нули
             if (person.operator !== null) {
-                if (person.operator.status === status && this.checkGroupOperator(person.operator.kbs, person.groupId)) {
+                if (person.operator.status === status && this.checkGroupOperator(person)) {
                     if (person.aCnt === null) {
                         data[index].aCnt = 0;
                     }
@@ -248,26 +262,31 @@ class Reservation extends React.Component<object, {
     }
 
     private mutateToUniquePersons(array: any) {
-        return Object.values(
+        const result = Object.values(
             array.reduce((result: any, person: any) => {
                 const id = person.operator.id;
             
                 if (!result.hasOwnProperty(id)) {
                     result[id] = person;
+                    result[id].groupsId = [person.groupId];
                     return result;
                 }
 
-                if (
-                    (result[id].aCnt === 0 && person.aCnt > 0) ||
-                    (result[id].cCnt === 0 && person.cCnt > 0)
-                ) {
-                    result[id] = person;
+                if ( person.aCnt > 0 || person.cCnt > 0) {
+                    result[id].aCnt += person.aCnt;
+                    result[id].cCnt += person.cCnt;
+                    result[id].groupsId.push(person.groupId);
+                    result[id].operator.kbs = [...new Set(result[id].operator.kbs.concat(person.operator.kbs))];
+                    result[id].operator.status = result[id].operator.status === "Online" ? result[id].operator.status : person.operator.status;
+
                     return result;
                 }
             
                 return result;
             }, {})
         );
+
+        return result;
     }
 }
 
