@@ -4,7 +4,7 @@ import { renderApp } from './core/create-render-app'
 import ModalWindow from './app/modal-window'
 import './app/dark-mode'
 import UserInfo from './app/user-info'
-import Reservation from './app/autofaq-people'
+import { AutoFaqPeople } from './app/autofaq-people'
 import SearchChat from './app/autofaq-search-chat';
 import TimTableInfo from './app/time-table';
 import СreateCmsButtonfrom from './app/vimbox-cms'
@@ -41,6 +41,10 @@ const App: any = () => {
 
   switch (window.location.hostname) {
     case 'localhost':
+      const body = document.querySelector('body')
+      if (body) {
+        body.style.background = 'black'
+      }
       renderApp(<UserInfo />, 'main')
 
       renderApp(
@@ -48,6 +52,12 @@ const App: any = () => {
           <SearchChat styleElement="position-fixed top-0 end-0" />
         </ShadowView>
         , 'search-chat'
+      )
+      renderApp(
+        <ShadowView>
+          <AutoFaqPeople />
+        </ShadowView>
+        , 'people-list'
       )
 
       break;
@@ -106,14 +116,14 @@ const App: any = () => {
 
           setTimeout(async function () {
             createDivIdForReact();
-  
+
             const root = ReactDOM.createRoot(
               document.getElementById('people_head') as HTMLElement
             );
-  
+
             root.render(
               <ShadowView>
-                <Reservation />
+                <AutoFaqPeople />
               </ShadowView>
             );
           }, 3000);
