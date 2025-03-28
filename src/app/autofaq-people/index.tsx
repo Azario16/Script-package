@@ -85,7 +85,7 @@ export class AutoFaqPeople extends React.Component<object, {
         })
 
 
-        setInterval(this.getCurrentState.bind(this), 1500)
+        setInterval(this.getCurrentState.bind(this), 10000)
     }
 
     async getCurrentState() {
