@@ -4,37 +4,48 @@ import { ACTIONS } from "../../chrome/actions";
 
 import UserStatus from './element/user-statuc-block'
 import { Logger } from '../../service/logger/logger.service';
+import { OperatorInfo } from '../../models/autofaq/operator-info.model';
+import { OnOperator, OperatorsStatisticCurrentStateResponse, OperatorStatus, UnAssigned } from '../../models/autofaq/operator-statistic.model';
 
-interface ClassValue {
+export interface ClassValue {
     status: string,
     color: string,
 }
 
-class Reservation extends React.Component<object, {
+interface IOperatorStatus {
+    online: OnOperator[];
+    busy: OnOperator[];
+    pause: OnOperator[];
+}
+
+export class AutoFaqPeople extends React.Component<object, {
     userKbs: any,
-    userId: any,
     userGroup: any,
     error: any,
     data: any,
     isLoadedData: boolean,
     isLoaded: boolean,
-    operStatus: any,
-    ArrPeople: any,
-    groupCnt: 0,
+    operatorStatus: IOperatorStatus,
+    groupCnt: number,
     class: Array<ClassValue>,
 }> {
+
+    private userId = ''
+
     constructor(props: any) {
         super(props);
         this.state = {
             userKbs: [],
-            userId: null,
             userGroup: null,
             error: null,
             data: [],
             isLoadedData: false,
             isLoaded: false,
-            operStatus: [],
-            ArrPeople: [],
+            operatorStatus: {
+                online: [],
+                busy: [],
+                pause: []
+            },
             groupCnt: 0,
             class: [
                 {
@@ -67,47 +78,52 @@ class Reservation extends React.Component<object, {
     }
 
     componentDidMount() {
-        sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: any) => {
+        sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: OperatorInfo) => {
             Logger.debug(result)
-            this.setState({
-                userKbs: result.settings.knowledgeBases,
-                userId: result.id,
-                userGroup: result.groupList[0]
-            })
+            this.userId = result.id
+            this.getCurrentState()
         })
-        this.getCurrentState()
-        setInterval(this.getCurrentState.bind(this), 15000)
+
+
+        setInterval(this.getCurrentState.bind(this), 1500)
     }
 
     async getCurrentState() {
-        sendMessage(ACTIONS.GET_AUTOFAQ_PEOPLE, '', (result: any) => {
+        sendMessage(ACTIONS.GET_AUTOFAQ_PEOPLE, '', (result: OperatorsStatisticCurrentStateResponse) => {
             Logger.debug(result);
 
-            const operState = this.mutateToUniquePersons(result['people-list'].onOperator);
-            const unAssigned = result['people-list'].unAssigned
-            const operStatus = this.parseStatus(operState)
-            const operStatusRender = Object.assign({}, operStatus.Online, operStatus.Busy, operStatus.Pause);
-            const cCntUndistributedGroup = this.checkSumContTematicGroup(unAssigned)
+            const currentOperator = this.findCurrentOnOperator(result)
+            if (!currentOperator) {
+                return;
+            }
+
+            const operatorInGroup = this.findOnOperatorInGroup(currentOperator.groupId, result)
+            const operatorNotOffline = this.findOnOperatorNotOffline(operatorInGroup)
+
+            const operatorStatus = this.parseStatus(operatorNotOffline)
+
+            const countUnAssignedGroup = this.getCountUnAssignedGroup(currentOperator.groupId, result.unAssigned)
             this.setState({
                 isLoaded: true,
-                data: operState,
-                operStatus: operStatus,
-                groupCnt: cCntUndistributedGroup,
-                ArrPeople: operStatusRender
+                operatorStatus: operatorStatus,
+                groupCnt: countUnAssignedGroup,
             })
         })
     }
 
-    parseStatus(data: any) {
-        const online = this.parse('Online', data);
-        const busy = this.parse('Busy', data);
-        const pause = this.parse('Pause', data);
+    parseStatus(onOperators: OnOperator[]): IOperatorStatus {
+        const online = this.parse('Online', onOperators);
+        const busy = this.parse('Busy', onOperators);
+        const pause = this.parse('Pause', onOperators);
+
+        console.log(online, busy, pause)
 
         const parseResult = {
-            Online: online,
-            Busy: busy,
-            Pause: pause
+            online: online,
+            busy: busy,
+            pause: pause
         }
+
         return parseResult
     }
 
@@ -127,7 +143,7 @@ class Reservation extends React.Component<object, {
             }
         }
 
-        if(!state || !person.operator.kbs.length){
+        if (!state || !person.operator.kbs.length) {
             state = this.state.userGroup === person.groupId;
 
             const groupsId = person.groupsId || [];
@@ -139,35 +155,9 @@ class Reservation extends React.Component<object, {
         return state;
     }
 
-    parse(status: any, data: any) {
-        const userList: any = []
-        let userInfo = {};
-        // статус операторов на английском, решил в массиве сразу интерпретировать а не в момент когда буду делать строку для отправки
-        // используется для бота, здесь просто оставлю возможно пригодится
-        data.forEach((person: any, index: any) => {
-            // AF вместо 0 чатов отдает null, тут условие чтобы были нули
-            if (person.operator !== null) {
-                if (person.operator.status === status && this.checkGroupOperator(person)) {
-                    if (person.aCnt === null) {
-                        data[index].aCnt = 0;
-                    }
-                    if (person.cCnt === null) {
-                        data[index].cCnt = 0;
-                    }
-                    userInfo = {
-                        name: person.operator.fullName,
-                        id: person.operator.id,
-                        stats: status,
-                        aCnt: data[index].aCnt,
-                        cCnt: data[index].cCnt,
-                        sCnt: data[index].aCnt + data[index].cCnt,
-                    }
-                    userList.push(userInfo);
-                }
-            }
-        });
-
-        return userList;
+    parse(status: OperatorStatus, onOperators: OnOperator[]) {
+        return onOperators
+            .filter(onOperator => onOperator.operator.status === status)
     }
 
     colorUndistributed() {
@@ -178,20 +168,16 @@ class Reservation extends React.Component<object, {
         }
     }
 
-    checkSumContTematicGroup(unAssigned: any) {
-        const listCntUndistributed: any = [];
-        unAssigned.forEach((unAssignedBody: any) => {
-            if (this.state.userKbs.includes(unAssignedBody.kb)) {
-                listCntUndistributed.push(unAssignedBody.count)
-            } else if(!this.state.userKbs.length){
-                if (this.state.userGroup == unAssignedBody.groupId) {
-                    listCntUndistributed.push(unAssignedBody.count)
-                }
-            }
-        });
-        Logger.debug(listCntUndistributed)
-        const summCnt = listCntUndistributed.reduce((sum: any, current: any) => sum + current, 0);
-        return summCnt;
+    getCountUnAssignedGroup(groupId: string, unAssigneds: UnAssigned[]): number {
+
+        const unAssigned = unAssigneds.find(value => value.groupId === groupId)
+        if(!unAssigned){
+            return 0;
+        }
+
+        Logger.debug(unAssigned.count)
+
+        return unAssigned.count;
     }
 
     render() {
@@ -210,7 +196,7 @@ class Reservation extends React.Component<object, {
                                     <div style={{ top: "1px", position: "relative" }}>{this.state.groupCnt}</div>
                                 </div>
                                 <span className="">
-                                    <span className="ant-badge user-select-none  mx-1">Нераспред</span>
+                                    <span className="ant-badge user-select-none  mx-1">Очередь</span>
                                 </span>
                             </div>
                             <div className="ant-menu-item ant-menu-item-only-child " data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -220,33 +206,33 @@ class Reservation extends React.Component<object, {
                                 <div className="card card-body ant-menu-dark ant-menu ant-menu-sub ant-menu-inline">
                                     <div className="">
                                         {
-                                            this.state.operStatus.Online.map((body: any) => {
+                                            this.state.operatorStatus.online.map((body) => {
                                                 const status = this.state.class.find((value: ClassValue) => {
-                                                    return value.status === body.stats
+                                                    return value.status === body.operator.status
                                                 })
                                                 return (
-                                                    <UserStatus body={body} status={status} searchChat={this.openModalElenet.bind(this, body.id)} key={body.name} />
+                                                    <UserStatus body={body} status={status} searchChat={this.openModalElenet.bind(this, body.operator.id)} key={body.operator.fullName} />
                                                 )
                                             })
                                         }
 
                                         {
-                                            this.state.operStatus.Busy.map((body: any) => {
+                                            this.state.operatorStatus.busy.map((body) => {
                                                 const status = this.state.class.find((value: ClassValue) => {
-                                                    return value.status === body.stats
+                                                    return value.status === body.operator.status
                                                 })
                                                 return (
-                                                    <UserStatus body={body} status={status} searchChat={this.openModalElenet.bind(this, body.id)} key={body.name} />
+                                                    <UserStatus body={body} status={status} searchChat={this.openModalElenet.bind(this, body.operator.id)} key={body.operator.fullName} />
                                                 )
                                             })
                                         }
                                         {
-                                            this.state.operStatus.Pause.map((body: any) => {
+                                            this.state.operatorStatus.pause.map((body) => {
                                                 const status = this.state.class.find((value: ClassValue) => {
-                                                    return value.status === body.stats
+                                                    return value.status === body.operator.status
                                                 })
                                                 return (
-                                                    <UserStatus body={body} status={status} searchChat={this.openModalElenet.bind(this, body.id)} key={body.name} />
+                                                    <UserStatus body={body} status={status} searchChat={this.openModalElenet.bind(this, body.operator.id)} key={body.operator.fullName} />
                                                 )
                                             })
                                         }
@@ -261,33 +247,19 @@ class Reservation extends React.Component<object, {
         }
     }
 
-    private mutateToUniquePersons(array: any) {
-        const result = Object.values(
-            array.reduce((result: any, person: any) => {
-                const id = person.operator.id;
-            
-                if (!result.hasOwnProperty(id)) {
-                    result[id] = person;
-                    result[id].groupsId = [person.groupId];
-                    return result;
-                }
+    private findCurrentOnOperator(operatorsStatisticCurrentState: OperatorsStatisticCurrentStateResponse): OnOperator | null {
+        const onOperator = operatorsStatisticCurrentState.onOperator
+            .find(onOperator => onOperator.operator.id === this.userId)
+        return onOperator ? onOperator : null
+    }
 
-                if ( person.aCnt > 0 || person.cCnt > 0) {
-                    result[id].aCnt += person.aCnt;
-                    result[id].cCnt += person.cCnt;
-                    result[id].groupsId.push(person.groupId);
-                    result[id].operator.kbs = [...new Set(result[id].operator.kbs.concat(person.operator.kbs))];
-                    result[id].operator.status = result[id].operator.status === "Online" ? result[id].operator.status : person.operator.status;
+    private findOnOperatorInGroup(groupId: string, operatorsStatisticCurrentState: OperatorsStatisticCurrentStateResponse): OnOperator[] {
+        return operatorsStatisticCurrentState.onOperator
+            .filter(onOperator => onOperator.groupId === groupId)
+    }
 
-                    return result;
-                }
-            
-                return result;
-            }, {})
-        );
-
-        return result;
+    private findOnOperatorNotOffline(onOperators: OnOperator[]): OnOperator[] {
+        return onOperators
+            .filter(onOperator => onOperator.operator.status !== "Offline")
     }
 }
-
-export default Reservation;

@@ -8,6 +8,8 @@ import getTaskHashAvailable from "./mock-app-list/get-task-hash-available.json";
 import getUserContactPhone from "./mock-app-list/get-user-contact-phone.json";
 import getUserContacts from "./mock-app-list/get-user-contacts.json";
 import geAllPersonalData from "./mock-app-list/get-all-personal-data.json";
+import { GetAutoFaqChatListOperator } from "./mock-app-list/get-autofaq-chat-list-operator";
+import { GetAutoFaqOperatorInfo } from "./mock-app-list/get-autofaq-operator-info";
 
 const mockResponseList = [
     {
@@ -60,7 +62,7 @@ const mockResponseList = [
     },
     {
         name: ACTIONS.GET_AUTOFAQ_PEOPLE,
-        response: {}
+        response: GetAutoFaqChatListOperator
     },
     {
         name: ACTIONS.GET_AUTOFAQ_PEOPLE_LIST,
@@ -98,7 +100,7 @@ const mockResponseList = [
     },
     {
         name: ACTIONS.GET_AUTOFAQ_OPERATOR_INFO,
-        response: {}
+        response: GetAutoFaqOperatorInfo
     },
 ]
 

@@ -2,7 +2,6 @@ import { isExtensionContext } from '../../service/chrome-runtime.service';
 import { Logger } from '../../service/logger/logger.service';
 import { ACTIONS } from '../actions';
 import { Getter } from './getter.interface';
-import { load } from 'cheerio';
 
 const generalGet = async (url: string, methodOption: any) => {
     const get: any = await fetch(url, methodOption)
@@ -237,8 +236,8 @@ const GetterBackground = (): Getter[] => {
                 const textHtmlResult = await resultUserNumber.text()
 
                 try {
-                    const $ = load(textHtmlResult);
-                    const userContactsTableTr = $("body > main > div:nth-child(9) > table > tbody > tr");
+                    const domPars = new DOMParser()
+                    const userContactsTableTr = domPars.parseFromString(textHtmlResult, `text/html`).querySelectorAll("body > main > div:nth-child(9) > table > tbody > tr")
 
                     const userContacts = Array.from(userContactsTableTr)
                         .filter((userContactTableTr: any) => {
@@ -304,9 +303,10 @@ const GetterBackground = (): Getter[] => {
                 try {
                     const textHtml = arrayResult['doc'];
 
-                    const $ = load(textHtml);
-                    const loginLinks: any = $("[value^='https://id.skyeng.ru/auth/login-link/']");
-                    const last = loginLinks[loginLinks.length - 1].attribs.value;
+                    const domPars = new DOMParser()
+                    const loginLinks: any = domPars.parseFromString(textHtml, `text/html`).querySelectorAll("[value^='https://id.skyeng.ru/auth/login-link/']")
+                    const last = loginLinks[loginLinks.length - 1].value;
+
                     json.loginLink = last
                     json.success = true
                 } catch (err) {
@@ -572,9 +572,6 @@ const GetterBackground = (): Getter[] => {
             name: ACTIONS.GET_AUTOFAQ_OPERATOR_INFO,
             call: async ({ callback }: { callback: any }) => {
                 if (isExtensionContext()) {
-                    const getPeople = GetterBackground().find((getter: any) => getter.name === ACTIONS.GET_AUTOFAQ_PEOPLE);
-                    const people = await (new Promise(r => getPeople?.call({ callback: r } as any))) as any;
-
                     chrome.cookies.get({ "url": "http://skyeng.autofaq.ai", "name": "jwt" }, function (cookie: any) {
                         if (callback) {
                             const base64Url = cookie.value.split('.')[1];
@@ -582,18 +579,9 @@ const GetterBackground = (): Getter[] => {
                             const jsonPayload: any = decodeURIComponent(WINDOW.atob(base64).split('').map(function (c) {
                                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                             }).join(''));
-
-                            Logger.debug(jsonPayload);
-
-                            const user = JSON.parse(jsonPayload).user;
-                            const operator = people['people-list'].onOperator.find((o: any) => o.operator.id === user.id);
-
-                            user.groupList = [operator.groupId || undefined];
-                            user.settings = {};
-                            user.settings.knowledgeBases = operator?.operator?.kbs || [];
-
+                            Logger.debug(jsonPayload)
+                            const user = JSON.parse(jsonPayload).user
                             Logger.debug(user)
-
                             callback(user);
                         }
                     });
