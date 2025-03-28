@@ -2,7 +2,6 @@ import { isExtensionContext } from '../../service/chrome-runtime.service';
 import { Logger } from '../../service/logger/logger.service';
 import { ACTIONS } from '../actions';
 import { Getter } from './getter.interface';
-import { load } from 'cheerio';
 
 const generalGet = async (url: string, methodOption: any) => {
     const get: any = await fetch(url, methodOption)
@@ -237,8 +236,8 @@ const GetterBackground = (): Getter[] => {
                 const textHtmlResult = await resultUserNumber.text()
 
                 try {
-                    const $ = load(textHtmlResult);
-                    const userContactsTableTr = $("body > main > div:nth-child(9) > table > tbody > tr");
+                    const domPars = new DOMParser()
+                    const userContactsTableTr = domPars.parseFromString(textHtmlResult, `text/html`).querySelectorAll("body > main > div:nth-child(9) > table > tbody > tr")
 
                     const userContacts = Array.from(userContactsTableTr)
                         .filter((userContactTableTr: any) => {
@@ -304,9 +303,10 @@ const GetterBackground = (): Getter[] => {
                 try {
                     const textHtml = arrayResult['doc'];
 
-                    const $ = load(textHtml);
-                    const loginLinks: any = $("[value^='https://id.skyeng.ru/auth/login-link/']");
-                    const last = loginLinks[loginLinks.length - 1].attribs.value;
+                    const domPars = new DOMParser()
+                    const loginLinks: any = domPars.parseFromString(textHtml, `text/html`).querySelectorAll("[value^='https://id.skyeng.ru/auth/login-link/']")
+                    const last = loginLinks[loginLinks.length - 1].value;
+
                     json.loginLink = last
                     json.success = true
                 } catch (err) {
