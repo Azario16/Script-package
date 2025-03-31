@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { sendMessage } from "../../../chrome/utils";
 import { ACTIONS } from "../../../chrome/actions";
 import { Logger } from '../../../service/logger/logger.service';
+import { DoomParserService } from '../../../service/dom-parser.service';
 
 function capitalizeFirstLetter(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -36,7 +37,16 @@ function ButtonBar(params: any) {
             Logger.debug(result)
             if (result.success && effectStatus.current) {
                 Logger.debug('Логин получено и скопирован')
-                navigator.clipboard.writeText(result.loginLink)
+                
+                const loginLink = DoomParserService.getLoginLinkFromHtml(result.textHtml)
+
+                if(!loginLink){
+                    Logger.debug('Логин пустой')
+                    setButtonColorLL('secondary')
+                    return;
+                }
+
+                navigator.clipboard.writeText(loginLink)
                 setButtonColorLL('success')
                 setTimeout(() => {
                     setButtonColorLL('secondary')
