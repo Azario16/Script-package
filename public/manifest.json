@@ -1,6 +1,6 @@
 {
   "name": "Script Package",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "Сборник скриптов для быстрого доступа к ресурсам: ://.skyeng.ru/* , ://datsy.ru/, ://skyeng.autofaq.ai/, ://skyeng.omnidesk.ru/*",
   "manifest_version": 3,
   "icons": {

@@ -297,19 +297,17 @@ const GetterBackground = (): Getter[] => {
                 arrayResult['doc'] = await resultLoginLinkPost.text()
 
                 const json = {
-                    'loginLink': '',
+                    'textHtml': '',
                     'success': true
                 }
                 try {
                     const textHtml = arrayResult['doc'];
+                    Logger.debug(textHtml)
 
-                    const domPars = new DOMParser()
-                    const loginLinks: any = domPars.parseFromString(textHtml, `text/html`).querySelectorAll("[value^='https://id.skyeng.ru/auth/login-link/']")
-                    const last = loginLinks[loginLinks.length - 1].value;
-
-                    json.loginLink = last
+                    json.textHtml = textHtml
                     json.success = true
                 } catch (err) {
+                    Logger.debug(err)
                     json.success = false
                 }
                 callback(json)

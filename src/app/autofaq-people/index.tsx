@@ -116,8 +116,6 @@ export class AutoFaqPeople extends React.Component<object, {
         const busy = this.parse('Busy', onOperators);
         const pause = this.parse('Pause', onOperators);
 
-        console.log(online, busy, pause)
-
         const parseResult = {
             online: online,
             busy: busy,
