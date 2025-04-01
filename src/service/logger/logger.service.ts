@@ -1,5 +1,5 @@
 class LoggerService {
-    static isDebug = false;
+    static isDebug = true;
 
     constructor() {
         this.loadDebugSetting();
@@ -28,7 +28,7 @@ class LoggerService {
 
     debug(...logs: any): void {
         if (LoggerService.isDebug) {
-            logs.forEach((log: any) => console.log(log));
+            logs.forEach((log: any) => console.log("ScriptPackageDebug: ", log));
         }
     }
 }

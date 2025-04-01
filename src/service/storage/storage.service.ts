@@ -1,7 +1,7 @@
 export default class Storage {
     static async read(key: string): Promise<any> {
         return new Promise((resolve, _) => {
-            chrome.storage.local.get([key], function (result) {
+            chrome.storage.local.get([key], (result) => {
                 resolve(result[key]);
             });
         });
@@ -9,7 +9,7 @@ export default class Storage {
     
     static async write(key: string, value: any): Promise<void> {
         return new Promise((resolve, _) => {
-            chrome.storage.local.set({ [key]: value }, function () {
+            chrome.storage.local.set({ [key]: value }, () => {
                 resolve();
             });
         });

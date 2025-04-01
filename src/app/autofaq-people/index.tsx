@@ -79,7 +79,7 @@ export class AutoFaqPeople extends React.Component<object, {
 
     componentDidMount() {
         sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: OperatorInfo) => {
-            Logger.debug(result)
+            Logger.debug('AutoFaqPeople ', result)
             this.userId = result.id
             this.getCurrentState()
         })
@@ -90,14 +90,17 @@ export class AutoFaqPeople extends React.Component<object, {
 
     async getCurrentState() {
         sendMessage(ACTIONS.GET_AUTOFAQ_PEOPLE, '', (result: OperatorsStatisticCurrentStateResponse) => {
-            Logger.debug(result);
+            Logger.debug('GET_AUTOFAQ_PEOPLE', result);
 
             const currentOperator = this.findCurrentOnOperator(result)
+            Logger.debug('currentOperator', currentOperator);
             if (!currentOperator) {
                 return;
             }
+            Logger.debug('currentOperator', currentOperator);
 
             const operatorInGroup = this.findOnOperatorInGroup(currentOperator.groupId, result)
+            Logger.debug(operatorInGroup);
             const operatorNotOffline = this.findOnOperatorNotOffline(operatorInGroup)
 
             const operatorStatus = this.parseStatus(operatorNotOffline)

@@ -8,8 +8,6 @@ const generalGet = async (url: string, methodOption: any) => {
     return get
 }
 
-const WINDOW = globalThis as unknown as (Window & typeof globalThis);
-
 const GetterBackground = (): Getter[] => {
     return [
         {
@@ -347,20 +345,16 @@ const GetterBackground = (): Getter[] => {
         {
             name: ACTIONS.GET_AUTOFAQ_PEOPLE,
             call: async ({ callback }) => {
-                const arrayResult: any = {
-                    'people-list': {},
-                }
-
                 const urlCurrentList = `https://skyeng.autofaq.ai/api/operators/statistic/currentState`;
                 const resultCurrentList = await generalGet(urlCurrentList, {
                     method: "GET",
                     credentials: "include"
                 })
                 const currentList = await resultCurrentList.json()
-                arrayResult['people-list'] = currentList
 
-                callback(arrayResult)
-                return arrayResult
+                Logger.debug(ACTIONS.GET_AUTOFAQ_PEOPLE, currentList)
+                callback(currentList)
+                return currentList
             }
         },
         {
@@ -570,17 +564,10 @@ const GetterBackground = (): Getter[] => {
             name: ACTIONS.GET_AUTOFAQ_OPERATOR_INFO,
             call: async ({ callback }: { callback: any }) => {
                 if (isExtensionContext()) {
-                    chrome.cookies.get({ "url": "http://skyeng.autofaq.ai", "name": "jwt" }, function (cookie: any) {
+                    chrome.storage.local.get('autofaq-user', (data) => {
                         if (callback) {
-                            const base64Url = cookie.value.split('.')[1];
-                            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                            const jsonPayload: any = decodeURIComponent(WINDOW.atob(base64).split('').map(function (c) {
-                                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                            }).join(''));
-                            Logger.debug(jsonPayload)
-                            const user = JSON.parse(jsonPayload).user
-                            Logger.debug(user)
-                            callback(user);
+                            Logger.debug(data)
+                            callback(data['autofaq-user']);
                         }
                     });
                 }
