@@ -11,6 +11,7 @@ import Home from "./page/home";
 import ChatList from './page/chat-list'
 import ChatListOperator from './page/chat-list-operator'
 import ChatId from './page/chat-id'
+import { OperatorInfo } from "../../models/autofaq/operator-info.model";
 
 
 const App = (props: any) => {
@@ -20,7 +21,7 @@ const App = (props: any) => {
 
 
     const updateSessionAndAfUserId = () => {
-        sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: any) => {
+        sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: OperatorInfo) => {
             setAfUserId(result.id)
         })
     }

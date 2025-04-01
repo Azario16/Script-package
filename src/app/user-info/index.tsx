@@ -8,6 +8,7 @@ import { sendMessage } from "../../chrome/utils";
 import { ACTIONS } from "../../chrome/actions";
 import { isExtensionContext } from '../../service/chrome-runtime.service';
 import { TaskService } from './service/task.service';
+import { OperatorInfo } from '../../models/autofaq/operator-info.model';
 
 const UserInfo: React.FC = () => {
     const [IS_EXPANDED, setIsExpanded] = useState(false)
@@ -15,7 +16,7 @@ const UserInfo: React.FC = () => {
     const [START_TASK_ASSIGN_DATE, setStartTaskAssignDate] = useState<string>('');
 
     const [USER_ID, setUserId] = useState('')
-    const [AF_OPERATOR_VALUE, setAfOperatorValue] = useState('')
+    const [AF_OPERATOR_VALUE, setAfOperatorValue] = useState<OperatorInfo>()
     const [CRM_SESSION, setCrmSession] = useState()
 
     const [mainElement, setMainelement] = useState<any>()
@@ -29,7 +30,7 @@ const UserInfo: React.FC = () => {
             const operatorCrmSession: any = result["session"]
             setCrmSession(operatorCrmSession)
 
-            sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: any) => {
+            sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: OperatorInfo) => {
                 setAfOperatorValue(result)
             })
         })

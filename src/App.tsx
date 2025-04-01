@@ -10,6 +10,7 @@ import TimTableInfo from './app/time-table';
 import СreateCmsButtonfrom from './app/vimbox-cms'
 import ShadowView from './shadow-view';
 import Storage from './service/storage/storage.service';
+import { AutoFaqUserInfoService } from './service/autofaq/user-info.servise';
 
 /* 
   Маппим приложения для конкретного домена
@@ -98,6 +99,8 @@ const App: any = () => {
 
       break;
     case 'skyeng.autofaq.ai':
+      AutoFaqUserInfoService.saveUserInfoForStore()
+    
       renderApp(<ShadowView>
         <UserInfo />
       </ShadowView>, 'main')
