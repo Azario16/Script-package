@@ -22,11 +22,19 @@ const ChatListOperator = (props: any) => {
 
     const OPERATOR_ID = useParams()
 
-    const updateChatList = () => {
+    const updateChatList = async () => {
         Logger.debug("updateChatList")
         buttonCollapseRef.current = []
         if (!!OPERATOR_ID.id) {
-            sendMessage(ACTIONS.GET_AUTOFAQ_CHAT_LIST_OPERATOR, { START, END, OPERATOR_ID }, (result: any) => {
+
+            const cfrToken = await cookieStore.get('csrf_token')
+            if (!cfrToken) {
+              return;
+            }
+
+            Logger.debug("cfrToken", cfrToken)
+
+            sendMessage(ACTIONS.GET_AUTOFAQ_CHAT_LIST_OPERATOR, { START, END, OPERATOR_ID, cfrToken: cfrToken.value }, (result: any) => {
                 const chatListUser: any = result["chat-list"]
                 if (chatListUser.items.length === 0) {
                     setChatList('0 чатов')

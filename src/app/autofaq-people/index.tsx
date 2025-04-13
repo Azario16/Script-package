@@ -30,7 +30,8 @@ export class AutoFaqPeople extends React.Component<object, {
     class: Array<ClassValue>,
 }> {
 
-    private userId = ''
+    // private userId = ''
+    private groupList: string[] = []
 
     constructor(props: any) {
         super(props);
@@ -80,32 +81,34 @@ export class AutoFaqPeople extends React.Component<object, {
     componentDidMount() {
         sendMessage(ACTIONS.GET_AUTOFAQ_OPERATOR_INFO, '', (result: OperatorInfo) => {
             Logger.debug('AutoFaqPeople ', result)
-            this.userId = result.id
+            // this.userId = result.id
+            this.groupList = result.groupList
             this.getCurrentState()
         })
 
 
-        setInterval(this.getCurrentState.bind(this), 10000)
+        setInterval(this.getCurrentState.bind(this), 5000)
     }
 
     async getCurrentState() {
         sendMessage(ACTIONS.GET_AUTOFAQ_PEOPLE, '', (result: OperatorsStatisticCurrentStateResponse) => {
+            console.log(this.groupList)
             Logger.debug('GET_AUTOFAQ_PEOPLE', result);
 
-            const currentOperator = this.findCurrentOnOperator(result)
-            Logger.debug('currentOperator', currentOperator);
-            if (!currentOperator) {
-                return;
-            }
-            Logger.debug('currentOperator', currentOperator);
+            // const currentOperator = this.findCurrentOnOperator(result)
+            // Logger.debug('currentOperator', currentOperator);
+            // if (!currentOperator) {
+            //     return;
+            // }
+            // Logger.debug('currentOperator', currentOperator);
 
-            const operatorInGroup = this.findOnOperatorInGroup(currentOperator.groupId, result)
+            const operatorInGroup = this.findOnOperatorInGroup(result)
             Logger.debug(operatorInGroup);
             const operatorNotOffline = this.findOnOperatorNotOffline(operatorInGroup)
 
             const operatorStatus = this.parseStatus(operatorNotOffline)
 
-            const countUnAssignedGroup = this.getCountUnAssignedGroup(currentOperator.groupId, result.unAssigned)
+            const countUnAssignedGroup = this.getCountUnAssignedGroup(result.unAssigned)
             this.setState({
                 isLoaded: true,
                 operatorStatus: operatorStatus,
@@ -167,18 +170,6 @@ export class AutoFaqPeople extends React.Component<object, {
         } else {
             return "bg-danger"
         }
-    }
-
-    getCountUnAssignedGroup(groupId: string, unAssigneds: UnAssigned[]): number {
-
-        const unAssigned = unAssigneds.find(value => value.groupId === groupId)
-        if(!unAssigned){
-            return 0;
-        }
-
-        Logger.debug(unAssigned.count)
-
-        return unAssigned.count;
     }
 
     render() {
@@ -248,15 +239,27 @@ export class AutoFaqPeople extends React.Component<object, {
         }
     }
 
-    private findCurrentOnOperator(operatorsStatisticCurrentState: OperatorsStatisticCurrentStateResponse): OnOperator | null {
-        const onOperator = operatorsStatisticCurrentState.onOperator
-            .find(onOperator => onOperator.operator.id === this.userId)
-        return onOperator ? onOperator : null
+    // private findCurrentOnOperator(operatorsStatisticCurrentState: OperatorsStatisticCurrentStateResponse): OnOperator | null {
+    //     const onOperator = operatorsStatisticCurrentState.onOperator
+    //         .find(onOperator => onOperator.operator.id === this.userId)
+    //     return onOperator ? onOperator : null
+    // }
+
+    private getCountUnAssignedGroup(unAssigneds: UnAssigned[]): number {
+
+        const unAssigned = unAssigneds.find(value => this.groupList.includes(value.groupId))
+        if(!unAssigned){
+            return 0;
+        }
+
+        Logger.debug(unAssigned.count)
+
+        return unAssigned.count;
     }
 
-    private findOnOperatorInGroup(groupId: string, operatorsStatisticCurrentState: OperatorsStatisticCurrentStateResponse): OnOperator[] {
+    private findOnOperatorInGroup(operatorsStatisticCurrentState: OperatorsStatisticCurrentStateResponse): OnOperator[] {
         return operatorsStatisticCurrentState.onOperator
-            .filter(onOperator => onOperator.groupId === groupId)
+            .filter(onOperator => this.groupList.includes(onOperator.groupId))
     }
 
     private findOnOperatorNotOffline(onOperators: OnOperator[]): OnOperator[] {

@@ -14,6 +14,7 @@ const ACTIONS = {
     GET_USER_CONTACT_PHONE: 'get-user-contact-number',
     GET_CURRENT_TASK: 'get-current-task',
     GET_TASK_HASH_AVAILABLE: 'get-task-hash-available',
+    GET_AUTOFAQ_CURRENT_STATE: 'get-autofaq-current_state',
     GET_AUTOFAQ_PEOPLE: 'get-autofaq-people',
     GET_AUTOFAQ_PEOPLE_LIST: 'get-autofaq-people-list',
     GET_AUTOFAQ_EVENT_NAME: 'get-autofaq-event-name',
@@ -23,6 +24,7 @@ const ACTIONS = {
     GET_AUTOFAQ_START_CHAT: 'get-autofaq-start-chat',
     GET_AUTOFAQ_ASSIGN_CHAT: 'get-autofaq-assign-chat',
     GET_AUTOFAQ_SEND_MESSAGE: 'get-autofaq-send-message',
+    GET_AUTOFAQ_VIEWER: 'get-autofaq-viewer',
     GET_AUTOFAQ_OPERATOR_INFO: 'get-autofaq-operator-info',
 };
 
