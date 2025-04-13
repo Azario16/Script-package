@@ -11,6 +11,7 @@ import СreateCmsButtonfrom from './app/vimbox-cms'
 import ShadowView from './shadow-view';
 import Storage from './service/storage/storage.service';
 import { AutoFaqUserInfoService } from './service/autofaq/user-info.servise';
+import { AutoFaqCurrentStateService } from './service/autofaq/current-state.service';
 
 /* 
   Маппим приложения для конкретного домена
@@ -99,8 +100,14 @@ const App: any = () => {
 
       break;
     case 'skyeng.autofaq.ai':
-      AutoFaqUserInfoService.saveUserInfoForStore()
-    
+      AutoFaqCurrentStateService.saveCurrentStateForStore()
+      
+      setInterval(() => {
+        AutoFaqCurrentStateService.saveCurrentStateForStore()
+      }, 10000)
+
+      AutoFaqUserInfoService.saveUserInfoForStoreV2()
+
       renderApp(<ShadowView>
         <UserInfo />
       </ShadowView>, 'main')

@@ -34,11 +34,18 @@ const ChatListUser = (props: any) => {
         })
     }
 
-    const updateChatList = () => {
+    const updateChatList = async () => {
         buttonCollapseRef.current = []
         setError('Поиск...')
         if (!!param.id) {
-            sendMessage(ACTIONS.GET_AUTOFAQ_CHAT_LIST_USER, { START, END, USER_ID, CHAT_ID }, (result: any) => {
+            const cfrToken = await cookieStore.get('csrf_token')
+            if (!cfrToken) {
+              return;
+            }
+
+            Logger.debug("cfrToken", cfrToken)
+
+            sendMessage(ACTIONS.GET_AUTOFAQ_CHAT_LIST_USER, { START, END, USER_ID, CHAT_ID, cfrToken: cfrToken.value }, (result: any) => {
                 const chatListUser: any = result["chat-list"]
                 if (chatListUser.items.length === 0) {
                     const errorMessage: string = 'Чаты не найдены'

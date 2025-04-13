@@ -19,9 +19,16 @@ const MessageBlock = (props: any) => {
     const [USER_ID, setUserId] = useState<any>('')
     const [ERROR, setError] = useState<boolean>(false)
     const [USER_NAME, setUserName] = useState<string>()
-    const updateChatList = () => {
+    const updateChatList = async () => {
 
-        sendMessage(ACTIONS.GET_AUTOFAQ_MESSAGE_VALUE, props.chatId, (result: any) => {
+        const cfrToken = await cookieStore.get('csrf_token')
+        if (!cfrToken) {
+          return;
+        }
+
+        Logger.debug("cfrToken", cfrToken)
+
+        sendMessage(ACTIONS.GET_AUTOFAQ_MESSAGE_VALUE, { chatId: props.chatId, cfrToken: cfrToken.value }, (result: any) => {
             const messageValue: any = result["message-value"].messages
             if (messageValue?.length === 0) {
                 setMessageValue("Пользователь не писал в этот преиод")

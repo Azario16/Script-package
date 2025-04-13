@@ -144,7 +144,7 @@ const GetterBackground = (): Getter[] => {
                 const resultTrmId = await generalGet(urlTeacherTrmId, {
                     method: "GET",
                     credentials: "include"
-                }).catch(err => {}) || "[]";
+                }).catch(err => { }) || "[]";
 
                 arrayResult['teacher-id'] = await resultTrmId.json()
 
@@ -343,10 +343,15 @@ const GetterBackground = (): Getter[] => {
             }
         },
         {
-            name: ACTIONS.GET_AUTOFAQ_PEOPLE,
-            call: async ({ callback }) => {
+            name: ACTIONS.GET_AUTOFAQ_CURRENT_STATE,
+            call: async ({ messageValue, callback }) => {
+                Logger.debug(ACTIONS.GET_AUTOFAQ_PEOPLE, messageValue)
+
                 const urlCurrentList = `https://skyeng.autofaq.ai/api/operators/statistic/currentState`;
                 const resultCurrentList = await generalGet(urlCurrentList, {
+                    headers: {
+                        "x-csrf-token": messageValue.cfrToken
+                    },
                     method: "GET",
                     credentials: "include"
                 })
@@ -355,6 +360,19 @@ const GetterBackground = (): Getter[] => {
                 Logger.debug(ACTIONS.GET_AUTOFAQ_PEOPLE, currentList)
                 callback(currentList)
                 return currentList
+            }
+        },
+        {
+            name: ACTIONS.GET_AUTOFAQ_PEOPLE,
+            call: async ({ callback }: { callback: any }) => {
+                if (isExtensionContext()) {
+                    chrome.storage.local.get('current-state', (data) => {
+                        if (callback) {
+                            Logger.debug(data)
+                            callback(data['current-state']);
+                        }
+                    });
+                }
             }
         },
         {
@@ -405,9 +423,9 @@ const GetterBackground = (): Getter[] => {
                 const bodyChatListUser: any = {}
                 bodyChatListUser['uer-get'] = urlChatListUser;
                 bodyChatListUser['body'] = `{\"serviceId\":\"361c681b-340a-4e47-9342-c7309e27e7b5\",\"mode\":\"Json\",\"channelUserFullTextLike\":\"${messageValue.USER_ID}\",\"tsFrom\":\"${messageValue.START.current}T00:00:00.000Z\",\"tsTo\":\"${messageValue.END.current}T23:59:59.059Z\",\"orderBy\":\"ts\",\"orderDirection\":\"Desc\",\"page\":1,\"limit\":10}`;
-                bodyChatListUser['method'] = 'POST'
                 bodyChatListUser['headers'] = {
-                    'content-type': 'application/json'
+                    'content-type': 'application/json',
+                    "x-csrf-token": messageValue.cfrToken
                 }
                 bodyChatListUser['return'] = 'json'
 
@@ -455,7 +473,8 @@ const GetterBackground = (): Getter[] => {
                 bodyChatListOperator['body'] = JSON.stringify(bodyOperator)
                 bodyChatListOperator['method'] = 'POST'
                 bodyChatListOperator['headers'] = {
-                    'content-type': 'application/json'
+                    'content-type': 'application/json',
+                    "x-csrf-token": messageValue.cfrToken
                 }
                 bodyChatListOperator['return'] = 'json'
 
@@ -478,8 +497,11 @@ const GetterBackground = (): Getter[] => {
                     'message-value': {},
                 }
 
-                const urlMessageValue = `https://skyeng.autofaq.ai/api/conversations/${messageValue}`;
+                const urlMessageValue = `https://skyeng.autofaq.ai/api/conversations/${messageValue.chatId}`;
                 const resultMessageValue = await generalGet(urlMessageValue, {
+                    headers: {
+                        "x-csrf-token": messageValue.cfrToken
+                    },
                     method: "GET",
                     credentials: "include"
                 })
@@ -558,6 +580,25 @@ const GetterBackground = (): Getter[] => {
                 })
 
                 callback(result)
+            }
+        },
+        {
+            name: ACTIONS.GET_AUTOFAQ_VIEWER,
+            call: async ({ callback, messageValue }) => {
+                Logger.debug(ACTIONS.GET_AUTOFAQ_PEOPLE, messageValue)
+
+                const urlCurrentList = `https://skyeng.autofaq.ai/api/users/viewer`;
+                const resultCurrentList = await generalGet(urlCurrentList, {
+                    headers: {
+                        "x-csrf-token": messageValue.cfrToken
+                    },
+                    method: "GET",
+                    credentials: "include"
+                })
+                const user = await resultCurrentList.json()
+
+                Logger.debug(ACTIONS.GET_AUTOFAQ_VIEWER, user)
+                callback(user)
             }
         },
         {
